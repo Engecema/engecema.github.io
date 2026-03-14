@@ -1,0 +1,17 @@
+yaml
+name: IBM Cloud Workflow
+
+on:
+push:
+branches: [ main ]
+
+jobs:
+build:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v2
+
+- name: Configurar a CLI do IBM Cloud
+uses: ibm-actions/setup-ibm-cloud-cli@v1
+with:
+ibmcloud-api-key: ${{ secrets.IBM_CLOUD_API_KEY }}
