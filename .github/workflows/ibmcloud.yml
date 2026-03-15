@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
 
 jobs:
-  deploy:
+  banco-digital-job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do Codigo
@@ -14,15 +14,14 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: Executar Teste de Conexao
+      - name: Testar Conexao
         run: node test-db.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
-                - name: Consultar Saldo do Cliente
+
+      - name: Consultar Saldo
         run: node consultar-saldo.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
-
-          
