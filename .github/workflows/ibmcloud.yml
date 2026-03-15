@@ -1,4 +1,17 @@
-      - name: Instalar dependencias do Cloudant
+name: Integracao IBM Cloud
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Codigo
+        uses: actions/checkout@v3
+
+      - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
       - name: Executar Teste de Conexao
