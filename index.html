@@ -3,44 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate | Corporate Black</title>
+    <title>BM Innovate | Corporate Dashboard</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #050505; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
         /* Header da Empresa */
-        .header-empresa { width: 100%; max-width: 360px; display: flex; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        .logo-box { width: 50px; height: 50px; background: #d4af37; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; overflow: hidden; }
-        .logo-img { width: 100%; height: auto; } /* Aqui entra sua logo real */
-        .empresa-info { text-align: left; }
+        .header-empresa { width: 100%; max-width: 360px; display: flex; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
+        .logo-box { width: 50px; height: 50px; background: #d4af37; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
         .empresa-nome { font-weight: bold; color: #d4af37; text-transform: uppercase; font-size: 0.9rem; }
         .empresa-cnpj { font-size: 0.7rem; color: #888; }
 
-        .black-card { background: linear-gradient(145deg, #111, #222); border-radius: 20px; padding: 25px; width: 100%; max-width: 340px; border: 1px solid #d4af37; position: relative; margin-bottom: 20px; }
+        /* Card Principal */
+        .black-card { background: linear-gradient(145deg, #111, #222); border-radius: 20px; padding: 25px; width: 100%; max-width: 340px; border: 1px solid #d4af37; position: relative; margin-bottom: 15px; text-align: center; }
         .badge-status { position: absolute; top: 15px; right: 15px; background: #d4af37; color: #000; font-size: 0.6rem; font-weight: bold; padding: 3px 8px; border-radius: 5px; }
+        
+        /* Widget da IA */
+        .ia-widget { width: 100%; max-width: 340px; background: #1a1a1a; padding: 15px; border-radius: 15px; border-left: 5px solid #d4af37; margin-top: 10px; font-size: 0.8rem; text-align: left; box-sizing: border-box; }
     </style>
 </head>
 <body>
-    <!-- Cabeçalho com sua Empresa -->
+    <!-- Cabeçalho -->
     <div class="header-empresa">
-        <div class="logo-box">
-            <!-- Substitua o 'src' abaixo pelo link da sua logo real se tiver -->
-            <span style="font-size: 1.5rem;">🏢</span>
-        </div>
+        <div class="logo-box"><span style="font-size: 1.5rem;">🏢</span></div>
         <div class="empresa-info">
             <div class="empresa-nome">BM Innovate Digital Bank</div>
             <div class="empresa-cnpj">CNPJ: 00.000.000/0001-00</div>
         </div>
     </div>
 
+    <!-- Card de Capital -->
     <div class="black-card">
         <div class="badge-status">CORPORATE BLACK</div>
         <small style="color: #888;">Capital de Giro Disponível</small>
         <div style="font-size: 2.2rem; font-weight: bold; margin: 10px 0; color: #d4af37;">R$ 4.627,02</div>
-        <div style="font-size: 0.7rem; color: #aaa;">Conta Auditada & Sincronizada via SWIFT</div>
+        <div style="font-size: 0.7rem; color: #aaa;">Sincronizado via SWIFT & Auditado</div>
     </div>
 
-    <div style="width: 100%; max-width: 340px; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #333; font-size: 0.8rem;">
-        <span style="color: #d4af37;">●</span> Limite de Crédito Empresarial: <strong>R$ 50.000,00</strong>
+    <!-- Diagnóstico da IA (O NOVO ITEM) -->
+    <div class="ia-widget">
+        <strong style="color: #d4af37; display: block; margin-bottom: 5px;">🤖 DIAGNÓSTICO IA CORPORATE:</strong>
+        <span>EXCELENTE: Empresa com alta solvência e reserva de ativos. Capital de giro saudável.</span>
+    </div>
+
+    <!-- Crédito Empresarial -->
+    <div style="width: 100%; max-width: 340px; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #333; font-size: 0.8rem; margin-top: 15px;">
+        <span style="color: #d4af37;">●</span> Crédito Empresarial: <strong>R$ 50.000,00</strong>
     </div>
 </body>
 </html>
