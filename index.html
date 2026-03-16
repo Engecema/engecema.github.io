@@ -2,40 +2,38 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate Bank | Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Innovate App | IA</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
-        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
-        .reserva-box { background: #1b5e20; color: white; border-radius: 20px; width: 340px; padding: 20px; margin-bottom: 20px; box-sizing: border-box; }
-        .audit-tag { background: #fff3e0; color: #ef6c00; font-size: 0.7rem; padding: 5px 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; display: inline-block; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #000; color: #fff; margin: 0; padding: 0; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 400px; background: #000; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .ia-bubble { background: #27ae60; color: white; padding: 15px; border-radius: 15px 15px 15px 0; margin-bottom: 25px; font-size: 0.85rem; border-left: 5px solid #fff; }
+        .card-balance { background: #1a1a1a; border-radius: 25px; padding: 25px; border: 1px solid #333; margin-bottom: 20px; }
+        .btn-action { background: #27ae60; color: #000; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1rem; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="card-main">
-        <div style="color: #27ae60; font-weight: bold; margin-bottom: 15px;">INNOVATE BANK</div>
-        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo disponível <span id="toggle-eye" style="cursor:pointer">👁️</span></p>
-        <div id="saldo-valor" class="balance-value">R$ 1.535,52</div>
-        <button style="background: #27ae60; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer;">Área Pix</button>
-        <div class="audit-tag">CONTA AUDITADA (CET) ✅</div>
-    </div>
+    <div class="app-container">
+        <div class="ia-bubble">
+            <strong>🤖 Gerente Virtual Innovate:</strong><br>
+            <span id="conselho">Analisando suas finanças...</span>
+        </div>
 
-    <div class="reserva-box">
-        <span style="font-size: 0.8rem; font-weight: bold; color: #a5d6a7;">🛡️ RESERVA DE EMERGÊNCIA</span>
-        <div style="font-size: 1.5rem; font-weight: bold; margin-top: 5px;">R$ 1.500,00</div>
-        <p style="font-size: 0.7rem; color: #c8e6c9;">Protegido contra saques e rendendo 100% do CDI.</p>
+        <div class="card-balance">
+            <small style="color: #888;">Saldo Total</small>
+            <div style="font-size: 2.2rem; font-weight: bold; margin: 10px 0;">R$ 1.535,52</div>
+            <small style="color: #27ae60;">● Rendendo 14.90% a.a.</small>
+        </div>
+
+        <button class="btn-action">Pagar com Pix</button>
+        <button class="btn-action" style="background: #333; color: #fff;">Investimentos</button>
     </div>
 
     <script>
-        const eye = document.getElementById('toggle-eye');
-        const saldo = document.getElementById('saldo-valor');
-        let visivel = true;
-        eye.addEventListener('click', () => {
-            if(visivel) { saldo.innerText = "R$ ••••••"; eye.innerText = "🙈"; } 
-            else { saldo.innerText = "R$ 1.535,52"; eye.innerText = "👁️"; }
-            visivel = !visivel;
-        });
+        // Simulando a resposta da IA vinda da IBM Cloud
+        setTimeout(() => {
+            document.getElementById('conselho').innerText = "Sua reserva está abaixo da meta. Sugiro mover R$ 200 do saldo para a Reserva.";
+        }, 1500);
     </script>
 </body>
 </html>
