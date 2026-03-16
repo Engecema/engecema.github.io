@@ -3,51 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate Digital Bank | Verde</title>
+    <title>Innovate Bank | Super App</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; position: relative; }
-        .logo { color: #27ae60; font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; text-transform: uppercase; }
-        .balance-container { position: relative; margin-bottom: 15px; }
-        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; }
-        .eye-icon { cursor: pointer; font-size: 1.2rem; vertical-align: middle; margin-left: 10px; color: #27ae60; }
-        .btn-main { background: #27ae60; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; }
-        .loan-card { background: #ffffff; border-radius: 20px; padding: 15px; margin-top: 20px; width: 310px; border-left: 5px solid #27ae60; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: left; }
-        .status-badge { background: #fff3e0; color: #ef6c00; font-size: 0.7rem; padding: 4px 8px; border-radius: 5px; font-weight: bold; float: right; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
+        .logo { color: #27ae60; font-weight: bold; font-size: 1.1rem; letter-spacing: 1.5px; margin-bottom: 20px; text-transform: uppercase; }
+        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
+        
+        /* Barra de Limite de Crédito */
+        .limit-section { text-align: left; margin-top: 15px; padding: 15px; background: #f1f8e9; border-radius: 15px; }
+        .limit-label { font-size: 0.75rem; color: #27ae60; font-weight: bold; }
+        .limit-bar { background: #ddd; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+        .limit-fill { background: #27ae60; width: 75%; height: 100%; }
+
+        /* Grade de Serviços (Super App) */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 340px; }
+        .menu-item { background: #ffffff; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
+        .menu-item:hover { border-color: #27ae60; transform: translateY(-3px); }
+        .menu-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+        .menu-text { font-size: 0.75rem; font-weight: bold; color: #333; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="card-main">
         <div class="logo">INNOVATE BANK</div>
-        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo em conta <span id="toggle-saldo" class="eye-icon">👁️</span></p>
-        <div class="balance-container">
-            <div id="saldo-valor" class="balance-value">R$ 4.000,00</div>
+        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo disponível <span id="toggle-eye" style="cursor:pointer">👁️</span></p>
+        <div id="saldo-valor" class="balance-value">R$ 4.000,00</div>
+        
+        <div class="limit-section">
+            <div style="display: flex; justify-content: space-between;">
+                <span class="limit-label">LIMITE DE CRÉDITO</span>
+                <span style="font-size: 0.75rem; color: #333; font-weight: bold;">R$ 5.000,00</span>
+            </div>
+            <div class="limit-bar"><div class="limit-fill"></div></div>
         </div>
-        <button class="btn-main">Área Pix</button>
     </div>
 
-    <div class="loan-card">
-        <span class="status-badge">EM ANÁLISE</span>
-        <span style="font-size: 0.8rem; color: #27ae60; font-weight: bold;">CRÉDITO RURAL</span>
-        <div style="font-size: 1rem; font-weight: bold; color: #333; margin: 5px 0;">Financiamento de Fazenda</div>
-        <div style="font-size: 0.75rem; color: #666;">Valor solicitado: R$ 500.000,00</div>
+    <div class="menu-grid">
+        <div class="menu-item">
+            <span class="menu-icon">⚡</span>
+            <span class="menu-text">Área Pix</span>
+        </div>
+        <div class="menu-item">
+            <span class="menu-icon">💳</span>
+            <span class="menu-text">Cartões</span>
+        </div>
+        <div class="menu-item">
+            <span class="menu-icon">📲</span>
+            <span class="menu-text">Transferir</span>
+        </div>
+        <div class="menu-item" style="background: #f1f8e9; border: 1px solid #27ae60;">
+            <span class="menu-icon">🏧</span>
+            <span class="menu-text">Minha Máquina</span>
+        </div>
     </div>
 
     <script>
-        const btnToggle = document.getElementById('toggle-saldo');
-        const txtSaldo = document.getElementById('saldo-valor');
-        let saldoVisivel = true;
-        const valorReal = "R$ 4.000,00";
+        // Lógica simples para o Olhinho de Privacidade
+        const eye = document.getElementById('toggle-eye');
+        const saldo = document.getElementById('saldo-valor');
+        let visivel = true;
 
-        btnToggle.addEventListener('click', () => {
-            if (saldoVisivel) {
-                txtSaldo.innerText = "R$ ••••••";
-                btnToggle.innerText = "🙈";
+        eye.addEventListener('click', () => {
+            if(visivel) {
+                saldo.innerText = "R$ ••••••";
+                eye.innerText = "🙈";
             } else {
-                txtSaldo.innerText = valorReal;
-                btnToggle.innerText = "👁️";
+                saldo.innerText = "R$ 4.000,00";
+                eye.innerText = "👁️";
             }
-            saldoVisivel = !saldoVisivel;
+            visivel = !visivel;
         });
     </script>
 </body>
