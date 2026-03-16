@@ -3,48 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate | Black Concierge</title>
+    <title>Innovate | Corporate Black</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; transition: background 2s; }
-        .gold-theme { color: #d4af37 !important; border-color: #d4af37 !important; }
-        .black-card { background: linear-gradient(145deg, #111, #333); border-radius: 20px; padding: 30px; width: 100%; max-width: 340px; border: 1px solid #d4af37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; overflow: hidden; margin: 0 auto; }
-        .milhas-card { background: #111; border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; margin: 20px auto; border: 1px solid #444; }
-        .btn-black { background: #d4af37; color: #000; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 340px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .shimmer { position: absolute; top: -100%; left: -100%; width: 50%; height: 300%; background: rgba(255,255,255,0.1); transform: rotate(45deg); animation: shine 4s infinite; }
-        @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
+        body { font-family: 'Segoe UI', sans-serif; background: #050505; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Header da Empresa */
+        .header-empresa { width: 100%; max-width: 360px; display: flex; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 15px; }
+        .logo-box { width: 50px; height: 50px; background: #d4af37; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; overflow: hidden; }
+        .logo-img { width: 100%; height: auto; } /* Aqui entra sua logo real */
+        .empresa-info { text-align: left; }
+        .empresa-nome { font-weight: bold; color: #d4af37; text-transform: uppercase; font-size: 0.9rem; }
+        .empresa-cnpj { font-size: 0.7rem; color: #888; }
+
+        .black-card { background: linear-gradient(145deg, #111, #222); border-radius: 20px; padding: 25px; width: 100%; max-width: 340px; border: 1px solid #d4af37; position: relative; margin-bottom: 20px; }
+        .badge-status { position: absolute; top: 15px; right: 15px; background: #d4af37; color: #000; font-size: 0.6rem; font-weight: bold; padding: 3px 8px; border-radius: 5px; }
     </style>
 </head>
-<body id="body">
-    <div style="text-align: center; margin-bottom: 30px;">
-        <div id="status-label" style="font-size: 0.7rem; letter-spacing: 3px; color: #27ae60;">DETECTANDO PATRIMÔNIO...</div>
-        <div style="font-size: 2.5rem; font-weight: bold;">R$ 4.627,02</div>
-    </div>
-
-    <div class="black-card" id="card">
-        <div class="shimmer"></div>
-        <div style="font-size: 0.6rem; letter-spacing: 3px;">INNOVATE METAL</div>
-        <div style="margin: 40px 0; font-size: 1.2rem; letter-spacing: 4px;">•••• •••• •••• 0001</div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-            <span>GEONIMATOS</span>
-            <span id="categoria-txt">BLACK</span>
+<body>
+    <!-- Cabeçalho com sua Empresa -->
+    <div class="header-empresa">
+        <div class="logo-box">
+            <!-- Substitua o 'src' abaixo pelo link da sua logo real se tiver -->
+            <span style="font-size: 1.5rem;">🏢</span>
+        </div>
+        <div class="empresa-info">
+            <div class="empresa-nome">BM Innovate Digital Bank</div>
+            <div class="empresa-cnpj">CNPJ: 00.000.000/0001-00</div>
         </div>
     </div>
 
-    <div class="milhas-card">
-        <div style="color: #d4af37; font-weight: bold; font-size: 0.8rem;">✈️ CONCIERGE DE MILHAS</div>
-        <div style="font-size: 1.5rem; font-weight: bold; margin: 5px 0;">24.060 Milhas</div>
-        <small style="color: #888;">Destinos Disponíveis: Paris, Miami, Maldivas</small>
+    <div class="black-card">
+        <div class="badge-status">CORPORATE BLACK</div>
+        <small style="color: #888;">Capital de Giro Disponível</small>
+        <div style="font-size: 2.2rem; font-weight: bold; margin: 10px 0; color: #d4af37;">R$ 4.627,02</div>
+        <div style="font-size: 0.7rem; color: #aaa;">Conta Auditada & Sincronizada via SWIFT</div>
     </div>
 
-    <button class="btn-black">Solicitar Concierge</button>
-
-    <script>
-        setTimeout(() => {
-            document.getElementById('body').style.background = '#050505';
-            document.getElementById('status-label').innerText = "UPGRADE BLACK ATIVADO";
-            document.getElementById('status-label').style.color = "#d4af37";
-            document.getElementById('card').style.borderColor = "#d4af37";
-        }, 2500);
-    </script>
+    <div style="width: 100%; max-width: 340px; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #333; font-size: 0.8rem;">
+        <span style="color: #d4af37;">●</span> Limite de Crédito Empresarial: <strong>R$ 50.000,00</strong>
+    </div>
 </body>
 </html>
