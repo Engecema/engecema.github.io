@@ -3,32 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate Digital Bank | Rural</title>
+    <title>Innovate Digital Bank | Verde</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
+        .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; position: relative; }
         .logo { color: #27ae60; font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; text-transform: uppercase; }
-        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
-        .credit-section { width: 340px; text-align: left; }
-        .loan-card { background: #ffffff; border-radius: 20px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #27ae60; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .balance-container { position: relative; margin-bottom: 15px; }
+        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; }
+        .eye-icon { cursor: pointer; font-size: 1.2rem; vertical-align: middle; margin-left: 10px; color: #27ae60; }
+        .btn-main { background: #27ae60; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; }
+        .loan-card { background: #ffffff; border-radius: 20px; padding: 15px; margin-top: 20px; width: 310px; border-left: 5px solid #27ae60; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: left; }
         .status-badge { background: #fff3e0; color: #ef6c00; font-size: 0.7rem; padding: 4px 8px; border-radius: 5px; font-weight: bold; float: right; }
     </style>
 </head>
 <body>
     <div class="card-main">
         <div class="logo">INNOVATE BANK</div>
-        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo em conta</p>
-        <div id="saldo-valor" class="balance-value">R$ 4.000,00</div>
-        <button style="background: #27ae60; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer;">Área Pix</button>
+        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo em conta <span id="toggle-saldo" class="eye-icon">👁️</span></p>
+        <div class="balance-container">
+            <div id="saldo-valor" class="balance-value">R$ 4.000,00</div>
+        </div>
+        <button class="btn-main">Área Pix</button>
     </div>
 
-    <div class="credit-section">
-        <div class="loan-card">
-            <span class="status-badge">EM ANÁLISE</span>
-            <span style="font-size: 0.8rem; color: #27ae60; font-weight: bold;">CRÉDITO RURAL</span>
-            <div style="font-size: 1rem; font-weight: bold; color: #333; margin: 5px 0;">Financiamento de Fazenda</div>
-            <div style="font-size: 0.75rem; color: #666;">Valor solicitado: R$ 500.000,00</div>
-        </div>
+    <div class="loan-card">
+        <span class="status-badge">EM ANÁLISE</span>
+        <span style="font-size: 0.8rem; color: #27ae60; font-weight: bold;">CRÉDITO RURAL</span>
+        <div style="font-size: 1rem; font-weight: bold; color: #333; margin: 5px 0;">Financiamento de Fazenda</div>
+        <div style="font-size: 0.75rem; color: #666;">Valor solicitado: R$ 500.000,00</div>
     </div>
+
+    <script>
+        const btnToggle = document.getElementById('toggle-saldo');
+        const txtSaldo = document.getElementById('saldo-valor');
+        let saldoVisivel = true;
+        const valorReal = "R$ 4.000,00";
+
+        btnToggle.addEventListener('click', () => {
+            if (saldoVisivel) {
+                txtSaldo.innerText = "R$ ••••••";
+                btnToggle.innerText = "🙈";
+            } else {
+                txtSaldo.innerText = valorReal;
+                btnToggle.innerText = "👁️";
+            }
+            saldoVisivel = !saldoVisivel;
+        });
+    </script>
 </body>
 </html>
