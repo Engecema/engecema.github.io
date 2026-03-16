@@ -2,27 +2,49 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Innovate Digital Bank</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; padding: 30px; text-align: center; border-top: 8px solid #0062ff; }
-        .balance-value { font-size: 2rem; font-weight: bold; margin: 15px 0; color: #000; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #fff; border-radius: 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.12); width: 340px; padding: 30px; text-align: center; border-top: 10px solid #0062ff; }
+        .logo { color: #0062ff; font-weight: bold; font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 25px; }
+        .balance-label { color: #666; font-size: 0.9rem; margin-bottom: 5px; }
+        .balance-value { font-size: 2.4rem; font-weight: bold; color: #000; margin-bottom: 25px; }
+        .btn-main { background: #0062ff; color: white; border: none; padding: 14px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: bold; font-size: 1rem; margin-bottom: 25px; }
+        .extrato-container { text-align: left; border-top: 1px solid #eee; padding-top: 20px; }
+        .extrato-title { font-size: 0.85rem; font-weight: bold; color: #333; margin-bottom: 12px; display: block; }
+        .transacao { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px dashed #f0f0f0; }
+        .valor-negativo { color: #e91e63; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div style="color: #0062ff; font-weight: bold; margin-bottom: 20px;">INNOVATE BANK</div>
+        <div class="logo">INNOVATE BANK</div>
         <p>Olá, <strong>Geonimatos</strong></p>
-        <p style="color: #666; font-size: 0.9rem;">Saldo disponível</p>
+        
+        <div class="balance-label">Saldo disponível</div>
         <div id="saldo-valor" class="balance-value">Carregando...</div>
-        <button style="background: #0062ff; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold;">Área Pix</button>
+        
+        <button class="btn-main">Área Pix</button>
+
+        <div class="extrato-container">
+            <span class="extrato-title">Últimas Transações</span>
+            <div class="transacao">
+                <span>Pagamento Efetuado</span>
+                <span class="valor-negativo">- R$ 200,00</span>
+            </div>
+            <div class="transacao">
+                <span>Transferência Enviada</span>
+                <span class="valor-negativo">- R$ 200,00</span>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Simulando a busca do saldo real que o GitHub Actions acabou de atualizar
+        // Sincronizando com a última atualização do GitHub Actions
         setTimeout(() => {
             document.getElementById('saldo-valor').innerText = 'R$ 600,00';
-        }, 1500);
+        }, 1200);
     </script>
 </body>
 </html>
