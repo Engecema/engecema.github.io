@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENGECEMA</title>
+    <!-- Biblioteca de E-mail Integrada -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net"></script>
     <style>
         :root { --emerald: #2ecc71; --dark: #27ae60; --bg: #f4f7f6; --text: #2d3436; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
@@ -38,9 +40,9 @@
         <div class="card" style="max-width: 450px; margin: 40px auto; border-left-color: #3498db;">
             <h2 style="color:var(--emerald); text-align:center;">Seja ENGECEMA</h2>
             <input type="text" id="cad-nome" placeholder="Nome Completo">
-            <input type="email" id="cad-email" placeholder="Seu E-mail Real">
+            <input type="email" id="cad-email" placeholder="E-mail Real">
             <input type="text" id="cad-cpf" placeholder="CPF" maxlength="14" oninput="mascaraCPF(this)">
-            <button class="btn-action" id="btn-cad" onclick="dispararFluxoIBM()">Cadastrar e Validar E-mail</button>
+            <button class="btn-action" id="btn-cad" onclick="enviarTokenEngecema()">Cadastrar e Validar E-mail</button>
             <button class="btn-secondary" style="border:none; color:#999;" onclick="mudarTela('screen-login')">Voltar</button>
         </div>
     </div>
@@ -49,7 +51,7 @@
     <div id="screen-token" class="screen">
         <div class="card" style="max-width: 400px; margin: 80px auto; text-align: center;">
             <h2 style="color:var(--dark);">Validar Acesso</h2>
-            <p id="token-msg" style="font-size: 14px; color:#666;">Enviamos o código para sua caixa de entrada.</p>
+            <p id="token-msg" style="font-size: 14px; color:#666;">Verifique seu e-mail para obter o código.</p>
             <input type="text" id="input-token" class="token-input" placeholder="000000" maxlength="6">
             <button class="btn-action" onclick="validarTokenFinal()">Ativar Conta ENGECEMA</button>
         </div>
@@ -69,19 +71,14 @@
             <div class="service-item"><span>🏦</span>Empréstimo</div>
             <div class="service-item"><span>📈</span>Investir</div>
         </div>
-        <button onclick="location.reload()" class="btn-secondary" style="margin-top:20px;">Sair</button>
+        <button onclick="location.reload()" class="btn-secondary" style="margin-top:20px;">Sair com Segurança</button>
     </div>
 
     <script>
-        /**
-         * INTEGRAÇÃO SEGURA DALLAS (US-SOUTH) - CREDENCIAIS ATIVADAS
-         */
-        const IBM_CONFIG = {
-            API_KEY: "UbMM1tfIXe0D9KtnUamThJfueeiwtqclH1PmM98IAMjM", 
-            INSTANCE_ID: "f71115e8-9681-4909-b8e1-093a3a2ed092"
-        };
+        // INICIALIZAÇÃO COM SUA CHAVE PÚBLICA REAL
+        (function() { emailjs.init("MrcSBFoZP4w8KVROL"); })();
 
-        let tokenTemporario = "";
+        let tokenAtual = "";
 
         function mascaraCPF(i) {
             let v = i.value.replace(/\D/g, "");
@@ -96,55 +93,43 @@
             document.getElementById(id).classList.add('active');
         }
 
-        async function dispararFluxoIBM() {
+        async function enviarTokenEngecema() {
             const nome = document.getElementById('cad-nome').value;
             const email = document.getElementById('cad-email').value;
             const btn = document.getElementById('btn-cad');
 
-            if(!nome || !email) return alert("Por favor, preencha os dados.");
+            if(!nome || !email) return alert("Preencha todos os campos.");
             
             btn.disabled = true;
-            btn.innerText = "Conectando à IBM Cloud Dallas...";
-            tokenTemporario = Math.floor(100000 + Math.random() * 900000).toString();
+            btn.innerText = "Enviando Token Real...";
+            tokenAtual = Math.floor(100000 + Math.random() * 900000).toString();
 
-            try {
-                // Chamada segura para o serviço de Notificações em Dallas
-                const url = `https://us-south.event-notifications.cloud.ibm.com{IBM_CONFIG.INSTANCE_ID}/notifications`;
-                
-                await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${IBM_CONFIG.API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ibm_en_data: { 
-                            message: `Token de Segurança ENGECEMA: ${tokenTemporario}`,
-                            to_email: email,
-                            user_name: nome
-                        }
-                    })
+            const params = {
+                to_name: nome,
+                to_email: email,
+                token: tokenAtual
+            };
+
+            // USANDO SEUS IDs DE SERVIÇO E TEMPLATE REAIS
+            emailjs.send("service_50l6y0d", "template_mcb6vad", params)
+                .then(() => {
+                    alert("E-mail real disparado com sucesso!");
+                    document.getElementById('msg-boas-vindas').textContent = "Olá, " + nome;
+                    mudarTela('screen-token');
+                }, (error) => {
+                    console.error("Erro:", error);
+                    alert("Falha no envio. Verifique os IDs no EmailJS.");
+                    btn.disabled = false;
+                    btn.innerText = "Tentar novamente";
                 });
-
-                alert("Sucesso! Verifique seu e-mail real agora.");
-                document.getElementById('msg-boas-vindas').textContent = "Olá, " + nome;
-                mudarTela('screen-token');
-
-            } catch (error) {
-                console.error("Tentativa de envio via IBM Cloud:", error);
-                // Contingência para testes de interface
-                alert("Token de segurança enviado (Processando via IBM Gateway).");
-                console.log("LOG DE SEGURANÇA ENGECEMA - TOKEN:", tokenTemporario);
-                mudarTela('screen-token');
-            }
         }
 
         function validarTokenFinal() {
-            if(document.getElementById('input-token').value === tokenTemporario) {
-                alert("Conta Validada com Sucesso!");
+            if(document.getElementById('input-token').value === tokenAtual) {
+                alert("Conta Ativada com Sucesso!");
                 mudarTela('screen-dash');
             } else {
-                alert("Token incorreto.");
+                alert("Token incorreto. Verifique o e-mail.");
             }
         }
     </script>
