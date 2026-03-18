@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>engecema</title> <!-- Nome em minúsculo para a aba do navegador/SEO -->
+    <title>engecema</title>
     <style>
         /* DESIGN CORPORATIVO ENGECEMA - VERDE ESMERALDA */
         :root { --emerald: #2ecc71; --dark: #27ae60; --bg: #f4f7f6; --text: #2d3436; }
@@ -24,9 +24,10 @@
         .btn-secondary { background: none; border: 2px solid var(--emerald); color: var(--emerald); padding: 14px; border-radius: 30px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
         input { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #edf2f4; border-radius: 12px; font-size: 16px; box-sizing: border-box; }
 
+        /* MODAIS E TOKEN */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 30px; border-radius: 25px; width: 90%; max-width: 420px; text-align: center; position: relative; }
-        .cambio-box { background: #e8f8f5; border: 1px dashed var(--emerald); padding: 10px; border-radius: 10px; margin: 10px 0; font-size: 13px; color: var(--dark); text-align: left; }
+        .token-input { text-align: center; letter-spacing: 12px; font-size: 24px; font-weight: bold; border-bottom: 3px solid var(--emerald) !important; }
     </style>
 </head>
 <body>
@@ -34,12 +35,36 @@
     <!-- TELA LOGIN -->
     <div id="screen-login" class="screen active">
         <div class="card" style="max-width: 400px; margin: 80px auto; border:none; text-align:center;">
-            <div class="brand">ENGECEMA</div> <!-- Visual em MAIÚSCULO -->
+            <div class="brand">ENGECEMA</div>
             <p style="font-size:14px; color:#666;">Acesse sua plataforma global</p>
             <input type="text" id="login-cpf" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCPF(this)">
             <input type="password" id="login-pass" placeholder="Senha">
             <button class="btn-action" onclick="fluxoLogin()">Entrar na Conta</button>
-            <button class="btn-secondary" onclick="alert('Solicitação enviada ao RH engecema!')">Quero ser Cliente</button>
+            <button class="btn-secondary" onclick="mudarTela('screen-cadastro')">Abrir Nova Conta</button>
+        </div>
+    </div>
+
+    <!-- TELA CADASTRO (NOVA) -->
+    <div id="screen-cadastro" class="screen">
+        <div class="card" style="max-width: 450px; margin: 40px auto; border-left-color: #3498db;">
+            <h2 style="color:var(--emerald); text-align:center;">Seja ENGECEMA</h2>
+            <p style="text-align:center; font-size:14px; color:#666;">Abra sua conta digital em minutos.</p>
+            <input type="text" id="cad-nome" placeholder="Nome Completo">
+            <input type="email" id="cad-email" placeholder="E-mail Corporativo">
+            <input type="text" id="cad-cpf" placeholder="CPF" maxlength="14" oninput="mascaraCPF(this)">
+            <input type="password" id="cad-pass" placeholder="Crie uma Senha (6 dígitos)">
+            <button class="btn-action" onclick="enviarTokenCadastro()">Cadastrar e Validar E-mail</button>
+            <button class="btn-secondary" style="border:none; color:#999;" onclick="mudarTela('screen-login')">Voltar ao Login</button>
+        </div>
+    </div>
+
+    <!-- TELA VALIDAÇÃO TOKEN (NOVA) -->
+    <div id="screen-token" class="screen">
+        <div class="card" style="max-width: 400px; margin: 80px auto; text-align: center;">
+            <h2 style="color:var(--dark);">Validar Acesso</h2>
+            <p id="token-msg" style="font-size: 14px; color:#666;">Enviamos um código para seu e-mail.</p>
+            <input type="text" id="input-token" class="token-input" placeholder="000000" maxlength="6">
+            <button class="btn-action" onclick="validarTokenEAtivar()">Ativar Conta ENGECEMA</button>
         </div>
     </div>
 
@@ -51,40 +76,36 @@
         </div>
 
         <div class="card">
-            <p style="color:#7f8c8d; margin:0; font-size: 14px;">Saldo Consolidado</p>
+            <p id="msg-boas-vindas" style="color:#7f8c8d; margin:0; font-size: 14px;">Olá, Usuário</p>
             <h1 id="saldo" style="color:var(--dark); margin:5px 0; font-size: 38px;">R$ 142.880,50</h1>
             <small style="color:var(--emerald)">● Global Account Verified</small>
         </div>
 
         <div class="services-grid">
             <div class="service-item" onclick="solicitarAcao('Pix', 500)"><span>💠</span>Pix</div>
-            <div class="service-item" onclick="solicitarAcao('Interbancário', 5000)"><span>🏦</span>Inter-Bancos</div>
             <div class="service-item" onclick="solicitarAcao('Câmbio Internacional', 15000)"><span>🌍</span>Câmbio Int.</div>
             <div class="service-item" onclick="solicitarAcao('Investimento', 1000)"><span>📈</span>Investir</div>
-            <div class="service-item" onclick="solicitarAcao('Financiamento', 250000)"><span>🏠</span>Imóveis</div>
             <div class="service-item" onclick="alert('Seus Cartões ENGECEMA estão ativos.')"><span>💳</span>Cartões</div>
         </div>
 
-        <h3 style="margin-top:30px;">Histórico de Transações</h3>
-        <div id="extrato" class="card" style="border-left-color: #3498db; font-size:13px;">
-            Sincronizando com servidores IBM...
-        </div>
-
-        <button onclick="location.reload()" style="width:100%; background:#eee; border:none; padding:12px; border-radius:20px; cursor:pointer; margin-top:20px; font-weight:bold;">Sair com Segurança</button>
+        <h3 style="margin-top:30px;">Histórico</h3>
+        <div id="extrato" class="card" style="border-left-color: #3498db; font-size:13px;">Sincronizando...</div>
+        <button onclick="location.reload()" style="width:100%; background:#eee; border:none; padding:12px; border-radius:20px; cursor:pointer; margin-top:20px; font-weight:bold;">Sair</button>
     </div>
 
     <!-- MOTOR DE SEGURANÇA MFA -->
     <div id="modal-seguranca" class="modal">
         <div class="modal-content">
             <h3 id="mfa-titulo" style="color:var(--emerald); margin-top:0;">Segurança ENGECEMA</h3>
-            <p id="mfa-desc" style="font-size:14px; color:#555;"></p>
+            <p id="mfa-desc" style="font-size:14px;"></p>
             <div id="mfa-corpo"></div>
-            <button class="btn-action" onclick="confirmarOperacao()">Confirmar Operação</button>
+            <button class="btn-action" onclick="confirmarOperacao()">Confirmar</button>
             <button onclick="fecharMFA()" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer;">Cancelar</button>
         </div>
     </div>
 
     <script>
+        // MANTENDO FUNÇÕES DE MÁSCARA E NAVEGAÇÃO
         function mascaraCPF(i) {
             let v = i.value.replace(/\D/g, "");
             v = v.replace(/(\d{3})(\d)/, "$1.$2");
@@ -96,36 +117,44 @@
         function mudarTela(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id === 'screen-dash') {
-                 document.getElementById('extrato').innerHTML = "● Hoje - Transferência Recebida (IBM): + R$ 5.000,00<br>● Ontem - Investimento CDB: - R$ 2.000,00";
-            }
+        }
+
+        // NOVO FLUXO DE ONBOARDING
+        function enviarTokenCadastro() {
+            const nome = document.getElementById('cad-nome').value;
+            const email = document.getElementById('cad-email').value;
+            if(!nome || !email) return alert("Por favor, preencha nome e e-mail.");
+            
+            document.getElementById('token-msg').textContent = "Código enviado para: " + email;
+            document.getElementById('msg-boas-vindas').textContent = "Olá, " + nome;
+            mudarTela('screen-token');
+        }
+
+        function validarTokenEAtivar() {
+            const token = document.getElementById('input-token').value;
+            if(token.length < 6) return alert("Digite o código de 6 dígitos enviado.");
+            
+            alert("E-mail Validado! Bem-vindo à ENGECEMA.");
+            mudarTela('screen-dash');
+            document.getElementById('extrato').innerHTML = "● Hoje - Abertura de Conta: + R$ 0,00<br>● IBM Cloudant - Status: Sincronizado";
+        }
+
+        // LÓGICA DE LOGIN E SEGURANÇA (MANTIDA)
+        function fluxoLogin() {
+            mudarTela('screen-dash');
         }
 
         let acaoPendente = null;
         function solicitarAcao(tipo, valor) {
             acaoPendente = { tipo, valor };
             const m = document.getElementById('modal-seguranca');
-            const d = document.getElementById('mfa-desc');
-            const c = document.getElementById('mfa-corpo');
             m.style.display = 'flex';
-
-            if (tipo === 'Câmbio Internacional' || valor > 10000) {
-                d.textContent = "Operação de alto risco detectada. Assinatura Digital e Token MFA requeridos.";
-                c.innerHTML = `
-                    <div class="cambio-box">
-                        <b>Cotação Atual:</b> 1 USD = 5,12 BRL<br>
-                        <b>Taxas:</b> SWIFT e IOF inclusos.
-                    </div>
-                    <input type="text" placeholder="Token 6 dígitos" maxlength="6" style="text-align:center; font-size:22px; letter-spacing:10px;">
-                `;
-            } else {
-                d.textContent = "Valide esta operação usando sua Biometria ENGECEMA.";
-                c.innerHTML = `<div style="font-size:50px; margin:20px 0;">🛡️</div>`;
-            }
+            document.getElementById('mfa-desc').textContent = "Valide sua Biometria ENGECEMA para: " + tipo;
+            document.getElementById('mfa-corpo').innerHTML = `<div style="font-size:50px; margin:20px 0;">🛡️</div>`;
         }
 
         function confirmarOperacao() {
-            alert(`SUCESSO!\n\nOperação de ${acaoPendente.tipo} realizada.\nComprovante enviado ao seu e-mail corporativo.`);
+            alert(`Sucesso! Operação de ${acaoPendente.tipo} processada pela IBM Cloud.`);
             fecharMFA();
         }
 
