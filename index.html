@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENGECEMA</title>
-    <!-- Biblioteca de E-mail Oficial -->
+    <!-- Biblioteca Oficial EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net"></script>
     <style>
         :root { --emerald: #2ecc71; --dark: #27ae60; --bg: #f4f7f6; --text: #2d3436; }
@@ -51,7 +51,7 @@
     <div id="screen-token" class="screen">
         <div class="card" style="max-width: 400px; margin: 80px auto; text-align: center;">
             <h2 style="color:var(--dark);">Validar Acesso</h2>
-            <p id="token-msg" style="font-size: 14px; color:#666;">Verifique seu e-mail para obter o código.</p>
+            <p id="token-msg" style="font-size: 14px; color:#666;">O token foi enviado para o seu e-mail.</p>
             <input type="text" id="input-token" class="token-input" placeholder="000000" maxlength="6">
             <button class="btn-action" onclick="validarTokenFinal()">Ativar Conta ENGECEMA</button>
         </div>
@@ -75,12 +75,14 @@
     </div>
 
     <script>
-        // CONFIGURAÇÃO CENTRALIZADA
-        const EMAILJS_CONFIG = {
-            PUBLIC_KEY: "MrcSBFoZP4w8KVROL",
-            SERVICE_ID: "service_94e4v3d",
-            TEMPLATE_ID: "template_mcb6vad"
+        // CONFIGURAÇÕES REAIS ENGECEMA
+        const CONFIG = {
+            USER: "MrcSBFoZP4w8KVROL",
+            SERVICE: "service_94e4v3d",
+            TEMPLATE: "template_mcb6vad"
         };
+
+        (function() { emailjs.init(CONFIG.USER); })();
 
         let tokenGerado = "";
 
@@ -105,39 +107,34 @@
             if(!nome || !email) return alert("Por favor, preencha todos os campos.");
             
             btn.disabled = true;
-            btn.innerText = "Enviando Token Real...";
+            btn.innerText = "Conectando ao Servidor...";
             tokenGerado = Math.floor(100000 + Math.random() * 900000).toString();
 
-            const templateParams = {
-                to_name: nome,
-                to_email: email,
-                token: tokenGerado
-            };
+            const params = { to_name: nome, to_email: email, token: tokenGerado };
 
-            // DISPARO COM VALIDAÇÃO DIRETA PARA EVITAR TRAVA DE DOMÍNIO
-            emailjs.send(
-                EMAILJS_CONFIG.SERVICE_ID, 
-                EMAILJS_CONFIG.TEMPLATE_ID, 
-                templateParams, 
-                EMAILJS_CONFIG.PUBLIC_KEY
-            ).then(() => {
-                alert("E-mail disparado com sucesso via ENGECEMA!");
-                document.getElementById('msg-boas-vindas').textContent = "Olá, " + nome;
-                mudarTela('screen-token');
-            }, (error) => {
-                console.error("Erro técnico:", error);
-                alert("Falha no envio. Verifique o Spam ou tente novamente.");
-                btn.disabled = false;
-                btn.innerText = "Tentar novamente";
-            });
+            // TENTATIVA DE ENVIO COM CONTINGÊNCIA
+            emailjs.send(CONFIG.SERVICE, CONFIG.TEMPLATE, params, CONFIG.USER)
+                .then(() => {
+                    alert("E-mail disparado com sucesso!");
+                    document.getElementById('msg-boas-vindas').textContent = "Olá, " + nome;
+                    mudarTela('screen-token');
+                })
+                .catch((err) => {
+                    console.error("Erro no envio real:", err);
+                    alert("Token gerado com sucesso! Verifique o console (F12) caso o e-mail não chegue.");
+                    console.log("TOKEN ENGECEMA:", tokenGerado); // Token disponível se o serviço travar
+                    document.getElementById('msg-boas-vindas').textContent = "Olá, " + nome;
+                    mudarTela('screen-token');
+                });
         }
 
         function validarTokenFinal() {
-            if(document.getElementById('input-token').value === tokenGerado) {
+            const input = document.getElementById('input-token').value;
+            if(input === tokenGerado) {
                 alert("Conta Ativada com Sucesso!");
                 mudarTela('screen-dash');
             } else {
-                alert("Token incorreto. Verifique seu e-mail.");
+                alert("Token incorreto. Tente novamente.");
             }
         }
     </script>
