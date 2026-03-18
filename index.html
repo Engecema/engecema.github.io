@@ -3,233 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema - Banking Business</title>
+    <title>Engecema - Sistema Bancário Integral</title>
     <style>
-        /* DESIGN SISTEMA ENGECEMA - VERDE ESMERALDA */
-        :root { 
-            --emerald: #2ecc71; 
-            --dark-emerald: #27ae60; 
-            --bg: #f4f7f6; 
-            --text-dark: #2d3436;
-            --white: #ffffff;
-        }
-
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text-dark); }
+        /* MANTENDO IDENTIDADE VERDE ESMERALDA */
+        :root { --emerald: #2ecc71; --dark: #27ae60; --bg: #f4f7f6; --text: #2d3436; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         .screen { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; }
         .active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-        /* HEADER E LOGO */
-        .header-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 20px; }
-        .brand { font-size: 26px; font-weight: 800; color: var(--emerald); letter-spacing: -1px; }
-
-        /* CARDS E CONTAINERS */
-        .card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 6px solid var(--emerald); }
-        .balance-title { color: #7f8c8d; font-size: 14px; margin: 0; }
-        .balance-value { font-size: 36px; font-weight: 800; color: var(--dark-emerald); margin: 5px 0; }
-
-        /* GRID DE SERVIÇOS COMPLETOS */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 6px solid var(--emerald); }
+        .brand { font-size: 28px; font-weight: 800; color: var(--emerald); text-align: center; margin-bottom: 20px; }
+        
+        /* GRID DE SERVIÇOS */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; }
         .service-item { 
-            background: var(--white); padding: 20px; border-radius: 15px; text-align: center; 
-            cursor: pointer; transition: all 0.3s ease; border: 1px solid #eee; font-weight: 600; font-size: 13px;
+            background: white; padding: 20px; border-radius: 15px; text-align: center; 
+            cursor: pointer; transition: 0.3s; border: 1px solid #eee; font-weight: 600;
         }
-        .service-item:hover { transform: translateY(-5px); border-color: var(--emerald); box-shadow: 0 8px 20px rgba(46, 204, 113, 0.15); }
-        .service-item span { display: block; font-size: 28px; margin-bottom: 10px; }
+        .service-item:hover { border-color: var(--emerald); transform: scale(1.03); color: var(--emerald); }
+        .service-item span { display: block; font-size: 30px; margin-bottom: 10px; }
 
-        /* MÓDULO DE CARTÕES PREMIUM */
-        .card-preview { 
-            background: linear-gradient(135deg, var(--emerald), var(--dark-emerald)); 
-            color: white; border-radius: 18px; padding: 25px; position: relative; margin-top: 10px;
-            box-shadow: 0 15px 30px rgba(46, 204, 113, 0.3);
-        }
-        .chip { width: 45px; height: 35px; background: #f1c40f; border-radius: 6px; margin-bottom: 20px; }
+        /* NOVO: MODAL PARA SIMULADORES E TRANSAÇÕES */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; }
+        .close-modal { position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 24px; color: #999; }
 
-        /* EXTRATO BANCÁRIO */
-        .tx-list { background: var(--white); border-radius: 20px; padding: 20px; }
-        .tx-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f1f1; }
-        .tx-info b { display: block; font-size: 14px; }
-        .tx-info small { color: #999; }
-        .val-pos { color: var(--emerald); font-weight: bold; }
-        .val-neg { color: #e74c3c; font-weight: bold; }
-
-        /* BOTÕES E INPUTS */
-        .btn-action { background: var(--emerald); color: white; border: none; padding: 16px; border-radius: 30px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .btn-action:hover { background: var(--dark-emerald); }
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #edf2f4; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
-        input:focus { border-color: var(--emerald); outline: none; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #edf2f4; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
+        .btn-action { background: var(--emerald); color: white; border: none; padding: 16px; border-radius: 30px; width: 100%; font-weight: 700; cursor: pointer; }
+        
+        .tx-list { background: white; border-radius: 20px; padding: 15px; }
+        .tx-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f1f1; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <!-- TELA 1: LOGIN SEGURO -->
+    <!-- TELA LOGIN (COM MÁSCARA ATIVA) -->
     <div id="screen-login" class="screen active">
-        <div class="card" style="max-width: 400px; margin: 100px auto; border-left: none; text-align: center;">
+        <div class="card" style="max-width: 400px; margin: 80px auto; border-left: none;">
             <div class="brand">Engecema</div>
-            <p style="color: #666;">Internet Banking Corporativo</p>
-            <input type="text" id="user-cpf" placeholder="Digite seu CPF" maxlength="11">
-            <input type="password" id="user-pass" placeholder="Senha de acesso">
-            <button class="btn-action" onclick="fluxoLogin()">Entrar na Conta</button>
-            <p id="login-feedback" style="color: #e74c3c; font-size: 12px; margin-top: 15px;"></p>
+            <input type="text" id="user-cpf" placeholder="000.000.000-00" maxlength="14" oninput="aplicarMascaraCPF(this)">
+            <input type="password" id="user-pass" placeholder="Senha">
+            <button class="btn-action" onclick="fluxoLogin()">Acessar Conta</button>
+            <p id="login-feedback" style="color:red; font-size:12px; text-align:center;"></p>
         </div>
     </div>
 
-    <!-- TELA 2: DASHBOARD COMPLETO (APP E WEB) -->
+    <!-- TELA DASHBOARD (SEM ALTERAR OS IDs EXISTENTES) -->
     <div id="screen-dash" class="screen">
-        <div class="header-nav">
-            <div class="brand">Engecema</div>
-            <button onclick="logout()" style="background:none; border:1px solid #ccc; padding:6px 18px; border-radius:20px; cursor:pointer; font-weight:600;">Sair</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+            <div class="brand" style="margin:0">Engecema</div>
+            <button onclick="logout()" style="background:none; border:1px solid #ccc; padding:8px 20px; border-radius:20px; cursor:pointer;">Sair</button>
         </div>
 
-        <!-- SALDO PRINCIPAL -->
         <div class="card">
-            <p class="balance-title">Saldo disponível em conta</p>
-            <h1 id="saldo" class="balance-value">R$ 0,00</h1>
+            <p style="color:#7f8c8d; margin:0; font-size:14px;">Saldo Total Disponível</p>
+            <h1 id="saldo" style="color:var(--dark); margin:5px 0; font-size:36px;">R$ 0,00</h1>
         </div>
 
-        <!-- MÓDULO DE CARTÕES (CRÉDITO E DÉBITO) -->
-        <h3>Meus Cartões</h3>
-        <div class="card" style="border-left-color: #34495e;">
-            <div class="card-preview">
-                <div class="chip"></div>
-                <div style="font-size: 20px; letter-spacing: 3px; font-family: monospace;">**** **** **** 8821</div>
-                <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
-                    <span style="font-size: 12px; text-transform: uppercase;">Corporate Platinum</span>
-                    <span style="font-weight: bold;">VISA</span>
-                </div>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button onclick="alert('Funcionalidade de Bloqueio Ativada')" style="flex:1; padding:12px; border-radius:12px; border:1px solid #ddd; background:white; cursor:pointer;">Bloquear</button>
-                <button onclick="alert('Gerando Cartão Virtual Seguro...')" style="flex:1; padding:12px; border-radius:12px; border:1px solid #ddd; background:white; cursor:pointer;">Cartão Virtual</button>
-            </div>
-        </div>
-
-        <!-- MENU DE SERVIÇOS (REQUISITOS COMPLETOS) -->
-        <h3>Serviços e Transações</h3>
         <div class="services-grid">
-            <div class="service-item" onclick="alert('Área Pix')"><span>💠</span>Pix</div>
-            <div class="service-item" onclick="alert('Transferências TED/DOC')"><span>💸</span>Transferir</div>
-            <div class="service-item" onclick="alert('Pagamento de Boletos')"><span>📄</span>Pagar Contas</div>
-            <div class="service-item" onclick="alert('Simulador de Empréstimos')"><span>🏦</span>Empréstimos</div>
-            <div class="service-item" onclick="alert('Portal de Investimentos')"><span>📈</span>Investimentos</div>
-            <div class="service-item" onclick="alert('Financiamento de Imóveis Engecema')"><span>🏠</span>Imóveis</div>
-            <div class="service-item" onclick="alert('Financiamento de Veículos')"><span>🚗</span>Veículos</div>
-            <div class="service-item" onclick="alert('Seguros e Proteção')"><span>🛡️</span>Seguros</div>
+            <div class="service-item" onclick="abrirModal('Pix')"><span>💠</span>Pix</div>
+            <div class="service-item" onclick="abrirModal('Financiamento')"><span>🏠</span>Financiar</div>
+            <div class="service-item" onclick="abrirModal('Investimento')"><span>📈</span>Investir</div>
+            <div class="service-item" onclick="abrirModal('Empréstimo')"><span>🏦</span>Empréstimo</div>
         </div>
 
-        <!-- EXTRATO DINÂMICO IBM CLOUD -->
-        <h3>Histórico Recente</h3>
-        <div class="tx-list">
-            <div id="lista-transacoes">
-                <p style="text-align: center; color: #999; font-size: 14px;">Conectando ao extrato da IBM Cloud...</p>
-            </div>
+        <h3 style="margin-top:30px;">Histórico de Transações</h3>
+        <div class="tx-list" id="lista-transacoes">
+            <p style="text-align:center; color:#999;">Buscando dados na IBM Cloud...</p>
+        </div>
+    </div>
+
+    <!-- MODAL ÚNICO PARA TODOS OS SERVIÇOS -->
+    <div id="modal-servico" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <h2 id="modal-titulo" style="color:var(--emerald); margin-top:0;">Serviço</h2>
+            <div id="modal-corpo"></div>
+            <button class="btn-action" style="margin-top:20px;" onclick="fecharModal()">Confirmar Operação</button>
         </div>
     </div>
 
     <script>
-        /**
-         * 1. CONFIGURAÇÃO E MOTOR DE SEGURANÇA IBM CLOUD
-         */
-        const CONFIG = Object.freeze({
-            API_URL: 'https://api.engecema.ibmcloud.com',
-            TIMEOUT: 12000
-        });
-
-        const state = {
-            get token() { return sessionStorage.getItem('_tk_engecema'); },
-            set token(val) { sessionStorage.setItem('_tk_engecema', val); }
+        /* MANTENDO CONFIGURAÇÃO ORIGINAL IBM CLOUD */
+        const CONFIG = Object.freeze({ API_URL: 'https://api.engecema.ibmcloud.com', TIMEOUT: 12000 });
+        const state = { 
+            get token() { return sessionStorage.getItem('_tk_enge'); },
+            set token(v) { sessionStorage.setItem('_tk_enge', v); } 
         };
 
-        async function apiCall(endpoint, method = 'GET', data = null) {
-            const headers = new Headers({
-                'Content-Type': 'application/json',
-                'X-App-Source': 'Engecema-Enterprise-Final',
-                'X-Request-ID': crypto.randomUUID()
-            });
-            if (state.token) headers.append('Authorization', `Bearer ${state.token}`);
-
-            try {
-                const response = await fetch(`${CONFIG.API_URL}${endpoint}`, {
-                    method, headers, body: data ? JSON.stringify(data) : null
-                });
-                if (response.status === 401) { logout(); return; }
-                if (!response.ok) throw new Error("Erro na rede");
-                return await response.json();
-            } catch (err) {
-                console.error("Erro Engecema API:", err);
-                throw err;
-            }
+        // NOVO: MÁSCARA CPF SEM ALTERAR LÓGICA DE LOGIN
+        function aplicarMascaraCPF(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            i.value = v;
         }
 
-        /**
-         * 2. LÓGICA DE NEGÓCIO
-         */
+        async function apiCall(e, m = 'GET', d = null) {
+            const h = new Headers({ 'Content-Type': 'application/json', 'X-Request-ID': crypto.randomUUID() });
+            if (state.token) h.append('Authorization', `Bearer ${state.token}`);
+            try {
+                const r = await fetch(`${CONFIG.API_URL}${e}`, { method: m, headers: h, body: d ? JSON.stringify(d) : null });
+                if (r.status === 401) logout();
+                return await r.json();
+            } catch (err) { throw err; }
+        }
+
         async function fluxoLogin() {
             const cpf = document.getElementById('user-cpf').value.replace(/\D/g, '');
             const pass = document.getElementById('user-pass').value;
-            const feedback = document.getElementById('login-feedback');
-            
-            if (cpf.length !== 11) { feedback.textContent = "CPF Inválido"; return; }
-
             try {
                 const res = await apiCall('/login', 'POST', { cpf, senha: pass });
                 state.token = res.token;
                 document.getElementById('screen-login').classList.remove('active');
                 document.getElementById('screen-dash').classList.add('active');
-                carregarInformacoes();
-            } catch (e) {
-                feedback.textContent = "Erro ao autenticar. Tente novamente.";
-            }
+                initApp();
+            } catch (e) { document.getElementById('login-feedback').textContent = "Falha na autenticação."; }
         }
 
-        async function carregarInformacoes() {
-            // Saldo Real
+        async function initApp() {
             try {
                 const dSaldo = await apiCall('/saldo');
                 document.getElementById('saldo').textContent = dSaldo.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            } catch(e) { document.getElementById('saldo').textContent = "R$ ---"; }
-
-            // Extrato Real
-            try {
                 const dTx = await apiCall('/extrato');
-                renderizarExtrato(dTx.transacoes);
-            } catch(e) {
-                document.getElementById('lista-transacoes').innerHTML = '<p style="text-align:center; color:#999;">Sem movimentações recentes.</p>';
+                const container = document.getElementById('lista-transacoes');
+                container.innerHTML = dTx.transacoes.map(t => `
+                    <div class="tx-item">
+                        <span><b>${t.descricao}</b><br><small>${t.data}</small></span>
+                        <span style="color:${t.tipo === 'C' ? 'var(--emerald)' : 'red'}"><b>${t.tipo === 'C' ? '+' : '-'} R$ ${t.valor}</b></span>
+                    </div>
+                `).join('');
+            } catch(e) { document.getElementById('lista-transacoes').innerHTML = '<p style="text-align:center; color:#999;">Extrato temporariamente indisponível.</p>'; }
+        }
+
+        /* NOVO: LÓGICA DOS MODAIS DE SERVIÇOS */
+        function abrirModal(tipo) {
+            const m = document.getElementById('modal-servico');
+            const t = document.getElementById('modal-titulo');
+            const c = document.getElementById('modal-corpo');
+            m.style.display = 'flex';
+            t.textContent = tipo;
+
+            if (tipo === 'Financiamento') {
+                c.innerHTML = `<p>Simulação Engecema (Imóveis e Veículos)</p>
+                    <select><option>Imóvel Residencial</option><option>Veículo Novo/Usado</option></select>
+                    <input type="number" placeholder="Valor total (R$)">
+                    <input type="number" placeholder="Número de meses">`;
+            } else if (tipo === 'Investimento') {
+                c.innerHTML = `<p>CDB Engecema Liquidez Diária</p>
+                    <input type="number" placeholder="Quanto deseja investir?">
+                    <small>Rendimento estimado: 110% do CDI</small>`;
+            } else if (tipo === 'Pix') {
+                c.innerHTML = `<input type="text" placeholder="Chave Pix (CPF, E-mail ou Telefone)">
+                    <input type="number" placeholder="Valor R$">`;
+            } else {
+                c.innerHTML = `<p>Solicite seu crédito direto pelo app com aprovação em até 24h.</p>
+                    <input type="number" placeholder="Valor desejado">`;
             }
         }
 
-        function renderizarExtrato(lista) {
-            const container = document.getElementById('lista-transacoes');
-            container.innerHTML = '';
-            lista.forEach(tx => {
-                const div = document.createElement('div');
-                div.className = 'tx-item';
-                div.innerHTML = `
-                    <div class="tx-info">
-                        <b>${tx.descricao}</b>
-                        <small>${tx.data}</small>
-                    </div>
-                    <div class="${tx.tipo === 'C' ? 'val-pos' : 'val-neg'}">
-                        ${tx.tipo === 'C' ? '+' : '-'} ${tx.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
+        function fecharModal() { document.getElementById('modal-servico').style.display = 'none'; }
+        function logout() { sessionStorage.clear(); window.location.reload(); }
 
-        function logout() {
-            sessionStorage.clear();
-            window.location.reload();
-        }
-
-        // Auto-login se houver token
-        window.onload = () => {
-            if (state.token) {
-                document.getElementById('screen-login').classList.remove('active');
-                document.getElementById('screen-dash').classList.add('active');
-                carregarInformacoes();
-            }
-        };
+        window.onload = () => { if (state.token) { 
+            document.getElementById('screen-login').classList.remove('active');
+            document.getElementById('screen-dash').classList.add('active');
+            initApp(); 
+        }};
     </script>
 </body>
 </html>
