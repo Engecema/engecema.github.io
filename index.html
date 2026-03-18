@@ -5,16 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Engecema - Banco Digital Seguro</title>
     <style>
-        :root { --purple: #820ad1; --dark-purple: #6c09b1; --bg: #f5f5f5; }
+        /* MUDANÇA DE CORES: IDENTIDADE VISUAL ENGECEMA */
+        :root { 
+            --emerald: #2ecc71;       /* Verde Esmeralda */
+            --dark-emerald: #27ae60;  /* Verde Escuro (Hover/Botão) */
+            --bg: #f5f5f5; 
+        }
+
         body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; background: var(--bg); color: #333; }
         .screen { display: none; padding: 20px; transition: all 0.3s ease; }
         .active { display: block; }
         .card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .btn-main { background: var(--purple); color: white; border: none; padding: 16px; border-radius: 30px; width: 100%; font-weight: 600; cursor: pointer; font-size: 16px; }
+        
+        /* Botão em Verde Esmeralda */
+        .btn-main { 
+            background: var(--emerald); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 30px; 
+            width: 100%; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 16px; 
+        }
+        .btn-main:hover { background: var(--dark-emerald); }
         .btn-main:disabled { opacity: 0.6; cursor: not-allowed; }
+
         input { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
-        input:focus { border-color: var(--purple); outline: none; }
+        
+        /* Borda do Input em Verde Esmeralda quando focado */
+        input:focus { border-color: var(--emerald); outline: none; }
+        
         .status-msg { font-size: 12px; color: #666; text-align: center; margin-top: 10px; }
+        
+        /* Títulos e Saldo em Verde Esmeralda */
+        .brand-color { color: var(--emerald); }
     </style>
 </head>
 <body>
@@ -22,7 +48,7 @@
     <!-- TELA DE LOGIN -->
     <div id="screen-login" class="screen active">
         <div class="card">
-            <h2 style="color: var(--purple); margin-top: 0;">Bem-vindo ao Engecema</h2>
+            <h2 class="brand-color" style="margin-top: 0;">Bem-vindo ao Engecema</h2>
             <p>Acesse sua conta segura</p>
             <input type="text" id="user-cpf" placeholder="CPF (somente números)" maxlength="11">
             <input type="password" id="user-pass" placeholder="Senha de 4 ou 6 dígitos">
@@ -35,15 +61,14 @@
     <div id="screen-dash" class="screen">
         <div class="card">
             <p style="color: #666; margin-bottom: 5px;">Saldo em conta</p>
-            <h1 id="saldo" style="margin: 0; font-size: 32px;">R$ 0,00</h1>
+            <h1 id="saldo" class="brand-color" style="margin: 0; font-size: 32px;">R$ 0,00</h1>
         </div>
         <button class="btn-main" style="background: #eee; color: #333;" onclick="executarLogout()">Sair da conta</button>
     </div>
 
     <script>
         /**
-         * 1. CONFIGURAÇÕES PROTEGIDAS (IMUTÁVEIS)
-         * Proteção contra alteração de API_BASE via console
+         * CONFIGURAÇÕES PROTEGIDAS (MANUTENÇÃO DA LÓGICA IBM)
          */
         const CONFIG = Object.freeze({
             API_URL: 'https://api.engecema.ibmcloud.com',
@@ -56,13 +81,14 @@
         };
 
         /**
-         * 2. MOTOR DE REQUISIÇÃO COM HEADERS DE SEGURANÇA E TRATAMENTO 401
+         * MOTOR DE REQUISIÇÃO (MANTENDO SEGURANÇA E TRATAMENTO 401)
          */
         async function apiCall(endpoint, method = 'GET', data = null) {
             const headers = new Headers({
                 'Content-Type': 'application/json',
-                'X-Content-Type-Options': 'nosniff', // Proteção contra Sniffing
-                'X-Request-ID': crypto.randomUUID()  // Rastreabilidade Bancária
+                'X-Content-Type-Options': 'nosniff',
+                'X-App-Source': 'Engecema-Production',
+                'X-Request-ID': crypto.randomUUID()
             });
 
             if (state.token) headers.append('Authorization', `Bearer ${state.token}`);
@@ -80,26 +106,21 @@
 
                 clearTimeout(timer);
 
-                // TRATAMENTO DE EXPIRAÇÃO DE TOKEN (401)
                 if (response.status === 401) {
-                    alert("Sessão expirada por segurança. Entre novamente.");
+                    alert("Sessão expirada. Entre novamente.");
                     executarLogout();
                     return;
                 }
 
-                if (!response.ok) throw new Error(`Erro IBM: ${response.status}`);
-
+                if (!response.ok) throw new Error(`Erro: ${response.status}`);
                 return await response.json();
 
             } catch (err) {
-                console.error("Falha na Operação:", err);
+                console.error("Erro na API Engecema:", err);
                 throw err;
             }
         }
 
-        /**
-         * 3. FUNÇÕES DE INTERFACE (UI) COM PROTEÇÃO XSS
-         */
         async function fluxoLogin() {
             const cpf = document.getElementById('user-cpf').value.replace(/\D/g, '');
             const pass = document.getElementById('user-pass').value;
@@ -107,24 +128,23 @@
             const btn = document.getElementById('btn-login');
 
             if (cpf.length !== 11) {
-                feedback.textContent = "CPF deve conter 11 dígitos.";
+                feedback.textContent = "CPF inválido.";
                 return;
             }
 
             btn.disabled = true;
-            btn.textContent = "Criptografando dados...";
+            btn.textContent = "Autenticando...";
 
             try {
                 const res = await apiCall('/login', 'POST', { cpf, senha: pass });
                 state.token = res.token;
                 
-                // Transição de tela
                 document.getElementById('screen-login').classList.remove('active');
                 document.getElementById('screen-dash').classList.add('active');
                 
                 carregarDadosIniciais();
             } catch (e) {
-                feedback.textContent = "Erro na autenticação. Verifique os dados.";
+                feedback.textContent = "Falha no acesso. Verifique seus dados.";
             } finally {
                 btn.disabled = false;
                 btn.textContent = "Entrar";
@@ -135,13 +155,13 @@
             const displaySaldo = document.getElementById('saldo');
             try {
                 const data = await apiCall('/saldo');
-                // PROTEÇÃO XSS: Usamos textContent para renderizar apenas texto puro
+                // Proteção contra XSS mantida via textContent
                 displaySaldo.textContent = data.valor.toLocaleString('pt-BR', { 
                     style: 'currency', 
                     currency: 'BRL' 
                 });
             } catch (e) {
-                displaySaldo.textContent = "Erro ao carregar saldo";
+                displaySaldo.textContent = "R$ ---";
             }
         }
 
@@ -150,7 +170,6 @@
             window.location.reload();
         }
 
-        // Verifica sessão ativa ao abrir a página
         window.onload = () => {
             if (state.token) {
                 document.getElementById('screen-login').classList.remove('active');
