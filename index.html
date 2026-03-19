@@ -1,235 +1,104 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Engecema | Private Banking</title> 
-    
-    <!-- Favicon Engecema (Base64) -->
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AP8AAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAAAA/wD/AAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAAAAA/wD/AAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAAAAA/wD/AAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAA/wD/AAAAAP8A/wAAAAD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8A8AADAPAAAQA==">
-
-    <style> 
-        :root { 
-            --brad-red: #cc092f; 
-            --brad-gray: #f4f4f4;
-            --brad-text: #333333;
-            --brad-link: #0076ff;
-        } 
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--brad-gray); color: var(--brad-text); -webkit-font-smoothing: antialiased; } 
-        
-        /* HEADER IDENTIDADE */
-        .header { background: var(--brad-red); color: white; padding: 18px; text-align: center; font-weight: 600; font-size: 18px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.15); } 
-        
-        .screen { display: none; padding: 20px; max-width: 480px; margin: 0 auto; min-height: 90vh; } 
-        .active { display: block; animation: slideIn 0.3s ease-out; } 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } 
-
-        /* LOGIN BOX */
-        .login-container { text-align: center; margin-top: 50px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .brand-title { font-size: 42px; font-weight: 900; color: var(--brad-red); margin-bottom: 5px; }
-        .brand-sub { font-size: 12px; color: #999; letter-spacing: 4px; margin-bottom: 40px; }
-
-        /* INPUTS ESTILO APP */
-        input { width: 100%; padding: 16px; margin: 8px 0; border: 1px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 16px; transition: 0.2s; background: #fafafa; } 
-        input:focus { border-color: var(--brad-red); background: white; outline: none; }
-
-        /* BOTOES */
-        .btn-primary { background: var(--brad-red); color: white; border: none; padding: 18px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; box-shadow: 0 4px 10px rgba(204, 9, 47, 0.3); }
-        .btn-secondary { background: none; border: 1px solid var(--brad-red); color: var(--brad-red); padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; margin-top: 20px; cursor: pointer; }
-
-        /* DASHBOARD CLONE */
-        .user-info { font-size: 14px; font-weight: 600; padding: 10px 0; color: #444; border-bottom: 1px solid #eee; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .user-info::before { content: "👤"; font-size: 18px; }
-        
-        .card-balance { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
-        .card-balance::after { content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 6px; background: var(--brad-red); }
-        .label-balance { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .value-balance { font-size: 30px; font-weight: 800; color: #222; margin: 8px 0; }
-        .limit-info { font-size: 12px; color: #27ae60; font-weight: 600; }
-
-        /* GRID BRADESCO 4 COLUNAS */
-        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; } 
-        .menu-item { background: white; padding: 15px 5px; border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; transition: 0.2s; } 
-        .menu-item:active { transform: scale(0.92); background: #fdfdfd; }
-        .menu-item i { font-size: 26px; display: block; margin-bottom: 10px; color: var(--brad-red); } 
-        
-        /* EXTRATO */
-        .section-title { font-size: 15px; font-weight: bold; margin: 25px 0 12px; color: #555; display: flex; justify-content: space-between; align-items: center; }
-        .extrato-box { background: white; border-radius: 12px; padding: 5px 15px; border: 1px solid #eee; }
-        .extrato-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f9f9f9; align-items: center; }
-        .extrato-row:last-child { border-bottom: none; }
-        .extrato-meta { font-size: 11px; color: #aaa; margin-top: 3px; }
-        .val-neg { color: var(--brad-red); font-weight: 700; }
-        
-        .op-modal { background: white; border-radius: 15px; padding: 25px; margin-top: 15px; border: 2px solid #eee; }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engecema | Engenharia e Construção</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f4f4f4; color: #333; line-height: 1.6; }
+        header { background: #003366; color: #fff; padding: 1rem 0; text-align: center; position: sticky; top: 0; z-index: 1000; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        .container { width: 80%; margin: auto; padding: 20px; }
+        section { background: #fff; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #003366; margin-bottom: 15px; }
+        #formCadastro { display: flex; flex-direction: column; gap: 10px; max-width: 400px; }
+        input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px; background: #003366; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0055aa; }
+        #mensagemFeedback { margin-top: 10px; font-weight: bold; }
+        footer { text-align: center; padding: 20px; background: #333; color: #fff; margin-top: 40px; }
     </style>
 </head>
-<body> 
+<body>
 
-    <div class="header" id="main-nav">Engecema Private</div> 
+    <header>
+        <h1>ENGECEMA</h1>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#cadastro">Abrir Conta</a>
+            <a href="admim.html">Admin</a>
+        </nav>
+    </header>
 
-    <!-- TELA 1: LOGIN --> 
-    <div id="screen-login" class="screen active"> 
-        <div class="login-container"> 
-            <div class="brand-title">Engecema</div> 
-            <div class="brand-sub">PRIVATE BANKING</div>
-            
-            <input type="text" id="login-cpf" placeholder="CPF" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'')"> 
-            <input type="password" id="login-senha" placeholder="Senha" maxlength="4"> 
-            <button class="btn-primary" onclick="validarAcesso()">Acessar conta</button> 
-            <div style="margin-top: 30px; font-size: 14px; color: #666;">
-                Ainda não é cliente? <span onclick="mudarTela('screen-cadastro')" style="color:var(--brad-red); font-weight:bold; cursor:pointer;">Abra sua conta</span>
-            </div>
-        </div> 
-    </div> 
+    <div class="container">
+        <section id="home">
+            <h2>Bem-vindo à Engecema</h2>
+            <p>Soluções inteligentes em engenharia e gestão de obras.</p>
+        </section>
 
-    <!-- TELA 2: CADASTRO --> 
-    <div id="screen-cadastro" class="screen"> 
-        <div class="login-container"> 
-            <h2 style="color:var(--brad-red); margin-top:0;">Novo Acesso</h2> 
-            <p style="font-size:13px; color:#888;">Preencha para validar seu perfil Private</p>
-            <input type="text" id="cad-nome" placeholder="Nome Completo"> 
-            <input type="email" id="cad-email" placeholder="E-mail de segurança"> 
-            <input type="text" id="cad-cpf" placeholder="CPF" maxlength="11"> 
-            <button class="btn-primary" id="btn-cad" onclick="fluxoCadastroReal()">Solicitar Acesso</button> 
-            <button onclick="mudarTela('screen-login')" class="btn-secondary">Voltar</button> 
-        </div> 
-    </div> 
+        <section id="cadastro">
+            <h2>Abrir Conta de Cliente</h2>
+            <p>Cadastre-se para acompanhar seus projetos.</p>
+            <form id="formCadastro">
+                <input type="text" id="nome" placeholder="Nome Completo" required>
+                <input type="email" id="email" placeholder="Seu E-mail" required>
+                <button type="submit">Finalizar Cadastro</button>
+            </form>
+            <div id="mensagemFeedback"></div>
+        </section>
+    </div>
 
-    <!-- TELA 3: TOKEN --> 
-    <div id="screen-token" class="screen"> 
-        <div class="login-container"> 
-            <div style="font-size:40px; margin-bottom:10px;">🔐</div>
-            <h3>Segurança Chave</h3> 
-            <p style="font-size:13px; color:#666;">Digite o código de 6 dígitos enviado por e-mail para confirmar sua identidade.</p> 
-            <input type="text" id="input-token" style="text-align:center; font-size:28px; letter-spacing:10px;" placeholder="000000" maxlength="6"> 
-            <button class="btn-primary" onclick="validarTokenFinal()">Confirmar Dispositivo</button> 
-        </div> 
-    </div> 
-
-    <!-- TELA 4: DASHBOARD (CLONE BRADESCO) --> 
-    <div id="screen-dash" class="screen"> 
-        <div class="user-info" id="nome-cliente-display">CARREGANDO...</div>
-        
-        <div class="card-balance"> 
-            <div class="label-balance">Saldo disponível em conta</div> 
-            <div class="value-balance" id="saldo-atual-display">R$ 142.880,50</div> 
-            <div class="limit-info">Cheque especial disponível: R$ 50.000,00</div> 
-        </div> 
-
-        <div class="menu-grid"> 
-            <div class="menu-item" onclick="abrirOp('Pix', '💠')"><i>💠</i>Pix</div> 
-            <div class="menu-item" onclick="abrirOp('Pagamento', '📄')"><i>📄</i>Pagar</div> 
-            <div class="menu-item" onclick="abrirOp('Transferência', '💸')"><i>💸</i>Transf.</div> 
-            <div class="menu-item"><i>💳</i>Cartões</div> 
-            <div class="menu-item"><i>🏦</i>Crédito</div> 
-            <div class="menu-item"><i>📈</i>Investir</div> 
-            <div class="menu-item"><i>🛡️</i>Seguros</div> 
-            <div class="menu-item"><i>🏠</i>Consórcio</div> 
-        </div> 
-
-        <!-- ÁREA DE TRANSAÇÃO -->
-        <div id="area-operacao" style="display:none;" class="op-modal">
-            <h3 id="op-titulo" style="margin-top:0; color:var(--brad-red);"></h3>
-            <input type="text" id="op-dest" placeholder="Dados de destino">
-            <input type="number" id="op-val" placeholder="Valor R$">
-            <button class="btn-primary" onclick="fazerTransacao()">Confirmar</button>
-            <button onclick="fecharOp()" style="border:none; background:none; width:100%; padding:10px; color:#999; cursor:pointer;">Cancelar</button>
-        </div>
-
-        <div class="section-title">Últimos Lançamentos <span style="font-weight:normal; font-size:12px; color:var(--brad-link);">Ver tudo</span></div>
-        <div class="extrato-box" id="extrato-lista">
-            <div id="empty-msg" style="text-align:center; padding:20px; color:#ccc;">Nenhum lançamento hoje</div>
-        </div>
-
-        <button onclick="location.reload()" class="btn-secondary" style="margin-bottom:40px;">Sair com segurança</button> 
-    </div> 
+    <footer>
+        <p>&copy; 2024 Engecema - Todos os direitos reservados.</p>
+    </footer>
 
     <script>
-        // CONFIGURAÇÕES API IBM
-        const API_BASE_URL = 'https://sua-app-na-ibm.com'; 
-        let saldo = 142880.50;
-        let opAtiva = '';
+        document.getElementById('formCadastro').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const feedback = document.getElementById('mensagemFeedback');
+            feedback.innerText = "Conectando ao servidor Engecema...";
+            feedback.style.color = "blue";
 
-        function atualizarSaldo() {
-            document.getElementById('saldo-atual-display').innerText = saldo.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-        }
+            // Dados estruturados conforme nossa integração Cloudant/AppConfig
+            const payload = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                // Chave de App gerada agora há pouco para o envio de e-mail
+                auth_key: "skhk gugh efrg osqk", 
+                origem: "engecema.github.io",
+                data: new Date().toLocaleString("pt-BR")
+            };
 
-        function mudarTela(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(id === 'screen-dash') atualizarSaldo();
-            window.scrollTo(0,0);
-        }
+            try {
+                // Rota configurada na IBM Cloud App Configuration
+                // Lembre-se de substituir a URL e APIKEY abaixo pelas de sua Service Credential
+                const urlServico = "COLE_AQUI_A_URL_DA_SUA_CREDENTIAL"; 
+                const apiKey = "COLE_AQUI_A_APIKEY_DA_SUA_CREDENTIAL";
 
-        function validarAcesso() {
-            const cpf = document.getElementById('login-cpf').value;
-            const sen = document.getElementById('login-senha').value;
-            if(cpf.length === 11 && sen.length === 4) {
-                document.getElementById('nome-cliente-display').innerText = "GEONNI CESAR DE MATOS";
-                mudarTela('screen-dash');
-            } else { alert("Verifique CPF e senha."); }
-        }
+                const response = await fetch(urlServico, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-        function abrirOp(t, icone) {
-            opAtiva = t;
-            document.getElementById('area-operacao').style.display = 'block';
-            document.getElementById('op-titulo').innerText = icone + ' ' + t;
-            document.getElementById('op-dest').placeholder = t === 'Pix' ? 'Chave Pix' : 'Dados do favorecido';
-            window.scrollTo(0, document.body.scrollHeight);
-        }
-
-        function fecharOp() { document.getElementById('area-operacao').style.display = 'none'; }
-
-        function fazerTransacao() {
-            const v = parseFloat(document.getElementById('op-val').value);
-            if(!v || v <= 0) return;
-            if(confirm(`Confirmar ${opAtiva} de R$ ${v.toFixed(2)}?`)) {
-                saldo -= v; atualizarSaldo();
-                const lista = document.getElementById('extrato-lista');
-                const msg = document.getElementById('empty-msg');
-                if(msg) msg.remove();
-                const row = document.createElement('div');
-                row.className = 'extrato-row';
-                row.innerHTML = `<div><div style="font-weight:700">${opAtiva} efetuado</div><div class="extrato-meta">${new Date().toLocaleTimeString()}</div></div><div class="val-neg">- ${v.toLocaleString('pt-br',{style:'currency',currency:'BRL'})}</div>`;
-                lista.prepend(row);
-                fecharOp();
+                if (response.ok) {
+                    feedback.innerText = "Conta aberta com sucesso! Verifique seu e-mail.";
+                    feedback.style.color = "green";
+                    e.target.reset();
+                } else {
+                    throw new Error("Erro na resposta da IBM Cloud");
+                }
+            } catch (error) {
+                feedback.innerText = "Erro de Servidor: Falha na autenticação ou conexão.";
+                feedback.style.color = "red";
+                console.error("Erro técnico:", error);
             }
-        }
-
-        // COMUNICAÇÃO IBM
-        async function fluxoCadastroReal() {
-            const n = document.getElementById('cad-nome').value;
-            const e = document.getElementById('cad-email').value;
-            const c = document.getElementById('cad-cpf').value;
-            const btn = document.getElementById('btn-cad');
-            if(!n || !e || !c) return alert("Preencha tudo.");
-            btn.disabled = true; btn.innerText = "Validando...";
-            try {
-                const res = await fetch(`${API_BASE_URL}/registrar`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ nome:n, email:e, cpf:c })
-                });
-                if(res.ok) mudarTela('screen-token');
-            } catch { alert("Erro servidor."); }
-            btn.disabled = false; btn.innerText = "Solicitar Acesso";
-        }
-
-        async function validarTokenFinal() {
-            const t = document.getElementById('input-token').value;
-            const c = document.getElementById('cad-cpf').value;
-            try {
-                const res = await fetch(`${API_BASE_URL}/validar`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ cpf:c, token:t })
-                });
-                const d = await res.json();
-                if(d.valid) {
-                    document.getElementById('nome-cliente-display').innerText = document.getElementById('cad-nome').value.toUpperCase();
-                    mudarTela('screen-dash');
-                } else { alert("Token inválido."); }
-            } catch { alert("Erro validação."); }
-        }
+        });
     </script>
 </body>
 </html>
