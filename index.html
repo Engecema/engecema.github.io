@@ -18,18 +18,7 @@
         } 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: #333; } 
         
-        .header { 
-            background: var(--enge-emerald); 
-            color: white; 
-            padding: 15px; 
-            text-align: center; 
-            font-weight: bold; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-        } 
-        
+        .header { background: var(--enge-emerald); color: white; padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } 
         .screen { display: none; padding: 15px; max-width: 500px; margin: 0 auto; min-height: 90vh; } 
         .active { display: block; animation: fadeIn 0.4s ease; } 
         
@@ -39,7 +28,8 @@
         .saldo-val { font-size: 28px; font-weight: bold; color: var(--enge-dark); margin: 5px 0; } 
         
         .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; } 
-        .menu-item { background: var(--white); padding: 12px 5px; border-radius: 8px; text-align: center; font-size: 10px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); } 
+        .menu-item { background: var(--white); padding: 12px 5px; border-radius: 8px; text-align: center; font-size: 10px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.2s; } 
+        .menu-item:active { transform: scale(0.95); background: #eee; }
         .menu-item span { font-size: 22px; display: block; margin-bottom: 5px; color: var(--enge-emerald); } 
         
         .btn-action { background: var(--enge-emerald); color: white; border: none; padding: 15px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.3s; }
@@ -48,6 +38,8 @@
         
         input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; } 
         .section-title { font-size: 15px; font-weight: bold; margin: 15px 0; color: #444; border-left: 4px solid var(--brad-red); padding-left: 10px; } 
+        
+        .modal-operacao { background: white; border-radius: 8px; padding: 20px; margin-top: 10px; border: 1px solid #ddd; }
     </style>
 </head>
 <body> 
@@ -92,43 +84,98 @@
         <div class="card-saldo"> 
             <div id="nome-cliente-display" style="font-size: 14px; color: #666; font-weight: 600;">Carregando...</div> 
             <div style="font-size: 12px; color: #888;">Saldo disponível</div> 
-            <div class="saldo-val">R$ 142.880,50</div> 
+            <div class="saldo-val" id="saldo-atual-display">R$ 0,00</div> 
             <div style="font-size: 11px; color: var(--enge-emerald); font-weight: bold;">Limite Cheque Especial: R$ 50.000,00</div> 
         </div> 
+
         <div class="menu-grid"> 
-            <div class="menu-item"><span>💠</span>Pix</div> 
-            <div class="menu-item"><span>📄</span>Pagar</div> 
-            <div class="menu-item"><span>💸</span>Transf.</div> 
+            <div class="menu-item" onclick="abrirOperacao('Pix')"><span>💠</span>Pix</div> 
+            <div class="menu-item" onclick="abrirOperacao('Pagamento')"><span>📄</span>Pagar</div> 
+            <div class="menu-item" onclick="abrirOperacao('Transferência')"><span>💸</span>Transf.</div> 
             <div class="menu-item"><span>💳</span>Cartões</div> 
             <div class="menu-item"><span>🏦</span>Crédito</div> 
             <div class="menu-item"><span>📈</span>Investir</div> 
             <div class="menu-item"><span>🛡️</span>Seguros</div> 
             <div class="menu-item"><span>🏠</span>Consórcio</div> 
         </div> 
+
+        <!-- ÁREA DE OPERAÇÃO DINÂMICA -->
+        <div id="area-operacao" style="display:none;" class="modal-operacao">
+            <h4 id="titulo-operacao" style="margin-top:0; color:var(--enge-dark);"></h4>
+            <input type="text" id="op-destino" placeholder="Chave Pix ou Código">
+            <input type="number" id="op-valor" placeholder="Valor R$">
+            <button class="btn-action" onclick="executarTransacao()">Confirmar</button>
+            <button onclick="fecharOperacao()" style="background:none; border:none; width:100%; margin-top:10px; color:gray; cursor:pointer;">Cancelar</button>
+        </div>
+
+        <div class="section-title">Sugestões de Crédito</div> 
+        <div style="background:white; padding:15px; border-radius:8px; display:flex; align-items:center; gap:15px; margin-bottom: 20px;"> 
+            <span style="font-size:30px;">🏠</span> 
+            <div> 
+                <div style="font-weight:bold; font-size:14px;">Crédito Imobiliário</div> 
+                <div style="font-size:11px; color:#666;">Taxas exclusivas para seu perfil Private.</div> 
+            </div> 
+        </div> 
+
         <button onclick="location.reload()" class="btn-exit">Sair com Segurança</button> 
     </div> 
 
     <script>
-        // URL DA SUA API NA IBM CLOUD (Certifique-se de usar https)
-        const API_BASE_URL = 'https://sua-app-na-ibm.com';
+        // CONFIGURAÇÕES GERAIS
+        const API_BASE_URL = 'https://sua-app-na-ibm.com'; // Substitua pela sua URL real da IBM
+        let saldoAtual = 142880.50;
+
+        function atualizarDisplaySaldo() {
+            document.getElementById('saldo-atual-display').innerText = saldoAtual.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+        }
 
         function mudarTela(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
+            if(id === 'screen-dash') atualizarDisplaySaldo();
         }
 
+        // SIMULAÇÃO DE LOGIN
         function validarAcesso() {
             const cpf = document.getElementById('login-cpf').value;
             const senha = document.getElementById('login-senha').value;
             if(cpf.length < 11 || senha.length < 4) {
-                alert("Dados inválidos.");
+                alert("Dados de acesso inválidos.");
             } else {
                 document.getElementById('nome-cliente-display').innerText = "Bem-vindo de volta";
                 mudarTela('screen-dash');
             }
         }
 
+        // OPERAÇÕES FINANCEIRAS SIMULADAS
+        function abrirOperacao(tipo) {
+            document.getElementById('area-operacao').style.display = 'block';
+            document.getElementById('titulo-operacao').innerText = 'Realizar ' + tipo;
+            document.getElementById('op-destino').placeholder = (tipo === 'Pix') ? 'Chave Pix (E-mail, CPF ou Celular)' : (tipo === 'Pagamento' ? 'Código de Barras' : 'Agência e Conta');
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function fecharOperacao() {
+            document.getElementById('area-operacao').style.display = 'none';
+            document.getElementById('op-valor').value = '';
+            document.getElementById('op-destino').value = '';
+        }
+
+        function executarTransacao() {
+            const valor = parseFloat(document.getElementById('op-valor').value);
+            if(isNaN(valor) || valor <= 0) return alert("Insira um valor válido.");
+            if(valor > saldoAtual + 50000) return alert("Saldo insuficiente (incluindo limite).");
+
+            if(confirm(`Confirmar transação de R$ ${valor.toFixed(2)}?`)) {
+                saldoAtual -= valor;
+                atualizarDisplaySaldo();
+                alert("Transação realizada com sucesso!");
+                fecharOperacao();
+            }
+        }
+
+        // COMUNICAÇÃO COM O BACK-END IBM
         async function fluxoCadastroReal() {
             const nome = document.getElementById('cad-nome').value;
             const email = document.getElementById('cad-email').value;
@@ -151,10 +198,10 @@
                     alert("Token de segurança enviado com sucesso!");
                     mudarTela('screen-token');
                 } else {
-                    alert("Erro no servidor. Verifique os dados.");
+                    alert("Erro ao processar cadastro no servidor IBM.");
                 }
             } catch (err) {
-                alert("Erro de conexão com o servidor Engecema.");
+                alert("Erro de conexão. Verifique se o servidor IBM está online.");
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Cadastrar e Validar";
@@ -175,13 +222,13 @@
                 const data = await response.json();
                 if(data.valid) {
                     document.getElementById('nome-cliente-display').innerText = document.getElementById('cad-nome').value;
-                    alert("Bem-vindo à Engecema Private!");
+                    alert("Conta ativada com sucesso! Bem-vindo à Engecema Private.");
                     mudarTela('screen-dash');
                 } else {
                     alert("Token inválido.");
                 }
             } catch (err) {
-                alert("Erro na validação.");
+                alert("Erro na validação do token.");
             }
         }
     </script>
