@@ -13,16 +13,15 @@ app.use(express.json());
 // 1. INICIALIZAÇÃO DO COFRE (App Configuration da IBM)
 const clientAppConfig = AppConfiguration.getInstance();
 clientAppConfig.init(
-    'us-south', // Região Dallas
+    'us-south', 
     '50341044-2194-4f79-a2ac-8f45959f423d', // SEU GUID
     'tL4h5JPtO0QwCdsmpGLgvBHHabvKq1PxVN9em0M_zUqO' // SUA API KEY DO SERVIÇO
 );
-clientAppConfig.setContext('producao', 'producao'); // Coleção configurada no painel
+clientAppConfig.setContext('producao', 'producao');
 
-// Servir arquivos estáticos (opcional se o index.html estiver na mesma pasta)
 app.use(express.static(path.join(__dirname)));
 
-let tokensAtivos = {}; // Armazenamento temporário de tokens em memória
+let tokensAtivos = {}; 
 
 // ROTA PRINCIPAL: REGISTRAR NO CLOUDANT E ENVIAR E-MAIL
 app.post('/api/registrar', async (req, res) => {
@@ -31,7 +30,6 @@ app.post('/api/registrar', async (req, res) => {
     tokensAtivos[cpf] = token;
 
     try {
-        // BUSCANDO CONFIGURAÇÕES REAIS NO APP CONFIGURATION (COFRE)
         const cloudantUrl = clientAppConfig.getProperty('cloudant_url').getCurrentValue();
         const cloudantKey = clientAppConfig.getProperty('cloudant_apikey').getCurrentValue();
         const emailPass = clientAppConfig.getProperty('email_pass').getCurrentValue();
@@ -42,66 +40,58 @@ app.post('/api/registrar', async (req, res) => {
             serviceUrl: cloudantUrl
         });
 
-        // SALVAR CLIENTE NO BANCO DE DADOS CLOUDANT
         await cloudant.postDocument({
             db: 'clientes_engecema',
             document: { 
-                nome, 
-                email, 
-                cpf, 
+                nome, email, cpf, 
                 status: 'AGUARDANDO_VALIDACAO', 
                 origem: 'Engecema Private Web',
                 criado_em: new Date().toISOString() 
             }
         });
 
-        // 3. CONFIGURAÇÃO DO DISPARO DE E-MAIL (NODEMAILER)
-        // Utilizando sua conta pessoal geonnimatos31@gmail.com
+        // 3. CONFIGURAÇÃO DO DISPARO DE E-MAIL (E-MAIL CORRIGIDO)
         let transporter = nodemailer.createTransport({
             service: 'gmail', 
             auth: { 
-                user: 'geonnimatos31@gmail.com', 
-                pass: emailPass // A "Senha de App" de 16 dígitos configurada na IBM
+                user: 'geonimatos31@gmail.com', // E-mail corrigido aqui
+                pass: emailPass 
             }
         });
 
         await transporter.sendMail({
-            from: '"Engecema Private" <geonnimatos31@gmail.com>', 
+            from: '"Engecema Private" <geonimatos31@gmail.com>', 
             to: email,
             subject: "Seu Token de Segurança Engecema",
             html: `
                 <div style="font-family: sans-serif; color: #333;">
                     <h2>Olá, ${nome}!</h2>
-                    <p>Recebemos sua solicitação de abertura de conta na <b>Engecema Private</b>.</p>
-                    <p>Seu código de ativação de 6 dígitos é:</p>
+                    <p>Seu código de ativação Engecema de 6 dígitos é:</p>
                     <div style="font-size: 32px; font-weight: bold; color: #2ecc71; letter-spacing: 5px; margin: 20px 0;">
                         ${token}
                     </div>
-                    <p>Insira este código na tela do sistema para prosseguir.</p>
-                    <hr>
-                    <small>Se você não solicitou este código, por favor ignore este e-mail.</small>
+                    <p>Insira este código no sistema para ativar sua conta.</p>
                 </div>
             `
         });
 
-        res.status(200).json({ success: true, message: "Cadastro salvo e token enviado." });
+        res.status(200).json({ success: true });
 
     } catch (error) {
-        console.error("Erro no processamento Engecema:", error);
-        res.status(500).json({ error: "Falha na comunicação com os serviços IBM." });
+        console.error("Erro Engecema:", error);
+        res.status(500).json({ error: "Erro no servidor." });
     }
 });
 
-// ROTA: VALIDAR TOKEN (CHAMADA PELO FRONT-END)
 app.post('/api/validar', (req, res) => {
     const { cpf, token } = req.body;
     if (tokensAtivos[cpf] && tokensAtivos[cpf] === token) {
-        delete tokensAtivos[cpf]; // Remove após uso por segurança
+        delete tokensAtivos[cpf];
         res.status(200).json({ valid: true });
     } else {
-        res.status(401).json({ valid: false, message: "Token inválido ou expirado." });
+        res.status(401).json({ valid: false });
     }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor Engecema operando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`Engecema ativo na porta ${PORT}`));
