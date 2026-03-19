@@ -1,48 +1,56 @@
 const express = require('express');
-const { CloudantV1 } = require('@ibm-cloud/cloudant');
-const { IamAuthenticator } = require('ibm-cloud-sdk-core');
-const path = require('path');
-
+const cors = require('cors');
+const nodemailer = require('nodemailer');
 const app = express();
-const port = process.env.PORT || 8080;
 
-// 1. Conexão Limpa com Cloudant V2 (Usa os Secrets do GitHub/IBM)
-const authenticator = new IamAuthenticator({
-    apikey: process.env.CLOUDANT_API_KEY_V2
-});
+app.use(cors());
+app.use(express.json());
 
-const cloudant = CloudantV1.newInstance({
-    authenticator: authenticator
-});
-cloudant.setServiceUrl(process.env.CLOUDANT_URL_V2);
+// O servidor pega as chaves das "Variáveis de Ambiente" da IBM Cloud
+const CONFIG = {
+    IBM_KEY: process.env.IBM_API_KEY,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS,
+    PORT: process.env.PORT || 3000
+};
 
-// 2. Servir arquivos estáticos (Seu index.html e logo.png)
-app.use(express.static(path.join(__dirname, '/')));
+let tokensAtivos = {}; // Armazena tokens temporariamente
 
-// 3. Rota de API para buscar Perfil e Saldo (Frente 2)
-app.get('/api/perfil', async (req, res) => {
+// ROTA: Gerar Token e Enviar E-mail
+app.post('/api/registrar', async (req, res) => {
+    const { nome, email, cpf } = req.body;
+    const token = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    tokensAtivos[cpf] = token;
+
+    // Configuração de E-mail (Exemplo Gmail/Outlook)
+    let transporter = nodemailer.createTransport({
+        service: 'gmail', 
+        auth: { user: CONFIG.EMAIL_USER, pass: CONFIG.EMAIL_PASS }
+    });
+
     try {
-        // Busca na pasta 'usuarios' (ajuste o docId conforme seu teste depois)
-        const userDoc = await cloudant.getDocument({
-            db: 'usuarios',
-            docId: 'perfil_teste' 
+        await transporter.sendMail({
+            from: `"Engecema Private" <${CONFIG.EMAIL_USER}>`,
+            to: email,
+            subject: "Seu Código de Ativação Engecema",
+            text: `Olá ${nome}, seu token de segurança é: ${token}`
         });
-
-        // Busca na pasta 'transacoes' para somar o saldo
-        const transacoes = await cloudant.postPartitionAllDocs({
-            db: 'transacoes',
-            partitionKey: 'perfil_teste'
-        });
-
-        res.json({
-            nome: userDoc.result.nome_completo,
-            saldo: userDoc.result.saldo_atual // Ou lógica de soma das transações
-        });
-    } catch (err) {
-        res.status(500).json({ error: "Erro ao acessar Cloudant V2" });
+        res.status(200).json({ message: "Sucesso" });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao enviar e-mail" });
     }
 });
 
-app.listen(port, () => {
-    console.log(`Servidor Engecema rodando na porta ${port}`);
+// ROTA: Validar Token
+app.post('/api/validar', (req, res) => {
+    const { cpf, token } = req.body;
+    if (tokensAtivos[cpf] === token) {
+        delete tokensAtivos[cpf]; // Token usado, apaga por segurança
+        res.status(200).json({ valid: true });
+    } else {
+        res.status(401).json({ valid: false });
+    }
 });
+
+app.listen(CONFIG.PORT, () => console.log(`Servidor Engecema ativo na porta ${CONFIG.PORT}`));
