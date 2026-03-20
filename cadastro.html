@@ -1,8 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Engecema Private - Abertura de Conta</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f0f2f5; }
+        form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #0f62fe; text-align: center; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #dde1e6; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        button:hover { background-color: #0353e9; }
+    </style>
+</head>
+<body>
+
+<form id="meuFormulario">
+    <h2>Abertura de Conta</h2>
+    <input type="text" name="nome" placeholder="Nome Completo" required>
+    <input type="email" name="email" placeholder="E-mail" required>
+    <button type="submit" id="btnEnviar">Finalizar Cadastro</button>
+</form>
+
 <script>
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = document.getElementById('btnEnviar');
+    btn.innerText = "Processando...";
+    btn.disabled = true;
 
-    // 1. SUAS CREDENCIAIS ENGEGEMA
+    // CREDENCIAIS
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const DB_NAME = "cliente_engecema";
@@ -12,8 +38,8 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
     dados.timestamp = new Date().toISOString();
 
     try {
-        // PASSO A: GERAÇÃO DO TOKEN (O "ESPELHAMENTO" DE SEGURANÇA BANCÁRIA)
-        // Isso troca sua apikey por um Token temporário, eliminando o erro 401 de senha
+        // PASSO 1: GERAÇÃO DO TOKEN (Segurança Bancária)
+        // Usamos um Proxy CORS para evitar bloqueio do navegador ao pedir o Token
         const authRes = await fetch("https://iam.cloud.ibm.com", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
@@ -23,7 +49,7 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
         const authData = await authRes.json();
         const accessToken = authData.access_token;
 
-        // PASSO B: ENVIO DOS DADOS COM O TOKEN GERADO
+        // PASSO 2: ENVIO DOS DADOS COM TOKEN
         const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
             method: "POST",
             headers: {
@@ -37,10 +63,17 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
             alert("Sucesso! Cadastro Engecema Private realizado com segurança de Token.");
             e.target.reset();
         } else {
-            alert("Erro na gravação. Verifique se o CORS está em 'Allow all domains (*)' no Cloudant.");
+            alert("Erro na gravação. Verifique se o banco 'cliente_engecema' existe.");
         }
     } catch (error) {
-        alert("Falha na comunicação com a IBM Cloud.");
+        console.error(error);
+        alert("Falha na comunicação com a IBM Cloud. Verifique o CORS.");
+    } finally {
+        btn.innerText = "Finalizar Cadastro";
+        btn.disabled = false;
     }
 });
 </script>
+
+</body>
+</html>
