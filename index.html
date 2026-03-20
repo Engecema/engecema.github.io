@@ -4,45 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
     <title>Engecema | Fomento Mercantil e Tecnologia</title>
     <style>
         :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #fff; padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; border-bottom: 6px solid var(--br-red); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* HEADER COM LOGIN INTEGRADO */
+        header { 
+            background: #fff; padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 6px solid var(--br-red); box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
         .logo { height: 55px; }
         .login-bar { display: flex; gap: 10px; }
         .login-bar input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100px; font-size: 14px; }
-        .btn-ok { background: var(--br-blue); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-ok { background: var(--br-blue); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-ok:hover { background: #002d55; }
+
+        /* SEÇÃO PRINCIPAL */
         .hero { background: #fff; padding: 70px 20px; text-align: center; border-bottom: 1px solid #ddd; }
         .hero h1 { font-size: 2.8em; margin: 0; font-weight: 300; }
         .hero h1 b { color: var(--br-red); font-weight: 800; }
+
+        /* CARD DE ABERTURA DE CONTA */
         .main-cta { max-width: 450px; margin: -40px auto 60px; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; }
-        
-        /* BOTÃO ATUALIZADO PARA cadastro.html */
-        .btn-open { display: block; background: var(--br-red); color: #fff; padding: 18px; text-decoration: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; margin-top: 20px; }
-        
+        .btn-open { display: block; background: var(--br-red); color: #fff; padding: 18px; text-decoration: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; margin-top: 20px; transition: 0.3s; }
+        .btn-open:hover { background: #a50725; transform: translateY(-2px); }
+
         footer { margin-top: auto; background: #fff; text-align: center; padding: 40px 20px; border-top: 1px solid #eee; color: #555; font-size: 0.95em; line-height: 1.8; }
     </style>
 </head>
 <body>
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
-        <div class="login-bar">
-            <input type="text" placeholder="Agência">
-            <input type="text" placeholder="Conta">
-            <button class="btn-ok">OK</button>
-        </div>
+        <!-- FUNCIONALIDADE 1: LOGIN REDIRECIONANDO PARA ADMIN.HTML -->
+        <form class="login-bar" onsubmit="event.preventDefault(); window.location.href='admin.html';">
+            <input type="text" placeholder="Agência" required maxlength="4">
+            <input type="text" placeholder="Conta" required maxlength="8">
+            <button type="submit" class="btn-ok">OK</button>
+        </form>
     </header>
+
     <div class="hero">
         <h1><b>Fomento Mercantil</b> e Tecnologia</h1>
         <p>Acesse seu Internet Banking ou abra sua conta digital agora.</p>
     </div>
+
     <div class="main-cta">
         <h2>Novo por aqui?</h2>
         <p>Experimente a agilidade do fomento digital com a segurança Engecema.</p>
-        <!-- LINK CORRIGIDO ABAIXO -->
+        <!-- FUNCIONALIDADE 2: ABERTURA DIRECIONANDO PARA CADASTRO.HTML -->
         <a href="cadastro.html" class="btn-open">ABRIR MINHA CONTA</a>
     </div>
+
     <footer>
         <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
         CNPJ 05.368.602/0001-10<br>
