@@ -1,4 +1,3 @@
-<!-- No seu cadastro.html, substitua a tag <form> por esta -->
 <form id="meuFormulario">
     <h2>Cadastro de Integrante</h2>
     <input type="text" name="nome" placeholder="Nome" required><br><br>
@@ -10,18 +9,16 @@
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. CONFIGURAÇÕES (Substitua pelos seus dados da IBM Cloud)
+    // 1. CONFIGURAÇÕES - Removi o espaço/quebra de linha na URL
     const API_KEY = "tO0QwCdsmpGLgvBHHabvKq1PxVN9em0M_zUqO"; 
-    const CLOUDANT_URL = "	
-https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud"; // Ex: https://...cloudantnosqldb.appdomain.cloud
-    const DB_NAME = "cliente_engecema"; // O nome da base de dados dentro do Cloudant
+    const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud"; 
+    const DB_NAME = "cliente_engecema"; 
 
     // 2. CAPTURA DOS DADOS
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
 
     try {
-        // O Cloudant exige que a API Key seja convertida em um Token ou enviada via Basic Auth (Codificada)
         const auth = btoa("apikey:" + API_KEY); 
 
         const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
@@ -37,10 +34,11 @@ https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.c
             alert("Cadastro realizado com sucesso!");
             e.target.reset();
         } else {
-            alert("Erro ao enviar dados. Verifique as credenciais.");
+            alert("Erro ao enviar dados. Verifique as credenciais e o CORS no Cloudant.");
         }
     } catch (error) {
         console.error("Erro na integração:", error);
+        alert("Erro de conexão. Verifique se o CORS está ativo na IBM Cloud.");
     }
 });
 </script>
