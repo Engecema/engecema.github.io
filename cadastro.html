@@ -2,27 +2,29 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private - Abertura de Conta</title>
-    <!-- Favicon preservado -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Engecema Private - Cadastro</title>
+    <!-- FAVICON: Ajustado para o domínio do GitHub Pages -->
+    <link rel="icon" href="https://engecema.github.io" type="image/x-icon">
+    <link rel="shortcut icon" href="https://engecema.github.io" type="image/x-icon">
+    
     <style>
         body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
         form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #0f62fe; text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-        input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .erro-senha { color: red; font-size: 12px; display: none; margin-bottom: 10px; }
-        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        h2 { color: #0f62fe; text-align: center; margin-bottom: 20px; font-size: 24px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .erro-senha { color: #da1e28; font-size: 12px; display: none; margin-bottom: 10px; font-weight: bold; }
+        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
         button:hover { background-color: #0353e9; }
     </style>
 </head>
 <body>
 
 <form id="formCadastro">
-    <h2>Dados da Conta</h2>
+    <h2>Engecema Private</h2>
     
     <label>Nome Completo</label>
-    <input type="text" name="nome" placeholder="Seu nome" required>
+    <input type="text" name="nome" placeholder="Digite seu nome" required>
 
     <label>E-mail Corporativo</label>
     <input type="email" name="email" placeholder="seu@email.com" required>
@@ -48,29 +50,29 @@ document.getElementById('formCadastro').addEventListener('submit', async (e) => 
     const confirma = document.getElementById('confirmar_senha').value;
     const msgErro = document.getElementById('msgErro');
 
-    // Validação de segurança de senha
     if (senha !== confirma) {
         msgErro.style.display = 'block';
         return;
-    } else {
-        msgErro.style.display = 'none';
     }
+    msgErro.style.display = 'none';
 
-    // DADOS TÉCNICOS IBM (Suas chaves enviadas anteriormente)
+    // CONFIGURAÇÕES IBM (G4mi3u... API KEY MANAGER)
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const URL_CL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const DB = "cliente_engecema";
 
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
-    delete dados.confirmar_senha; // Não envia o campo repetido para o banco
-    dados.data_abertura = new Date().toISOString();
+    delete dados.confirmar_senha;
+    dados.tipo_conta = "Private";
+    dados.criado_em = new Date().toISOString();
 
     try {
+        // Ajuste para autenticação IAM que o Cloudant exige
         const auth = btoa("apikey:" + API_KEY.trim());
+
         const response = await fetch(`${URL_CL}/${DB}`, {
             method: 'POST',
-            mode: 'cors',
             headers: {
                 'Authorization': 'Basic ' + auth,
                 'Content-Type': 'application/json'
@@ -79,13 +81,15 @@ document.getElementById('formCadastro').addEventListener('submit', async (e) => 
         });
 
         if (response.ok) {
-            alert("Sucesso! Conta Engecema Private criada com os 5 itens.");
+            alert("Sucesso! Cadastro Engecema Private realizado.");
             e.target.reset();
         } else {
-            alert("Erro de autenticação na IBM (401). Verifique o CORS.");
+            const erroData = await response.json();
+            console.error(erroData);
+            alert("Erro 401: A IBM recusou o acesso. Verifique se o CORS está em 'Allow all domains (*)' no painel Cloudant.");
         }
     } catch (error) {
-        alert("Erro de rede. A IBM bloqueou a conexão direta do navegador.");
+        alert("Erro de Rede: O navegador bloqueou a conexão. Verifique o CORS na IBM.");
     }
 });
 </script>
