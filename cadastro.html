@@ -2,8 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Engecema Private</title>
+    <meta title="Cadastro - Engecema Private">
     <style>
         body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f4; }
         form { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
@@ -24,26 +23,21 @@
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. CONFIGURAÇÕES - COLE A CHAVE E URL APENAS ENTRE AS ASPAS ""
+    // CONFIGURAÇÕES FIXAS
     const API_KEY = "2iYmkEX16F2bd9aeE_8_JnSeWjabD8RMmKKeiCCJF918"; 
     const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const DB_NAME = "cliente_engecema";
 
-    // 2. CAPTURA DOS DADOS
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
     dados.criado_em = new Date().toISOString();
 
     try {
-        const cleanKey = API_KEY.trim();
-        const cleanURL = CLOUDANT_URL.trim();
-
-        const response = await fetch(`${cleanURL}/${DB_NAME}`, {
+        const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
             method: 'POST',
             headers: {
-                'Authorization': 'Basic ' + btoa('apikey:' + cleanKey),
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Authorization': 'Basic ' + btoa('apikey:' + API_KEY),
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(dados)
         });
@@ -53,12 +47,12 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
             e.target.reset();
         } else {
             const erroData = await response.json();
-            console.error("Erro:", erroData);
-            alert("Erro 401: Verifique se a API Key é MANAGER.");
+            console.error("Erro IBM:", erroData);
+            alert("Erro 401: Verifique se a chave no painel IBM é MANAGER.");
         }
     } catch (error) {
         console.error("Erro de Rede:", error);
-        alert("Falha de conexão. Verifique o CORS no Cloudant.");
+        alert("Falha de conexão. Verifique o CORS no painel da IBM.");
     }
 });
 </script>
