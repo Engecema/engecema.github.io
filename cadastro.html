@@ -2,76 +2,61 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private - Cadastro Seguro</title>
+    <title>Engecema Private - Cadastro</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f0f2f5; }
-        form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #0f62fe; text-align: center; margin-bottom: 25px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #dde1e6; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
-        button:hover { background-color: #0353e9; }
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f4; }
+        form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { margin-top: 0; color: #0f62fe; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
     </style>
 </head>
 <body>
 
 <form id="meuFormulario">
     <h2>Abertura de Conta</h2>
-    <label>Nome Completo</label>
-    <input type="text" name="nome" placeholder="Digite seu nome" required>
-    
-    <label>E-mail Corporativo</label>
-    <input type="email" name="email" placeholder="seu@email.com" required>
-    
-    <button type="submit" id="btnEnviar">Finalizar Cadastro</button>
+    <input type="text" name="nome" placeholder="Nome Completo" required>
+    <input type="email" name="email" placeholder="E-mail Corporativo" required>
+    <button type="submit">Finalizar Cadastro</button>
 </form>
 
 <script>
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = document.getElementById('btnEnviar');
-    btn.innerText = "Validando...";
-    btn.disabled = true;
 
-    // 1. AS DUAS CHAVES QUE VOCÊ FORNECEU
+    // 1. CREDENCIAIS INTEGRADAS (Método de Alta Compatibilidade)
     const APIKEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-    const IAM_APIKEY = "ApiKey-71c5e05c-1176-4fa6-bd22-e0514e317b4e";
+    const DB_NAME = "cliente_engecema";
     
-    // 2. URL DO SEU WEBHOOK (No App Configuration)
-    // Se o seu Webhook aponta para o Cloudant, use a URL dele aqui:
-    const WEBHOOK_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
+    // Inserindo a APIKEY diretamente na URL para evitar bloqueio de Header pelo Navegador
+    const URL_DIRETA = `https://apikey:${APIKEY}@7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${DB_NAME}`;
 
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
-    dados.timestamp = new Date().toISOString();
-    dados.seguranca = "IAM_Validated";
+    dados.criado_em = new Date().toISOString();
 
     try {
-        // Enviando com os cabeçalhos de segurança que a IBM Cloud exige para Webhooks
-        const response = await fetch(WEBHOOK_URL, {
+        const response = await fetch(URL_DIRETA, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-App-Config-API-Key': APIKEY, // Chave de acesso do Webhook
-                'Authorization': 'Basic ' + btoa('apikey:' + APIKEY) // Autenticação para o Cloudant
+                'Content-Type': 'application/json'
+                // O Authorization foi removido daqui pois já está na URL_DIRETA
             },
             body: JSON.stringify(dados)
         });
 
         if (response.ok) {
-            alert("Sucesso! Cadastro Engecema Private realizado com as duas chaves de segurança.");
+            alert("Sucesso! O Engecema Private recebeu seus dados.");
             e.target.reset();
         } else {
-            const erro = await response.text();
-            console.error(erro);
-            alert("Erro na IBM: Verifique se o Webhook está ativo e o CORS em '*'.");
+            const erroData = await response.json();
+            console.error(erroData);
+            alert("Erro na IBM: Verifique se o banco 'cliente_engecema' existe.");
         }
     } catch (error) {
-        alert("Falha na comunicação. Verifique a conexão com a IBM Cloud.");
-    } finally {
-        btn.innerText = "Finalizar Cadastro";
-        btn.disabled = false;
+        console.error(error);
+        alert("Ocorreu um erro de rede. Verifique se o banco de dados está online.");
     }
 });
 </script>
