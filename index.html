@@ -12,17 +12,17 @@
     <title>Engecema | Fomento Mercantil e Tecnologia</title>
     
     <style>
-        /* LAYOUT BANCÁRIO LIMPO - ELOGIADO ONTEM */
+        /* LAYOUT BANCÁRIO LIMPO - FOCO NO CLIENTE */
         :root {
-            --primary-red: #cc092f;
-            --dark-blue: #004481;
-            --bg-light: #f4f7f9;
+            --brand-red: #cc092f;
+            --brand-blue: #004481;
+            --bg-gray: #f4f7f9;
         }
 
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
             margin: 0; 
-            background-color: var(--bg-light); 
+            background-color: var(--bg-gray); 
             color: #333; 
         }
         
@@ -32,67 +32,62 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            border-bottom: 5px solid var(--primary-red);
+            border-bottom: 5px solid var(--brand-red);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .logo-header { height: 60px; }
 
-        .tag-ibm { 
-            font-size: 0.75em; 
-            color: var(--dark-blue); 
-            font-weight: bold; 
-            text-transform: uppercase;
-        }
-
-        /* TEXTO SUPERIOR PERSONALIZADO */
-        .hero-top { 
+        /* TEXTO SUPERIOR BANCÁRIO */
+        .hero-section { 
             background: #fff; 
-            padding: 60px 20px; 
+            padding: 70px 20px; 
             text-align: center; 
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e1e4e8;
         }
 
-        .hero-top h1 { 
-            font-size: 2.5em; 
-            color: #222; 
+        .hero-section h1 { 
+            font-size: 2.8em; 
+            color: #1a1a1a; 
             margin: 0; 
+            font-weight: 300;
         }
 
-        .hero-top p { 
-            font-size: 1.2em; 
-            color: #666; 
+        .hero-section h1 b { color: var(--brand-red); font-weight: 800; }
+
+        .hero-section p { 
+            font-size: 1.3em; 
+            color: #555; 
             margin-top: 15px; 
         }
 
-        /* CONTAINER ÚNICO DE ACESSO */
-        .main-portal { 
-            max-width: 900px; 
-            margin: 40px auto; 
-            padding: 0 20px; 
-        }
-
-        .login-card { 
-            background: #fff; 
-            padding: 40px; 
+        /* ÁREA DE ACESSO DO CLIENTE */
+        .login-container { 
+            max-width: 500px; 
+            margin: -40px auto 80px; 
+            background: #ffffff; 
+            padding: 50px 40px; 
             border-radius: 4px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15);
             text-align: center;
         }
 
-        .btn-action { 
+        .btn-client { 
             display: block; 
             width: 100%; 
             padding: 18px; 
-            margin: 20px 0; 
+            margin-top: 20px; 
             text-decoration: none; 
-            font-weight: bold; 
+            font-weight: 900; 
             border-radius: 4px; 
             text-transform: uppercase;
-            font-size: 1em;
+            font-size: 1.1em;
+            transition: 0.3s;
         }
 
-        .btn-red { background: var(--primary-red); color: #fff; }
-        .btn-blue { background: var(--dark-blue); color: #fff; }
+        .btn-red { background: var(--brand-red); color: #fff; }
+        .btn-blue { background: var(--brand-blue); color: #fff; }
+        .btn-client:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
         .divider { 
             margin: 30px 0; 
@@ -100,24 +95,26 @@
             position: relative; 
         }
 
-        .divider span { 
+            .divider span { 
             position: absolute; 
             top: -12px; 
             background: #fff; 
             padding: 0 15px; 
             left: 50%; 
             transform: translateX(-50%); 
-            color: #999; 
+            color: #bbb; 
             font-size: 0.9em; 
         }
 
         /* RODAPÉ CORPORATIVO 2026 */
         footer { 
+            background: #fff; 
             text-align: center; 
-            padding: 50px 20px; 
-            color: #555; 
-            font-size: 0.95em; 
-            line-height: 1.8; 
+            padding: 60px 20px; 
+            border-top: 1px solid #eee;
+            color: #444;
+            font-size: 1em;
+            line-height: 2;
         }
     </style>
 </head>
@@ -125,31 +122,32 @@
 
     <header>
         <img src="logo.png" alt="Engecema" class="logo-header">
-        <div class="tag-ibm">INTEGRADO AO IBM CLOUD SERVICES</div>
+        <div style="font-size: 0.8em; color: var(--brand-blue); font-weight: bold;">
+            SISTEMA SEGURO IBM CLOUD
+        </div>
     </header>
 
-    <div class="hero-top">
-        <h1>Fomento Mercantil e Tecnologia</h1>
-        <p>Acesse o portal para abertura de contas ou realize seu login administrativo.</p>
+    <div class="hero-section">
+        <!-- TEXTO SUPERIOR EXATO -->
+        <h1><b>Fomento Mercantil</b> e Tecnologia</h1>
+        <p>Acesse seu Internet Banking ou abra sua conta digital agora.</p>
     </div>
 
-    <div class="main-portal">
-        <div class="login-card">
-            <!-- ABERTURA DE CONTAS -->
-            <a href="#" class="btn-action btn-red">ABRIR MINHA CONTA DIGITAL</a>
-
-            <div class="divider"><span>OU</span></div>
-
-            <!-- LOGIN ADMIN -->
-            <a href="admin.html" class="btn-action btn-blue">ACESSAR LOGIN / ADMIN</a>
-        </div>
+    <div class="login-container">
+        <!-- FOCO EXCLUSIVO NO CLIENTE -->
+        <a href="#" class="btn-client btn-blue">ENTRAR NA MINHA CONTA</a>
+        
+        <div class="divider"><span>OU</span></div>
+        
+        <a href="#" class="btn-client btn-red">ABRIR MINHA CONTA DIGITAL</a>
     </div>
 
     <footer>
+        <!-- RODAPÉ CORPORATIVO COMPLETO -->
         <p>
             <strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
             CNPJ 05.368.602/0001-10<br>
-            Ambiente Seguro via GitHub Enterprise & IBM Cloud Services.<br>
+            Integração Segura via GitHub Enterprise & IBM Cloud Services.<br>
             © 2026 Todos os Direitos Reservados.
         </p>
     </footer>
