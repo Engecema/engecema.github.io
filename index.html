@@ -3,72 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Engecema - Engenharia e Construção Civil | Abertura de Contas e Gestão">
+    <meta name="description" content="Engecema - Engenharia e Construção Civil">
     
-    <!-- CONFIGURAÇÃO DO FAVICON (REFERÊNCIA: logo.png NA RAIZ) -->
+    <!-- FAVICON CORRIGIDO -->
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
 
-    <!-- METADADOS DE COMPARTILHAMENTO (ESTILO BRADESCO) -->
-    <meta property="og:title" content="Engecema | Engenharia e Construção">
-    <meta property="og:description" content="Soluções integradas em engenharia. Acesse o portal ou abra sua conta.">
+    <!-- METADADOS ESTILO BRADESCO -->
+    <meta property="og:title" content="Engecema | Abertura de Conta">
+    <meta property="og:description" content="Portal oficial Engecema integrado ao GitHub e IBM Cloud.">
     <meta property="og:image" content="logo.png">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://engecema.github.io">
 
-    <title>Engecema - Portal de Serviços e Engenharia</title>
-
+    <title>Engecema - Abertura de Conta e Administração</title>
+    
     <style>
-        /* Estilização Limpa e Profissional */
-        :root { --primary-color: #004481; --secondary-color: #f4f4f4; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; line-height: 1.6; color: #333; }
-        .header-main { background: var(--secondary-color); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; }
-        .brand-logo { height: 50px; width: auto; }
-        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--primary-color); font-weight: bold; }
-        .container { max-width: 1000px; margin: 40px auto; padding: 20px; text-align: center; }
-        .form-section { background: #fff; border: 1px solid #ddd; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .btn-primary { background: var(--primary-color); color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
-        .footer-main { background: #333; color: white; text-align: center; padding: 20px 0; margin-top: 50px; }
+        /* RESTAURAÇÃO DO LAYOUT DE ONTEM */
+        :root {
+            --primary-red: #cc092f; /* Vermelho Bradesco/Engenharia */
+            --dark-blue: #004481;
+            --light-gray: #f5f7f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #fff 0%, #f8f8f8 100%);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--primary-red);
+        }
+
+        .logo-container img {
+            height: 45px;
+            vertical-align: middle;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-left: 25px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover { color: var(--primary-red); }
+
+        .hero-section {
+            background: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: -40px auto 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .card h2 { color: var(--primary-red); margin-top: 0; }
+
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-action {
+            background-color: var(--primary-red);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+
+        .btn-action:hover { background-color: #a50725; }
+
+        .admin-box {
+            background: var(--dark-blue);
+            color: white;
+            text-align: center;
+        }
+
+        .btn-outline {
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 12px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
 
-    <header class="header-main">
-        <img src="logo.png" alt="Logomarca Engecema" class="brand-logo">
-        <nav class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#servicos">Serviços</a>
-            <a href="admin.html" style="color: #d10000;">Painel Administrativo</a>
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Engecema Logo">
+        </div>
+        <nav class="nav-menu">
+            <a href="#">PARA VOCÊ</a>
+            <a href="#">PARA EMPRESAS</a>
+            <a href="admin.html" style="color: var(--primary-red);">PAINEL ADMIN</a>
         </nav>
     </header>
 
-    <main class="container">
-        <section id="home">
-            <h1>Engenharia com Excelência</h1>
-            <p>Seja bem-vindo ao portal de integração Engecema & IBM Cloud.</p>
-        </section>
+    <section class="hero-section">
+        <h1>Bem-vindo à sua nova experiência em Engenharia</h1>
+        <p>Soluções integradas com a confiança Engecema e tecnologia IBM Cloud.</p>
+    </section>
 
-        <!-- MÓDULO DE ABERTURA DE CONTA (INTEGRADO) -->
-        <section id="abertura" class="form-section">
-            <h2>Abertura de Conta Digital</h2>
-            <p>Preencha os dados abaixo para iniciar sua parceria com a Engecema.</p>
+    <main class="main-container">
+        <!-- LADO ESQUERDO: ABERTURA DE CONTA -->
+        <div class="card">
+            <h2>Abra sua conta</h2>
+            <p>Inicie seu cadastro de forma rápida e segura.</p>
             <form action="https://sua-api-ibmcloud.com" method="POST">
-                <input type="text" name="nome" placeholder="Nome Completo" style="width:80%; padding:10px; margin:10px;" required><br>
-                <input type="email" name="email" placeholder="E-mail Corporativo" style="width:80%; padding:10px; margin:10px;" required><br>
-                <button type="submit" class="btn-primary">Enviar Solicitação</button>
+                <input type="text" placeholder="Nome Completo" required>
+                <input type="email" placeholder="E-mail" required>
+                <button type="submit" class="btn-action">Quero ser cliente</button>
             </form>
-        </section>
+        </div>
 
-        <section id="admin-link" style="margin-top: 50px;">
-            <h3>Área Administrativa</h3>
-            <p>Para gestão de projetos e controle interno, utilize o link abaixo:</p>
-            <a href="admin.html" class="btn-primary">Acessar Admin.html</a>
-        </section>
+        <!-- LADO DIREITO: ADMINISTRAÇÃO -->
+        <div class="card admin-box">
+            <h2>Área Administrativa</h2>
+            <p>Acesse o painel de controle de projetos e gestão interna.</p>
+            <br>
+            <a href="admin.html" class="btn-outline">ENTRAR NO ADMIN.HTML</a>
+        </div>
     </main>
 
-    <footer class="footer-main">
-        <p>&copy; 2024 Engecema. Sincronizado via GitHub & IBM Cloud.</p>
+    <footer>
+        <p>&copy; 2024 Engecema - Engenharia e Construção. <br> Powered by GitHub & IBM Cloud.</p>
     </footer>
 
 </body>
