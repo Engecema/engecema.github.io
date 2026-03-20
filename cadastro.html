@@ -2,9 +2,11 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private - Cadastro</title>
-    <!-- FAVICON: Link direto do repositório para garantir que apareça -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Engecema Private - Cadastro Seguro</title>
+    
+    <!-- SOLUÇÃO FAVICON: Caminho absoluto para garantir carregamento em qualquer tela -->
+    <link rel="shortcut icon" href="https://engecema.github.io" type="image/x-icon">
+    <link rel="icon" href="https://engecema.github.io" type="image/x-icon">
     
     <style>
         body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
@@ -24,76 +26,83 @@
             cursor: pointer; 
             font-weight: bold; 
             font-size: 16px; 
+            transition: 0.3s;
         }
         button:hover { background-color: #b91922; }
+        #status { text-align: center; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+<!-- SOLUÇÃO ERRO DE REDE: Usando integração via Webhook/Formspree para evitar bloqueio CORS -->
 <form id="formCadastro">
     <h2>Engecema Private</h2>
     
     <label>Nome Completo</label>
-    <input type="text" name="nome" required>
+    <input type="text" name="nome" placeholder="Digite seu nome" required>
 
     <label>E-mail Corporativo</label>
-    <input type="email" name="email" required>
+    <input type="email" name="email" placeholder="seu@email.com" required>
 
     <label>CPF</label>
-    <input type="text" name="cpf" required>
+    <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" required>
 
     <label>Crie uma Senha</label>
-    <input type="password" id="senha" name="senha" required>
+    <input type="password" id="senha" name="senha" placeholder="******" required>
 
     <label>Confirme a Senha</label>
-    <input type="password" id="confirmar_senha" required>
+    <input type="password" id="confirmar_senha" placeholder="******" required>
     <span id="msgErro" class="erro-senha">As senhas não coincidem!</span>
 
     <button type="submit" id="btnFinalizar">Finalizar Cadastro</button>
+    <p id="status"></p>
 </form>
 
 <script>
-document.getElementById('formCadastro').onsubmit = async function(e) {
-    e.preventDefault();
-    
-    const senha = document.getElementById('senha').value;
-    const confirma = document.getElementById('confirmar_senha').value;
-    
-    if (senha !== confirma) {
-        document.getElementById('msgErro').style.display = 'block';
-        return;
-    }
+    document.getElementById('formCadastro').onsubmit = async function(e) {
+        e.preventDefault();
+        
+        const senha = document.getElementById('senha').value;
+        const confirma = document.getElementById('confirmar_senha').value;
+        const msgErro = document.getElementById('msgErro');
+        const status = document.getElementById('status');
 
-    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-    const DB_NAME = "cliente_engecema";
-    const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
+        if (senha !== confirma) {
+            msgErro.style.display = 'block';
+            return;
+        }
+        msgErro.style.display = 'none';
+        status.innerText = "Processando abertura de conta...";
 
-    const formData = new FormData(this);
-    const dados = Object.fromEntries(formData.entries());
-    delete dados.confirmar_senha;
+        // NOVA ESTRATÉGIA: Usar o Webhook do Formspree (Gratuito) que aceita o POST sem erro CORS
+        // Crie sua conta gratuita em formspree.io e cole o ID abaixo
+        const FORMSPREE_ID = "xpzeqlra"; // Substitua pelo seu ID real do Formspree
+        const FORM_URL = `https://formspree.io{FORMSPREE_ID}`;
 
-    try {
-        const auth = btoa("apikey:" + API_KEY);
+        const formData = new FormData(this);
 
-        // MODO NO-CORS: Envia o dado ignorando o bloqueio do navegador
-        fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
-            method: 'POST',
-            mode: 'no-cors', 
-            headers: {
-                'Authorization': 'Basic ' + auth,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dados)
-        });
+        try {
+            const response = await fetch(FORM_URL, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
 
-        // Como o modo 'no-cors' não permite ler a resposta, assumimos o envio
-        alert("Solicitação enviada ao Engecema Private. Verifique seu banco de dados.");
-        this.reset();
-
-    } catch (error) {
-        alert("Erro técnico. Verifique a configuração da IBM.");
-    }
-};
+            if (response.ok) {
+                status.style.color = "green";
+                status.innerText = "Sucesso! Cadastro enviado para validação Engecema.";
+                this.reset();
+                // Redirecionamento automático após 2 segundos
+                setTimeout(() => { window.location.href = "https://engecema.github.io"; }, 2000);
+            } else {
+                status.style.color = "red";
+                status.innerText = "Erro ao processar. Tente novamente em instantes.";
+            }
+        } catch (error) {
+            status.style.color = "red";
+            status.innerText = "Falha de conexão segura. Verifique sua rede.";
+        }
+    };
 </script>
 
 </body>
