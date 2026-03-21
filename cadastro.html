@@ -4,22 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="Engecema Private Banking - Sistema de Cadastro Integrado">
+    <meta name="description" content="Engecema Private Banking - Sistema de Cadastro de Clientes">
+    <meta name="author" content="Engecema Private">
     <title>Bradesco | Cadastro Engecema Private</title>
+    
+    <!-- Identidade Visual e Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
     <style>
-        /* ESTILIZAÇÃO COMPLETA PADRÃO BRADESCO PRIVATE */
+        /* ESTILIZAÇÃO COMPLETA PADRÃO BRADESCO PRIVATE - 166 LINHAS */
+        @font-face {
+            font-family: 'Bradesco Sans';
+            src: local('Arial');
+        }
         :root {
             --bradesco-red: #cc092f;
             --bg-gray: #f4f4f4;
             --input-border: #ddd;
             --text-main: #333;
-            --success-green: #28a745;
+            --success-color: #28a745;
+            --gold-accent: #c5a059;
         }
-        * { box-sizing: border-box; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-font-smoothing: antialiased;
+        }
         body {
             background-color: var(--bg-gray);
-            font-family: "Bradesco Sans", Arial, Helvetica, sans-serif;
+            font-family: "Bradesco Sans", Arial, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -31,46 +43,55 @@
             background: #ffffff;
             width: 100%;
             max-width: 480px;
-            padding: 50px;
+            padding: 55px;
             border-top: 8px solid var(--bradesco-red);
             border-radius: 4px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
             position: relative;
-            animation: fadeInUp 0.6s ease-out;
+            animation: slideIn 0.7s ease-out;
         }
-        @keyframes fadeInUp {
-            from { transform: translateY(20px); opacity: 0; }
+        @keyframes slideIn {
+            from { transform: translateY(40px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        header { text-align: center; margin-bottom: 40px; }
-        .logo-img { height: 50px; width: auto; }
+        header { 
+            text-align: center; 
+            margin-bottom: 45px; 
+        }
+        .logo-img { 
+            height: 52px; 
+            width: auto; 
+        }
         h2 {
             color: var(--text-main);
             text-align: center;
             font-weight: 300;
-            margin-bottom: 30px;
-            font-size: 26px;
+            margin-bottom: 35px;
+            font-size: 27px;
             letter-spacing: -0.5px;
         }
-        .form-group { margin-bottom: 20px; width: 100%; }
+        .form-group { 
+            margin-bottom: 22px; 
+            width: 100%; 
+        }
         input {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: 1px solid var(--input-border);
             border-radius: 4px;
             font-size: 16px;
             background: #fafafa;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
         input:focus {
             border-color: var(--bradesco-red);
             background: #fff;
             outline: none;
-            box-shadow: 0 0 8px rgba(204,9,47,0.15);
+            box-shadow: 0 0 10px rgba(204,9,47,0.18);
         }
-        .btn-red {
+        .btn-submit {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             background: var(--bradesco-red);
             color: #fff;
             border: none;
@@ -79,86 +100,115 @@
             cursor: pointer;
             text-transform: uppercase;
             font-size: 14px;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             transition: 0.3s;
-            margin-top: 10px;
+            margin-top: 12px;
         }
-        .btn-red:hover { background: #a00725; transform: translateY(-2px); }
+        .btn-submit:hover { 
+            background: #a00725; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(160,7,37,0.3);
+        }
 
-        /* TELA DE SUCESSO */
-        .success-box { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+        /* TELA DE SUCESSO PÓS-CADASTRO */
+        .success-wrapper { 
+            display: none; 
+            text-align: center; 
+            animation: fadeIn 0.6s ease;
+        }
         .icon-check {
-            font-size: 70px;
-            color: var(--success-green);
-            margin-bottom: 30px;
+            font-size: 75px;
+            color: var(--success-color);
+            margin-bottom: 35px;
             display: block;
         }
-        .success-text {
-            color: #777;
-            margin-bottom: 40px;
-            line-height: 1.8;
+        .success-msg {
+            color: #666;
+            margin-bottom: 45px;
+            line-height: 1.9;
             font-size: 16px;
         }
+        .btn-gold {
+            background-color: var(--gold-accent) !important;
+            color: #000 !important;
+        }
 
-        .footer-info {
+        .footer-tag {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 45px;
             font-size: 11px;
             color: #bbb;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        
+        /* 
+           DETALHAMENTO TÉCNICO:
+           Fluxo unificado para evitar redirecionamento administrativo.
+           Campos: Nome, Email, CPF, Senha, Confirmação.
+           Caminho: Root -> produtos.html
+        */
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- ETAPA 1: FORMULÁRIO DE REGISTRO (5 CAMPOS) -->
+        <!-- ETAPA 1: COLETA DE DADOS -->
         <div id="step-register">
             <header>
-                <img src="logo.png" alt="Bradesco Engecema" class="logo-img">
+                <img src="logo.png" alt="Engecema Private" class="logo-img">
             </header>
             <h2>Realizar Cadastro</h2>
             
-            <div class="form-group"><input type="text" id="nome" placeholder="Nome Completo" required></div>
-            <div class="form-group"><input type="email" id="email" placeholder="E-mail" required></div>
-            <div class="form-group"><input type="text" id="cpf" placeholder="CPF" required></div>
-            <div class="form-group"><input type="password" id="senha" placeholder="Senha" required></div>
-            <div class="form-group"><input type="password" id="confirma" placeholder="Confirmar Senha" required></div>
+            <div class="form-group"><input type="text" id="reg_nome" placeholder="Nome Completo" required></div>
+            <div class="form-group"><input type="email" id="reg_email" placeholder="E-mail Institucional" required></div>
+            <div class="form-group"><input type="text" id="reg_cpf" placeholder="CPF do Titular" required></div>
+            <div class="form-group"><input type="password" id="reg_pass" placeholder="Senha de Acesso" required></div>
+            <div class="form-group"><input type="password" id="reg_confirm" placeholder="Confirmar Senha" required></div>
 
-            <button class="btn-red" onclick="finalizarProcesso()">Finalizar Cadastro</button>
+            <button class="btn-submit" onclick="validarFluxo()">Finalizar Cadastro</button>
         </div>
 
-        <!-- ETAPA 2: REGISTRO CONCLUÍDO COM REDIRECIONAMENTO -->
-        <div id="step-success" class="success-box">
+        <!-- ETAPA 2: REGISTRO CONCLUÍDO (DIRECIONAMENTO DIRETO) -->
+        <div id="step-success" class="success-wrapper">
             <span class="icon-check">✓</span>
             <h2>Registro Concluído</h2>
-            <p class="success-text">
-                Seu perfil Private Engecema foi ativado com sucesso. Sua grade de produtos e serviços está disponível via Dallas.
+            <p class="success-msg">
+                Seu perfil Private Engecema foi ativado com sucesso. Sua grade de produtos e serviços está disponível via Dallas (us-south).
             </p>
             
-            <!-- CORREÇÃO DE DIRECIONAMENTO: Manda para produtos.html (Interface Banking) -->
-            <button class="btn-red" onclick="window.location.href='produtos.html'">Acessar Interface de Produtos</button>
+            <!-- CORREÇÃO DE DIRECIONAMENTO: Força a ida para produtos.html -->
+            <button class="btn-submit btn-gold" onclick="window.location.href='produtos.html'">Acessar Interface de Produtos</button>
         </div>
 
-        <div class="footer-info">Engecema Private Banking | us-south (Dallas)</div>
+        <div class="footer-tag">Engecema Private Banking | us-south (Dallas)</div>
     </div>
 
     <script>
         /**
-         * Lógica de Transição e Validação
+         * Lógica Técnica de Transição e Auditoria
          */
-        function finalizarProcesso() {
-            const ids = ['nome', 'email', 'cpf', 'senha', 'confirma'];
-            const todosPreenchidos = ids.every(id => document.getElementById(id).value.trim() !== "");
+        function validarFluxo() {
+            const camposIds = ['reg_nome', 'reg_email', 'reg_cpf', 'reg_pass', 'reg_confirm'];
+            const inputs = camposIds.map(id => document.getElementById(id));
+            const isValido = inputs.every(el => el.value.trim() !== "");
 
-            if (todosPreenchidos) {
+            if (isValido) {
+                // Transição de estado de interface
                 document.getElementById('step-register').style.display = 'none';
                 document.getElementById('step-success').style.display = 'block';
-                console.log("Fluxo Engecema: Cadastro finalizado. Redirecionando para produtos.html");
+                
+                // Log para monitoria IBM Cloud Continuous Delivery
+                console.log("Engecema: Cadastro finalizado. Aguardando navegação para produtos.html.");
             } else {
-                alert("Por favor, preencha todos os 5 campos obrigatoriamente.");
+                alert("Por favor, preencha todos os campos do formulário para prosseguir.");
+                inputs.forEach(el => {
+                    if (el.value.trim() === "") el.style.borderColor = "#cc092f";
+                });
             }
         }
     </script>
