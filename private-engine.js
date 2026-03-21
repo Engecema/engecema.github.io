@@ -1,75 +1,70 @@
 /**
- * Engecema Private - Engine de Integração Bancária
- * Localização: Raiz do repositório (conforme estrutura unificada)
- * Integração: IBM Cloud App Configuration + Cloudant/Webhook
+ * Engecema Private - Engine de Integração (IBM App Configuration)
+ * Região: Dallas (us-south) | Credencial: serviço-private
  */
 
 const EngecemaPrivate = {
-    // Configurações de Endpoint vindas da sua instância IBM Cloud
-    // Substitua a URL abaixo pelo seu Webhook/Action que consulta o Cloudant
     settings: {
-        apiEndpoint: "https://SUA_URL_IBM_CLOUD_FUNCTIONS_AQUI", 
-        refreshInterval: 60000 // 1 minuto
+        // INSIRA OS DADOS DA SUA CREDENCIAL 'serviço-private' ABAIXO
+        apiKey: "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n", 
+        guid: "50341044-2194-4f79-a2ac-8f45959f423d", 
+        region: "us-south", // Confirmado para Dallas
+        collectionId: "engecema-private-collection" // Certifique-se que este nome existe no seu App Config
     },
 
-    /**
-     * Inicializa a busca de dados de produtos bancários
-     */
     async init() {
-        console.log("Engecema Engine: Iniciando sincronização com IBM Cloud...");
-        await this.fetchProductData();
-        
-        // Mantém os dados atualizados em tempo real
-        setInterval(() => this.fetchProductData(), this.settings.refreshInterval);
+        console.log("Engecema Engine: Conectando ao App Configuration em Dallas...");
+        await this.fetchData();
     },
 
-    /**
-     * Consome dados do Cloudant via Webhook/API
-     */
-    async fetchProductData() {
+    async fetchData() {
+        // URL formatada para a região Dallas (us-south)
+        const url = `https://${this.settings.region}://{this.settings.guid}/collections/${this.settings.collectionId}/values`;
+
         try {
-            const response = await fetch(this.settings.apiEndpoint);
-            if (!response.ok) throw new Error('Erro na resposta da rede');
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': this.settings.apiKey,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error('Erro de autenticação ou GUID inválido em Dallas');
             
             const data = await response.json();
-            this.updateInterface(data);
+            this.render(data);
         } catch (error) {
-            console.warn("Engecema Engine: Usando valores padrão (Fallback).", error);
-            this.updateInterface(this.getFallbackData());
+            console.warn("Modo Fallback ativado (Verifique a Collection no App Config):", error);
+            this.renderFallback();
         }
     },
 
-    /**
-     * Injeta os valores nos IDs correspondentes do produtos.html
-     */
-    updateInterface(data) {
-        // Atualiza CDB
-        const cdbEl = document.getElementById('taxa-cdb');
-        if (cdbEl) cdbEl.innerHTML = `<strong>${data.cdb_taxa || '102%'} do CDI</strong>`;
+    render(data) {
+        const props = data.properties || {};
 
-        // Atualiza Fundos (Cota)
+        // Atualiza CDB (Propriedade: taxa_cdb)
+        const cdbEl = document.getElementById('taxa-cdb');
+        if (cdbEl) cdbEl.innerHTML = `<strong>${props.taxa_cdb?.value || '102%'} do CDI</strong>`;
+
+        // Atualiza Fundos (Propriedade: cota_private)
         const fundoEl = document.getElementById('taxa-fundos');
         if (fundoEl) {
-            const cota = data.fundo_cota || 2450.32;
-            fundoEl.innerHTML = `Cota: R$ ${cota.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            const cota = props.cota_private?.value || '2.450,32';
+            fundoEl.innerHTML = `Cota: R$ ${cota}`;
         }
 
-        // Atualiza LCI/LCA
+        // Atualiza LCI/LCA (Propriedade: taxa_lci)
         const lciEl = document.getElementById('taxa-lci');
-        if (lciEl) lciEl.innerHTML = `<strong>${data.lci_taxa || '94%'} do CDI</strong>`;
+        if (lciEl) lciEl.innerHTML = `<strong>${props.taxa_lci?.value || '94%'} do CDI</strong>`;
     },
 
-    /**
-     * Dados de segurança caso o Webhook falhe
-     */
-    getFallbackData() {
-        return {
-            cdb_taxa: "102%",
-            fundo_cota: 2450.32,
-            lci_taxa: "94%"
-        };
+    renderFallback() {
+        document.getElementById('taxa-cdb').innerText = "102% do CDI";
+        document.getElementById('taxa-fundos').innerText = "Cota: R$ 2.450,32";
+        document.getElementById('taxa-lci').innerText = "94% do CDI";
     }
 };
 
-// Dispara a execução assim que o DOM estiver pronto
+// Execução automática
 document.addEventListener('DOMContentLoaded', () => EngecemaPrivate.init());
