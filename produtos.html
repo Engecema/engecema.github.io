@@ -3,79 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema Private | Finalizar Cadastro</title>
+    <title>Engecema Private | Carteira de Investimentos</title>
+    <!-- Identidade Visual e Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
         :root {
-            --gold: #c5a059;
-            --bg: #1a1a1a;
-            --white: #ffffff;
+            --private-bg: #1a1a1a;
+            --private-gold: #c5a059;
+            --private-text: #ffffff;
+            --private-gray: #333333;
         }
         body {
-            background-color: var(--bg);
-            color: var(--white);
             font-family: "Bradesco Sans", Arial, sans-serif;
+            background-color: var(--private-bg);
+            color: var(--private-text);
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            border-bottom: 1px solid var(--private-gold);
+            padding: 20px;
             text-align: center;
+            background-color: #000;
         }
-        .confirmation-box {
-            background: #2d2d2d;
-            padding: 50px;
-            border: 1px solid var(--gold);
-            border-radius: 4px;
-            max-width: 500px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
-        h1 { color: var(--gold); font-weight: 300; margin-bottom: 20px; }
-        p { color: #ccc; margin-bottom: 30px; line-height: 1.6; }
+        h1 { color: var(--private-gold); font-weight: 300; margin-bottom: 10px; }
+        p.subtitle { color: #888; margin-bottom: 40px; }
         
-        .btn-finalizar {
+        /* Grid de Ativos Financeiros */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .product-card {
+            background: var(--private-gray);
+            border: 1px solid #444;
+            padding: 30px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            border-color: var(--private-gold);
+            transform: translateY(-5px);
+        }
+        .product-tag {
+            color: var(--private-gold);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+            margin-bottom: 15px;
+        }
+        .data-display {
+            margin: 20px 0;
+            font-size: 22px;
+            color: var(--private-gold);
+            font-weight: bold;
+        }
+        .btn-investir {
             display: inline-block;
-            padding: 15px 40px;
-            background-color: var(--gold);
+            padding: 12px 30px;
+            background-color: var(--private-gold);
             color: #000;
             text-decoration: none;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
+            font-size: 13px;
+            transition: opacity 0.2s;
         }
-        .btn-finalizar:hover {
-            background-color: #b08d4a;
-            transform: scale(1.05);
-        }
-        .footer-logo {
-            margin-top: 30px;
-            opacity: 0.7;
+        .btn-investir:hover { opacity: 0.9; }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 12px;
+            color: #555;
+            border-top: 1px solid #333;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
-<div class="confirmation-box">
-    <div class="icon-success" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;">✓</div>
-    <h1>Cadastro Concluído</h1>
-    <p>Seu perfil de investidor Private foi configurado com sucesso. Agora você tem acesso exclusivo à nossa grade de produtos em tempo real.</p>
+<header>
+    <!-- Logo conforme repositório engecema.github.io -->
+    <img src="logo.png" alt="Engecema Private" style="height: 50px;">
+</header>
 
-    <!-- BOTÃO DEFINITIVO DE REDIRECIONAMENTO -->
-    <a href="produtos.html" class="btn-finalizar">
-        Acessar Interface de Produtos
-    </a>
+<div class="container">
+    <h1>Produtos Bancários Private</h1>
+    <p class="subtitle">Gestão patrimonial integrada via IBM Cloud Dallas (us-south).</p>
 
-    <div class="footer-logo">
-        <img src="logo.png" alt="Engecema Private" style="height: 40px;">
+    <div class="product-grid">
+        <!-- CDB -->
+        <div class="product-card">
+            <span class="product-tag">Renda Fixa</span>
+            <h3>CDB Escalonado</h3>
+            <p>Liquidez diária com rentabilidade progressiva.</p>
+            <div id="taxa-cdb" class="data-display">Sincronizando...</div>
+            <a href="cadastro.html" class="btn-investir">Acessar Ativo</a>
+        </div>
+
+        <!-- FUNDOS -->
+        <div class="product-card">
+            <span class="product-tag">Investimentos</span>
+            <h3>Private Selection</h3>
+            <p>Curadoria de fundos multimercados globais.</p>
+            <div id="taxa-fundos" class="data-display">Sincronizando...</div>
+            <a href="cadastro.html" class="btn-investir">Ver Detalhes</a>
+        </div>
+
+        <!-- LCI/LCA -->
+        <div class="product-card">
+            <span class="product-tag">Isenção de IR</span>
+            <h3>LCI / LCA</h3>
+            <p>Títulos de crédito imobiliário e do agronegócio.</p>
+            <div id="taxa-lci" class="data-display">Sincronizando...</div>
+            <a href="cadastro.html" class="btn-investir">Simular Agora</a>
+        </div>
     </div>
 </div>
 
-<script>
-    // Log de auditoria para o IBM Cloud Pipeline
-    console.log("Fluxo de Cadastro Finalizado. Aguardando navegação para produtos.html");
-</script>
+<footer>
+    &copy; 2024 Engecema Private. Monitoramento via IBM Cloud Continuous Delivery.
+</footer>
+
+<!-- Chamada do Script na Raiz do Repositório -->
+<script src="private-engine.js"></script>
 
 </body>
 </html>
