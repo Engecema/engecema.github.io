@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engecema Private | Produtos Bancários</title>
+    <!-- Estilização Espelhada Bradesco Private -->
+    <style>
+        :root {
+            --private-bg: #1a1a1a;
+            --private-gold: #c5a059;
+            --private-text: #ffffff;
+            --private-gray: #333333;
+        }
+        body {
+            font-family: "Bradesco Sans", Arial, sans-serif;
+            background-color: var(--private-bg);
+            color: var(--private-text);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            border-bottom: 2px solid var(--private-gold);
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 { color: var(--private-gold); font-weight: 300; }
+        
+        /* Grid de Produtos */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .product-card {
+            background: var(--private-gray);
+            border: 1px solid #444;
+            padding: 25px;
+            border-radius: 4px;
+            transition: transform 0.3s;
+        }
+        .product-card:hover {
+            border-color: var(--private-gold);
+            transform: translateY(-5px);
+        }
+        .product-tag {
+            color: var(--private-gold);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-investir {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: var(--private-gold);
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
 
+<header>
+    <img src="https://engecema.github.io" alt="Engecema Private" style="height: 50px;">
+</header>
+
+<div class="container">
+    <h1>Soluções em Investimentos</h1>
+    <p>Produtos exclusivos para gestão de patrimônio de alta performance.</p>
+
+    <div class="product-grid" id="lista-produtos">
+        <!-- Espelhamento de Ativos via Script -->
+        <div class="product-card">
+            <span class="product-tag">Renda Fixa</span>
+            <h3>CDB Pós-Fixado</h3>
+            <p>Rentabilidade diferenciada com a solidez Engecema.</p>
+            <div id="taxa-cdb">Carregando taxas...</div>
+            <a href="#" class="btn-investir">Consultar</a>
+        </div>
+
+        <div class="product-card">
+            <span class="product-tag">Fundos</span>
+            <h3>Private Selection</h3>
+            <p>Curadoria de fundos multimercados globais.</p>
+            <div id="taxa-fundos">D+1 | Risc Médio</div>
+            <a href="#" class="btn-investir">Saiba Mais</a>
+        </div>
+
+        <div class="product-card">
+            <span class="product-tag">Câmbio</span>
+            <h3>Operações Estruturadas</h3>
+            <p>Hedge cambial e remessas internacionais.</p>
+            <a href="#" class="btn-investir">Simular</a>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts de Integração Bancária -->
+<script src="js/private-engine.js"></script> <!-- Script que você deve criar para lógica de taxas -->
+<script>
+    // Simulação da lógica de espelhamento Bradesco
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Interface Private Engecema carregada via IBM Cloud Pipeline.");
+        // Exemplo de injeção dinâmica de dados que o script do Bradesco faria
+        document.getElementById('taxa-cdb').innerHTML = "<strong>102% do CDI</strong>";
+    });
+</script>
+
+</body>
+</html>
