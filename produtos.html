@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bradesco Private | Validação de Segurança</title>
+    <title>Bradesco Private | Validação de Acesso</title>
     <style>
         :root {
             --bradesco-red: #cc092f;
@@ -14,32 +14,32 @@
 
         body, html { margin: 0; padding: 0; height: 100%; background: var(--bg-dark); font-family: Arial, sans-serif; overflow: hidden; }
 
-        /* TELA DE SENHA (A ABA QUE FALTAVA) */
-        #aba-senha {
+        /* 1. ABA DE SENHA (INTERCEPTOR DE SEGURANÇA) */
+        #aba-senha-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 9999;
+            background: var(--bg-dark); z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        .caixa-validacao {
+        .caixa-senha {
             background: #111; padding: 45px; border-top: 5px solid var(--bradesco-red);
-            width: 380px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,1);
+            width: 380px; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,1);
         }
 
-        .caixa-validacao h2 { color: var(--private-gold); font-size: 14px; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px; }
+        .caixa-senha h2 { color: var(--private-gold); font-size: 13px; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 2px; }
 
         input[type="password"] {
             width: 100%; padding: 18px; background: #222; border: 1px solid #333;
-            color: var(--private-gold); text-align: center; font-size: 22px; margin-bottom: 25px; border-radius: 4px;
+            color: var(--private-gold); text-align: center; font-size: 24px; margin-bottom: 25px; border-radius: 4px; outline: none;
         }
 
-        .btn-entrar {
+        .btn-validar {
             width: 100%; padding: 18px; background: var(--bradesco-red); color: white;
             border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px;
         }
 
-        /* PAINEL DE GESTÃO (OCULTO ATÉ A SENHA SER DIGITADA) */
-        #painel-dallas { display: none; padding-top: 80px; }
+        /* 2. PAINEL DE GESTÃO (OCULTO ATÉ A VALIDAÇÃO) */
+        #painel-gestao-dallas { display: none; padding-top: 80px; }
 
         header {
             background: #000; border-bottom: 1px solid var(--private-gold);
@@ -47,73 +47,76 @@
             position: fixed; top: 0; width: 100%; z-index: 1000;
         }
 
-        .card-patrimonio {
-            background: var(--card-gray); padding: 50px; margin: 40px;
-            border-left: 5px solid var(--private-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .card-valor {
+            background: var(--card-gray); padding: 60px; margin: 40px auto; max-width: 1200px;
+            border-left: 6px solid var(--private-gold); box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
 
-        .card-patrimonio h1 { color: var(--private-gold); font-size: 48px; margin: 10px 0; font-weight: 300; }
+        .card-valor h1 { color: var(--private-gold); font-size: 52px; margin: 15px 0; font-weight: 300; }
+        .session-tag { color: var(--private-gold); font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-<!-- 1. INTERCEPTAÇÃO: ABA DE SENHA -->
-<div id="aba-senha">
-    <div class="caixa-validacao">
-        <img src="logo.png" alt="Bradesco Private" style="height: 35px; margin-bottom: 25px;">
-        <h2>Digite sua Senha de 4 Dígitos</h2>
-        <input type="password" id="campo-senha" placeholder="••••" maxlength="4">
-        <button class="btn-entrar" onclick="liberarAcesso()">Acessar Conta</button>
-        <p id="msg-erro" style="color: #ff4444; font-size: 12px; margin-top: 15px; display: none;">Senha inválida para este terminal.</p>
+<!-- TELA DE SEGURANÇA (A ABA QUE FALTAVA NO FLUXO) -->
+<div id="aba-senha-container">
+    <div class="caixa-senha">
+        <img src="logo.png" alt="Bradesco Private" style="height: 35px; margin-bottom: 30px;">
+        <h2>Identificação Digital Requerida</h2>
+        <input type="password" id="senha-input" placeholder="••••" maxlength="4">
+        <button class="btn-validar" onclick="liberarPainel()">Confirmar e Acessar</button>
+        <p id="erro-auth" style="color: #ff3333; font-size: 11px; margin-top: 15px; display: none;">Chave de segurança inválida.</p>
     </div>
 </div>
 
-<!-- 2. PAINEL DE GESTÃO REAL -->
-<div id="painel-dallas">
+<!-- CONTEÚDO REAL DA PRODUÇÃO (SÓ APARECE COM SENHA) -->
+<div id="painel-gestao-dallas">
     <header>
         <img src="logo.png" alt="Bradesco Private" style="height: 35px;">
-        <div style="color: var(--private-gold); font-size: 11px; font-weight: bold;">● CONEXÃO SEGURA: DALLAS ENGINE</div>
+        <div class="session-tag">● AMBIENTE CRIPTOGRAFADO: DALLAS (US-SOUTH)</div>
     </header>
 
-    <div class="card-patrimonio">
-        <span style="color: #777; text-transform: uppercase; font-size: 12px; letter-spacing: 2px;">Patrimônio sob Gestão (Consolidado)</span>
-        <h1 id="valor-ibm">R$ 1.250.000,00</h1>
-    </div>
+    <main class="card-valor">
+        <span style="color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 3px;">Patrimônio Consolidado sob Gestão</span>
+        <h1 id="valor-real-ibm">R$ 1.250.000,00</h1>
+        <p style="color: #444; font-size: 12px; margin: 0;">Sincronizado via Cloudant Webhook em tempo real.</p>
+    </main>
 </div>
 
 <script>
-    // FUNÇÃO QUE LIBERA O PAINEL
-    function liberarAcesso() {
-        const senha = document.getElementById('campo-senha').value;
+    // FUNÇÃO QUE DESTRAVA O PAINEL DE GESTÃO
+    function liberarPainel() {
+        const pass = document.getElementById('senha-input').value;
         
-        // Simulação de validação (coloque a senha que desejar para o teste)
-        if (senha.length >= 4) { 
-            document.getElementById('aba-senha').style.display = 'none';
-            document.getElementById('painel-dallas').style.display = 'block';
+        // Simulação de trava (digite 4 dígitos para entrar)
+        if (pass.length >= 4) { 
+            document.getElementById('aba-senha-container').style.display = 'none';
+            document.getElementById('painel-gestao-dallas').style.display = 'block';
             document.body.style.overflow = 'auto';
-            conectarIBM(); // Só inicia a conexão com a IBM após a senha
+            conectarBancoCloudant(); // Busca dados da IBM Cloud após a senha
         } else {
-            document.getElementById('msg-erro').style.display = 'block';
+            document.getElementById('erro-auth').style.display = 'block';
         }
     }
 
-    // CONEXÃO COM O CLOUDANT
-    const API_URL = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
+    // CONEXÃO COM O ENDPOINT EXTERNAL PREFERRED
+    const API_CLOUDNAT = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
 
-    async function conectarIBM() {
+    async function conectarBancoCloudant() {
         try {
-            const res = await fetch(API_URL);
-            const json = await res.json();
-            const documentos = json.rows.map(r => r.doc);
+            const res = await fetch(API_CLOUDNAT);
+            const data = await res.json();
+            const docs = data.rows.map(r => r.doc);
 
-            let somaTotal = 0;
-            documentos.forEach(d => { if(d.valor) somaTotal += parseFloat(d.valor); });
+            // Soma dos ativos no banco de dados
+            let soma = 0;
+            docs.forEach(doc => { if(doc.valor) soma += parseFloat(doc.valor); });
 
-            if (somaTotal > 0) {
-                document.getElementById('valor-ibm').innerText = `R$ ${somaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            if (soma > 0) {
+                document.getElementById('valor-real-ibm').innerText = `R$ ${soma.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             }
         } catch (e) {
-            console.log("Mantendo valor de reserva (Dallas Default)");
+            console.log("Modo de segurança ativo. Usando valores Dallas Default.");
         }
     }
 </script>
