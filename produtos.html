@@ -2,120 +2,115 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bradesco Private | Validação de Acesso</title>
     <style>
         :root {
             --bradesco-red: #cc092f;
             --private-gold: #c5a059;
             --bg-dark: #0e0e0e;
-            --card-gray: #1c1c1c;
         }
 
         body, html { margin: 0; padding: 0; height: 100%; background: var(--bg-dark); font-family: Arial, sans-serif; overflow: hidden; }
 
-        /* 1. ABA DE SENHA (A CAMADA QUE FALTAVA NO FLUXO) */
-        #camada-senha {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        /* ABA DE SENHA LATERAL (ESPELHAMENTO BRADESCO) */
+        #aba-senha-lateral {
+            position: fixed; top: 0; right: 0; width: 400px; height: 100%;
+            background: #111; z-index: 10000; border-left: 1px solid var(--private-gold);
+            display: flex; flex-direction: column; padding: 60px 40px;
+            box-shadow: -20px 0 50px rgba(0,0,0,0.8);
+            transition: transform 0.5s ease;
         }
 
-        .caixa-validacao {
-            background: #111; padding: 45px; border-top: 5px solid var(--bradesco-red);
-            width: 380px; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,1);
-        }
+        .aba-fechada { transform: translateX(100%); }
 
-        .caixa-validacao h2 { color: var(--private-gold); font-size: 13px; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 2px; }
+        .aba-header { border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+        .aba-header h2 { color: var(--private-gold); font-size: 18px; text-transform: uppercase; margin: 0; }
 
         input[type="password"] {
-            width: 100%; padding: 18px; background: #222; border: 1px solid #333;
-            color: var(--private-gold); text-align: center; font-size: 24px; margin-bottom: 25px; border-radius: 4px; outline: none;
+            width: 100%; padding: 15px; background: #222; border: 1px solid #444;
+            color: white; font-size: 24px; text-align: center; letter-spacing: 8px; margin-bottom: 20px;
         }
 
-        .btn-validar {
-            width: 100%; padding: 18px; background: var(--bradesco-red); color: white;
-            border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px;
+        .btn-confirmar {
+            background: var(--bradesco-red); color: white; border: none;
+            padding: 20px; width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        /* 2. PAINEL DE GESTÃO (OCULTO ATÉ A VALIDAÇÃO) */
-        #painel-dallas { display: none; padding-top: 80px; }
+        /* CONTEÚDO DO PAINEL (FICA AO FUNDO, DESFOCADO) */
+        #conteúdo-principal { filter: blur(8px); pointer-events: none; padding: 80px 50px; }
 
         header {
             background: #000; border-bottom: 1px solid var(--private-gold);
-            padding: 15px 50px; display: flex; justify-content: space-between;
-            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 15px 50px; position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between;
         }
 
-        .card-valor {
-            background: var(--card-gray); padding: 60px; margin: 40px auto; max-width: 1200px;
-            border-left: 6px solid var(--private-gold); box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        .card-saldo {
+            background: #1c1c1c; padding: 60px; border-left: 5px solid var(--private-gold);
+            max-width: 800px; margin-top: 50px;
         }
 
-        .card-valor h1 { color: var(--private-gold); font-size: 52px; margin: 15px 0; font-weight: 300; }
-        .session-tag { color: var(--private-gold); font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        .card-saldo h1 { color: var(--private-gold); font-size: 48px; margin: 0; }
     </style>
 </head>
 <body>
 
-<!-- TELA DE SEGURANÇA: INTERCEPTA O CLIQUE EM "OK" -->
-<div id="camada-senha">
-    <div class="caixa-validacao">
-        <img src="logo.png" alt="Bradesco Private" style="height: 35px; margin-bottom: 30px;">
-        <h2>Identificação Digital Requerida</h2>
-        <input type="password" id="senha-digitos" placeholder="••••" maxlength="4">
-        <button class="btn-validar" onclick="concederAcesso()">Confirmar e Acessar</button>
-        <p id="erro-msg" style="color: #ff3333; font-size: 11px; margin-top: 15px; display: none;">Chave de segurança inválida.</p>
+<!-- ABA DE SENHA QUE APARECE AO CLICAR EM "OK" -->
+<div id="aba-senha-lateral">
+    <div class="aba-header">
+        <img src="logo.png" alt="Bradesco" style="height: 30px; margin-bottom: 15px;">
+        <h2>Senha de Acesso</h2>
+        <p style="color: #666; font-size: 12px;">Digite sua senha de 4 dígitos para liberar o Painel Private.</p>
+    </div>
+    
+    <input type="password" id="campo-senha" maxlength="4" placeholder="••••">
+    <button class="btn-confirmar" onclick="validarESoltar()">Confirmar</button>
+    <p id="erro" style="color: red; font-size: 11px; margin-top: 20px; display: none;">Senha não autorizada para este terminal.</p>
+</div>
+
+<!-- O PAINEL DE GESTÃO FICA AO FUNDO ESPERANDO A SENHA -->
+<div id="conteúdo-principal">
+    <header>
+        <img src="logo.png" alt="Logo" style="height: 35px;">
+        <div style="color: var(--private-gold); font-size: 11px;">● SESSÃO: DALLAS US-SOUTH</div>
+    </header>
+
+    <div class="card-saldo">
+        <span style="color: #666; font-size: 12px; text-transform: uppercase;">Patrimônio Consolidado</span>
+        <h1 id="valor-ibm">R$ 1.250.000,00</h1>
     </div>
 </div>
 
-<!-- CONTEÚDO DE PRODUÇÃO: SÓ APARECE APÓS A SENHA -->
-<div id="painel-dallas">
-    <header>
-        <img src="logo.png" alt="Bradesco Private" style="height: 35px;">
-        <div class="session-tag">● AMBIENTE CRIPTOGRAFADO: DALLAS (US-SOUTH)</div>
-    </header>
-
-    <main class="card-valor">
-        <span style="color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 3px;">Patrimônio Consolidado sob Gestão</span>
-        <h1 id="saldo-ibm">R$ 1.250.000,00</h1>
-        <p style="color: #444; font-size: 12px; margin: 0;">Sincronizado via Cloudant Webhook.</p>
-    </main>
-</div>
-
 <script>
-    // FUNÇÃO QUE LIBERA O PAINEL E BUSCA DADOS NA IBM
-    function concederAcesso() {
-        const pass = document.getElementById('senha-digitos').value;
+    // FUNÇÃO QUE VALIDA A SENHA E REVELA O PAINEL
+    function validarESoltar() {
+        const senha = document.getElementById('campo-senha').value;
         
-        // Simulação de trava: digite qualquer senha de 4 dígitos para entrar
-        if (pass.length >= 4) { 
-            document.getElementById('camada-senha').style.display = 'none';
-            document.getElementById('painel-dallas').style.display = 'block';
+        if(senha.length >= 4) {
+            // Remove a aba e o desfoque
+            document.getElementById('aba-senha-lateral').classList.add('aba-fechada');
+            document.getElementById('conteúdo-principal').style.filter = 'none';
+            document.getElementById('conteúdo-principal').style.pointerEvents = 'auto';
             document.body.style.overflow = 'auto';
-            carregarDadosCloudant(); // Só conecta ao banco APÓS a senha
+            conectarIBM(); // Busca dados reais após a senha
         } else {
-            document.getElementById('erro-msg').style.display = 'block';
+            document.getElementById('erro').style.display = 'block';
         }
     }
 
-    // CONEXÃO COM O ENDPOINT CLOUDANT
-    const ENDPOINT_IBM = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
-
-    async function carregarDadosCloudant() {
+    // CONEXÃO IBM CLOUDANT
+    async function conectarIBM() {
+        const API = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
         try {
-            const res = await fetch(ENDPOINT_IBM);
+            const res = await fetch(API);
             const data = await res.json();
-            const documentos = data.rows.map(r => r.doc);
-
-            let somaTotal = 0;
-            documentos.forEach(doc => { if(doc.valor) somaTotal += parseFloat(doc.valor); });
-
-            if (somaTotal > 0) {
-                document.getElementById('saldo-ibm').innerText = `R$ ${somaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            const docs = data.rows.map(r => r.doc);
+            let total = 0;
+            docs.forEach(d => { if(d.valor) total += parseFloat(d.valor); });
+            if (total > 0) {
+                document.getElementById('valor-ibm').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             }
         } catch (e) {
-            console.log("Acesso via Dallas Engine Offline.");
+            console.log("Erro de sincronização. Usando valor padrão.");
         }
     }
 </script>
