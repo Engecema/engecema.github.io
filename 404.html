@@ -11,33 +11,32 @@
             display: flex; flex-direction: column; padding: 60px 40px; box-shadow: -20px 0 70px #000; color: #fff;
         }
         input { width: 100%; padding: 20px; background: #000; border: 1px solid #333; color: var(--gold); font-size: 32px; text-align: center; letter-spacing: 10px; margin: 30px 0; outline: none; }
-        button { width: 100%; padding: 20px; background: var(--red); color: #fff; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        button { width: 100%; padding: 20px; background: var(--red); color: #fff; border: none; font-weight: bold; text-transform: uppercase; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="aba-seguranca">
         <h2 id="tit" style="color:var(--gold)">SENHA DE ACESSO</h2>
-        <p id="sub" style="color:#666; font-size:12px;">Informe sua senha de 4 dígitos.</p>
+        <p id="sub" style="color:#666; font-size:12px;">Informe sua senha de 4 dígitos para o terminal Dallas.</p>
         <input type="password" id="p" maxlength="4" placeholder="••••">
-        <button onclick="proximo()">Avançar</button>
+        <button id="btn-p" onclick="fluxo()">Avançar</button>
+        <p id="err" style="color:var(--red); font-size:11px; margin-top:15px; display:none; text-align:center;">As senhas não conferem.</p>
     </div>
-
     <script>
         let s1 = "";
-        function proximo() {
+        function fluxo() {
             const val = document.getElementById('p').value;
             if(val.length === 4) {
                 if(s1 === "") {
                     s1 = val;
                     document.getElementById('tit').innerText = "CONFIRMAR SENHA";
-                    document.getElementById('sub').innerText = "Repita a senha para validar.";
+                    document.getElementById('sub').innerText = "Repita para validar a segurança.";
                     document.getElementById('p').value = "";
                 } else if(val === s1) {
-                    // SUCESSO: Direciona para o produção.html (Saldo IBM)
                     window.location.href = "produção.html";
                 } else {
-                    alert("Senhas não conferem.");
-                    location.reload();
+                    document.getElementById('err').style.display = 'block';
+                    setTimeout(() => location.reload(), 2000);
                 }
             }
         }
