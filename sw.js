@@ -1,23 +1,29 @@
-/* SW.JS - SEQUESTRO DE ROTA PARA FORÇAR ABA DE SENHA */
-const CACHE_NAME = 'engecema-private-v500';
+/* SW.JS - MOTOR DE INJEÇÃO ENGECEMA PRIVATE */
+const CACHE_NAME = 'engecema-v250';
+const ASSETS = ['index.html', 'cadastro.html', 'produção.html', 'private-engine.js', 'logo.png'];
 
 self.addEventListener('install', (e) => {
-    self.skipWaiting(); 
+    self.skipWaiting();
+    e.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(ASSETS)));
 });
 
 self.addEventListener('activate', (e) => {
-    e.waitUntil(self.clients.claim());
+    e.waitUntil(caches.keys().then((ks) => Promise.all(
+        ks.map((k) => { if (k !== CACHE_NAME) return caches.delete(k); })
+    )).then(() => self.clients.claim()));
 });
 
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
-
-    // Se o clique no OK pedir 'admin.html', entregamos o 'produção.html' 
-    // onde a sua aba de senha já funciona manualmente.
-    if (url.pathname.endsWith('admin.html')) {
+    // Injeta o private-engine.js em todos os arquivos HTML imutáveis
+    if (url.pathname.endsWith('.html') || url.pathname === '/') {
         event.respondWith(
-            fetch('produção.html').then(response => {
-                return response;
+            fetch(event.request).then(async (res) => {
+                let html = await res.text();
+                const scriptTag = '<script src="private-engine.js"></script>';
+                return new Response(html.replace('</body>', scriptTag + '</body>'), {
+                    headers: { 'Content-Type': 'text/html' }
+                });
             })
         );
     } else {
