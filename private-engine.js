@@ -1,32 +1,49 @@
-/* PRIVATE-ENGINE.JS - MOTOR DE SENHA DALLAS */
+/**
+ * ENGECEMA PRIVATE - AJUSTE DE INTERFACE DALLAS
+ * ADICIONA CAMPOS DE SENHA NO INDEX IMUTÁVEL
+ */
+
 (function() {
-    const style = document.createElement('style');
-    style.innerHTML = `
-        #aba-br-private { position:fixed; top:0; right:0; width:410px; height:100vh; background:#111; z-index:9999999; border-left:2px solid #c5a059; padding:60px 40px; color:#fff; display:flex; flex-direction:column; box-shadow:-25px 0 80px #000; font-family:Arial; box-sizing:border-box; }
-        .in-br { width:100%; padding:20px; background:#000; border:1px solid #333; color:#c5a059; font-size:32px; text-align:center; letter-spacing:15px; margin:30px 0; outline:none; border-radius:4px; }
-        .bt-br { width:100%; padding:22px; background:#cc092f; color:#fff; border:none; font-weight:bold; text-transform:uppercase; cursor:pointer; border-radius:4px; }
-    `;
-    document.head.appendChild(style);
+    window.addEventListener('load', function() {
+        const loginBar = document.querySelector('.login-bar');
+        const btnOk = document.querySelector('.btn-ok');
 
-    const aba = document.createElement('div');
-    aba.id = 'aba-br-private';
-    let s1 = "";
+        if (loginBar && btnOk) {
+            // 1. Cria o campo de Senha
+            const inputSenha = document.createElement('input');
+            inputSenha.type = 'password';
+            inputSenha.placeholder = 'Senha';
+            inputSenha.required = true;
+            inputSenha.maxLength = 4;
+            inputSenha.style.width = '100px';
+            inputSenha.style.padding = '8px';
+            inputSenha.style.borderRadius = '4px';
+            inputSenha.style.border = '1px solid #ccc';
 
-    const render = (tit, sub, btn) => {
-        aba.innerHTML = '<img src="logo.png" style="height:30px;margin-bottom:25px;"><h2 style="color:#c5a059;text-transform:uppercase;font-size:16px;">'+tit+'</h2><p style="color:#666;font-size:12px;">'+sub+'</p><input type="password" id="p-br" class="in-br" maxlength="4" placeholder="••••"><button class="bt-br" id="b-br">'+btn+'</button>';
-        document.body.appendChild(aba);
-        document.getElementById('b-br').onclick = () => {
-            const val = document.getElementById('p-br').value;
-            if(val.length === 4) {
-                if(s1 === "") { s1 = val; render("CONFIRMAR SENHA", "Repita a senha para validar.", "CONFIRMAR"); }
-                else if(val === s1) { 
-                    aba.style.display="none"; 
-                    // Redireciona para o destino final com o saldo real IBM
-                    window.location.href = "produtos.html";
+            // 2. Cria o campo de Confirmar Senha
+            const inputConfirma = document.createElement('input');
+            inputConfirma.type = 'password';
+            inputConfirma.placeholder = 'Confirmar';
+            inputConfirma.required = true;
+            inputConfirma.maxLength = 4;
+            inputConfirma.style.width = '100px';
+            inputConfirma.style.padding = '8px';
+            inputConfirma.style.borderRadius = '4px';
+            inputConfirma.style.border = '1px solid #ccc';
+
+            // 3. Insere os campos ANTES do botão OK
+            loginBar.insertBefore(inputSenha, btnOk);
+            loginBar.insertBefore(inputConfirma, btnOk);
+
+            // 4. Validação antes de enviar para o admin.html
+            loginBar.onsubmit = function(e) {
+                if (inputSenha.value !== inputConfirma.value) {
+                    e.preventDefault();
+                    alert("Senhas não conferem!");
+                    return false;
                 }
-                else { alert("Senhas não conferem."); location.reload(); }
-            }
-        };
-    };
-    render("SENHA DE ACESSO", "Informe sua senha de 4 dígitos para identificação digital.", "AVANÇAR");
+                // Se estiver ok, o navegador segue o onsubmit original do index (window.location.href='admin.html')
+            };
+        }
+    });
 })();
