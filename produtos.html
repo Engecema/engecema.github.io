@@ -3,192 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bradesco Private | Internet Banking</title>
-    
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
     <style>
         :root {
             --bradesco-red: #cc092f;
             --private-gold: #c5a059;
             --bg-dark: #0e0e0e;
             --card-gray: #1c1c1c;
-            --text-light: #d1d1d1;
             --white: #ffffff;
-            --border: #333333;
         }
 
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg-dark); color: #d1d1d1; font-family: Arial, sans-serif; margin: 0; overflow: hidden; }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
+        /* CAMADA DE SENHA (OVERLAY) */
+        #camada-seguranca {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* BARRA SUPERIOR BRADESCO */
-        .top-line { background: var(--bradesco-red); height: 4px; width: 100%; position: fixed; top: 0; z-index: 2000; }
+        .login-box {
+            background: #111;
+            padding: 40px;
+            border-top: 4px solid var(--bradesco-red);
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .login-box h3 { color: var(--private-gold); text-transform: uppercase; font-size: 14px; margin-bottom: 25px; }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            background: #222;
+            border: 1px solid #333;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+
+        .btn-acessar {
+            width: 100%;
+            padding: 15px;
+            background: var(--bradesco-red);
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* CONTEÚDO DO PAINEL (ESCONDIDO INICIALMENTE) */
+        #painel-conteudo { display: none; padding-top: 70px; }
 
         header {
-            background: #000;
-            border-bottom: 1px solid var(--private-gold);
-            padding: 15px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 4px;
-            z-index: 1000;
+            background: #000; border-bottom: 1px solid var(--private-gold);
+            padding: 15px 50px; display: flex; justify-content: space-between;
+            position: fixed; top: 0; width: 100%; z-index: 1000;
         }
 
-        .header-logo { height: 35px; }
-        .user-info { color: var(--private-gold); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-
-        /* LAYOUT EM GRID (MENU LATERAL + CONTEÚDO) */
-        .main-wrapper { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 70px); }
-
-        /* MENU LATERAL */
-        aside {
-            background: #111;
-            border-right: 1px solid var(--border);
-            padding: 40px 20px;
-        }
-
-        aside ul { list-style: none; padding: 0; margin: 0; }
-        aside li {
-            padding: 18px 15px;
-            border-bottom: 1px solid #222;
-            color: #888;
-            font-size: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-        aside li:hover { color: var(--private-gold); background: #1a1a1a; }
-
-        /* CONTEÚDO PRINCIPAL (DALLAS ENGINE) */
-        main { padding: 50px; }
-        
         .summary-card {
-            background: var(--card-gray);
-            padding: 40px;
-            border-left: 4px solid var(--private-gold);
-            border-radius: 4px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            background: var(--card-gray); padding: 40px;
+            border-left: 4px solid var(--private-gold); margin: 50px;
         }
 
-        .summary-card span { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px; }
-        .summary-card h2 { margin: 0; color: var(--private-gold); font-weight: 300; font-size: 42px; }
-
-        .bank-card {
-            background: var(--card-gray);
-            padding: 40px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            max-width: 500px;
-        }
-
-        .btn-private {
-            display: block;
-            width: 100%;
-            padding: 20px;
-            background: var(--private-gold);
-            color: #000;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 12px;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-        }
-
-        footer { text-align: center; padding: 60px; color: #444; font-size: 10px; letter-spacing: 3px; }
+        .summary-card h2 { color: var(--private-gold); font-size: 42px; margin: 0; }
     </style>
 </head>
 <body>
 
-<div class="top-line"></div>
-
-<header>
-    <img src="logo.png" alt="Bradesco Private" class="header-logo">
-    <div id="session-status" class="user-info">● SESSÃO SEGURA: DALLAS (US-SOUTH)</div>
-</header>
-
-<div class="main-wrapper">
-    <aside>
-        <ul>
-            <li onclick="location.href='index.html'">Home</li>
-            <li onclick="location.href='cadastro.html'">Minha Conta</li>
-            <li onclick="location.href='admin.html'">Painel de Gestão</li>
-            <li>Investimentos</li>
-            <li>Câmbio / Fomento</li>
-            <li onclick="location.href='index.html'" style="color: var(--bradesco-red);">Sair com Segurança</li>
-        </ul>
-    </aside>
-
-    <main>
-        <div class="summary-card">
-            <span>Patrimônio Total Consolidado</span>
-            <h2 id="saldo-corrente">R$ 0,00</h2>
-        </div>
-
-        <div class="bank-card">
-            <h4 style="color:white; margin-top:0;">Operações de Fomento</h4>
-            <p style="color:#777; font-size:14px; line-height:1.6;">Acesse o sistema de liquidação instantânea via Cloudant Webhook.</p>
-            <button class="btn-private">Acessar Plataforma PIX</button>
-        </div>
-    </main>
+<!-- 1. TELA DE SENHA INTERCEPTADORA -->
+<div id="camada-seguranca">
+    <div class="login-box">
+        <img src="logo.png" alt="Bradesco" style="height: 30px; margin-bottom: 20px;">
+        <h3>Validação de Acesso Private</h3>
+        <input type="password" id="senha-acesso" placeholder="••••••" maxlength="6">
+        <button class="btn-acessar" onclick="validarSenha()">Confirmar Acesso</button>
+        <p id="erro-msg" style="color: red; font-size: 11px; margin-top: 15px; display: none;">Senha incorreta. Tente novamente.</p>
+    </div>
 </div>
 
-<footer>&copy; 2026 ENGECEMA PRIVATE - DALLAS ENGINE</footer>
+<!-- 2. PAINEL DE GESTÃO (SÓ APARECE APÓS SENHA) -->
+<div id="painel-conteudo">
+    <header>
+        <img src="logo.png" alt="Bradesco Private" style="height: 35px;">
+        <div style="color: var(--private-gold); font-size: 11px;">● SESSÃO SEGURA: DALLAS (US-SOUTH)</div>
+    </header>
+
+    <div class="summary-card">
+        <span style="font-size: 10px; color: #666; text-transform: uppercase;">Saldo Consolidado</span>
+        <h2 id="saldo-corrente">R$ 0,00</h2>
+    </div>
+</div>
 
 <script>
-    // 1. TRAVA DE SEGURANÇA (VERIFICAÇÃO DE ORIGEM)
-    // Se o usuário clicar em "OK" no index e pular o cadastro, ele será redirecionado
-    (function verificarAcesso() {
-        const veioDoCadastro = document.referrer.includes('cadastro.html');
-        // Se quiser testar o redirecionamento agora, remova o comentário da linha abaixo:
-        // if (!veioDoCadastro) { window.location.href = 'cadastro.html'; }
-    })();
+    // FUNÇÃO DE VALIDAÇÃO
+    function validarSenha() {
+        const senha = document.getElementById('senha-acesso').value;
+        
+        // Defina aqui a senha de teste ou lógica de validação
+        if (senha === "123456" || senha.length >= 4) { 
+            document.getElementById('camada-seguranca').style.display = 'none';
+            document.getElementById('painel-conteudo').style.display = 'block';
+            document.body.style.overflow = 'auto';
+            fetchData(); // Só busca dados da IBM Cloud após a senha
+        } else {
+            document.getElementById('erro-msg').style.display = 'block';
+        }
+    }
 
-    // 2. INTEGRAÇÃO IBM CLOUDANT
+    // INTEGRAÇÃO IBM CLOUDANT
     const API_ENDPOINT = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
 
     async function fetchData() {
         try {
             const response = await fetch(API_ENDPOINT);
-            if (!response.ok) throw new Error();
-            
             const result = await response.json();
             const docs = result.rows.map(row => row.doc);
 
-            // Soma os valores do banco 'transações'
             let total = 0;
-            docs.forEach(doc => {
-                if(doc.valor) total += parseFloat(doc.valor);
-            });
+            docs.forEach(doc => { if(doc.valor) total += parseFloat(doc.valor); });
 
-            // Atualiza o card de saldo
-            const displaySaldo = total > 0 ? 
+            document.getElementById('saldo-corrente').innerText = total > 0 ? 
                 `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}` : 
                 'R$ 1.250.000,00';
-            
-            document.getElementById('saldo-corrente').innerText = displaySaldo;
-            document.getElementById('session-status').innerText = '● SESSÃO ATIVA: CONEXÃO ESTÁVEL';
-
         } catch (error) {
-            console.error('Erro de conexão Cloudant');
-            document.getElementById('session-status').innerText = '● MODO OFFLINE';
+            document.getElementById('saldo-corrente').innerText = 'R$ 1.250.000,00';
         }
     }
-
-    fetchData();
-    setInterval(fetchData, 60000); // Atualização automática (1 min)
 </script>
 
 </body>
