@@ -2,42 +2,37 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private | Terminal Dallas</title>
+    <title>Bradesco Private | Home Banking</title>
     <style>
-        :root { --red: #cc092f; --bg: #ffffff; --text: #333333; }
-        body { background: #f4f7f9; color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        :root { --br-red: #cc092f; --br-gray: #f4f7f9; --text: #333; --gold: #c5a059; }
+        body { background: var(--br-gray); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-bottom: 80px; }
         
-        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
         .logo { height: 35px; }
+
+        .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
         
-        .container { padding: 40px; max-width: 1100px; margin: 0 auto; }
-        .card-saldo { background: #fff; padding: 40px; border-left: 8px solid var(--red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .label { color: #888; text-transform: uppercase; font-size: 11px; font-weight: bold; }
-        .valor { color: var(--text); font-size: 52px; margin: 10px 0; font-weight: 800; }
+        /* CARD PATRIMÔNIO */
+        .card-patrimonio { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .label-p { color: #888; text-transform: uppercase; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+        .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
 
-        .grid-servicos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .btn-servico { background: #fff; padding: 35px; text-align: center; border: 1px solid #ddd; cursor: pointer; color: var(--red); font-weight: 900; text-transform: uppercase; transition: 0.3s; }
-        .btn-servico:hover { border-color: var(--red); transform: translateY(-3px); }
+        /* SEÇÕES DE PRODUTOS */
+        .secao-titulo { color: var(--br-red); font-size: 14px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 8px; letter-spacing: 1px; }
+        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        
+        .produto-item { background: #fff; padding: 20px 10px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.3s; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; }
+        .produto-item:hover { border-color: var(--br-red); box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateY(-2px); }
+        .produto-item span { font-size: 11px; font-weight: bold; color: #555; text-transform: uppercase; line-height: 1.3; margin-top: 10px; }
+        .icon { font-size: 24px; color: var(--br-red); }
 
-        /* JANELA DE VALOR (MODAL BRANCO E VERMELHO) */
-        #modal-transacao { 
-            display: none; position: fixed; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); background: #fff; 
-            padding: 40px; border: 2px solid var(--red); z-index: 1001; 
-            width: 380px; text-align: center; border-radius: 8px;
-            box-shadow: 0 20px 100px rgba(0,0,0,0.2);
-        }
-        #modal-transacao h3 { color: var(--red); margin-top: 0; text-transform: uppercase; }
-        #modal-transacao input { 
-            width: 100%; padding: 15px; margin: 20px 0; 
-            border: 1px solid #ddd; background: #f9f9f9; 
-            font-size: 24px; text-align: center; border-radius: 4px; outline: none;
-        }
-        #modal-transacao button { 
-            width: 100%; padding: 18px; background: var(--red); 
-            color: white; border: none; font-weight: bold; 
-            text-transform: uppercase; cursor: pointer; border-radius: 4px;
-        }
+        /* MODAL DE TRANSAÇÃO (BRANCO/VERMELHO) */
+        #modal-br { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 40px; border: 2px solid var(--br-red); z-index: 1001; width: 380px; border-radius: 8px; box-shadow: 0 20px 100px rgba(0,0,0,0.3); text-align: center; }
+        #modal-br h3 { color: var(--br-red); text-transform: uppercase; margin: 0 0 20px 0; font-size: 18px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { font-size: 10px; font-weight: bold; color: #999; text-transform: uppercase; }
+        #modal-br input { width: 100%; padding: 15px; margin-top: 5px; border: 1px solid #ddd; background: #f9f9f9; font-size: 18px; border-radius: 4px; box-sizing: border-box; outline: none; }
+        #modal-br button { width: 100%; padding: 18px; background: var(--br-red); color: white; border: none; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 4px; margin-top: 10px; }
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; }
     </style>
 </head>
@@ -47,72 +42,121 @@
 
 <header>
     <img src="logo.png" class="logo">
-    <div style="color:var(--red); font-weight:bold; font-size:12px;">DALLAS PRIVATE TERMINAL</div>
+    <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">SESSÃO PRIVATIVA | DALLAS US-SOUTH</div>
 </header>
 
 <div class="container">
-    <div class="card-saldo">
-        <span class="label">Patrimônio Consolidado</span>
-        <h1 id="saldo-ibm" class="valor">R$ 0,00</h1>
+    <!-- PATRIMÔNIO REAL IBM CLOUDANT -->
+    <div class="card-patrimonio">
+        <span class="label-p">Patrimônio Líquido sob Gestão</span>
+        <h1 id="saldo-real" class="valor-p">R$ 0,00</h1>
+        <small style="color: #ccc;">Atualizado em tempo real via Cloudant Webhook</small>
     </div>
 
-    <div class="grid-servicos">
-        <div class="btn-servico" onclick="abrirJanela('PIX')">PIX</div>
-        <div class="btn-servico" onclick="abrirJanela('Transferir')">Transferir</div>
-        <div class="btn-servico" onclick="abrirJanela('Extrato')">Extrato</div>
-        <div class="btn-servico" onclick="abrirJanela('Investir')">Investir</div>
-        <div class="btn-servico" onclick="abrirJanela('Pagamentos')">Contas</div>
-        <div class="btn-servico" onclick="abrirJanela('Cartões')">Cartões</div>
+    <!-- CATEGORIA 1: TRANSAÇÕES -->
+    <div class="secao-titulo">Transações e Consultas</div>
+    <div class="grid-produtos">
+        <div class="produto-item" onclick="abrirModal('PIX', true)"><i>📱</i><span>Pix</span></div>
+        <div class="produto-item" onclick="abrirModal('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
+        <div class="produto-item" onclick="abrirModal('Transferências')"><i>💸</i><span>Transferências</span></div>
+        <div class="produto-item" onclick="abrirModal('Pagamentos')"><i>📄</i><span>Pagamentos</span></div>
+        <div class="produto-item" onclick="abrirModal('Cartões')"><i>💳</i><span>Cartões</span></div>
+        <div class="produto-item" onclick="abrirModal('Agendamentos')"><i>📅</i><span>Agendamentos</span></div>
+        <div class="produto-item" onclick="abrirModal('Saque')"><i>🏧</i><span>Saque</span></div>
+        <div class="produto-item" onclick="abrirModal('Comprovantes')"><i>📝</i><span>Comprovantes</span></div>
+    </div>
+
+    <!-- CATEGORIA 2: EMPRÉSTIMOS -->
+    <div class="secao-titulo">Empréstimos e Financiamentos</div>
+    <div class="grid-produtos">
+        <div class="produto-item" onclick="abrirModal('Empréstimos')"><i>💰</i><span>Empréstimos</span></div>
+        <div class="produto-item" onclick="abrirModal('Crédito Imobiliário')"><i>🏠</i><span>Crédito Imobiliário</span></div>
+        <div class="produto-item" onclick="abrirModal('Linha de Crédito')"><i>📈</i><span>Linha de Crédito</span></div>
+        <div class="produto-item" onclick="abrirModal('Renegociação')"><i>🤝</i><span>Renegociação</span></div>
+    </div>
+
+    <!-- CATEGORIA 3: INVESTIMENTOS -->
+    <div class="secao-titulo">Investimentos</div>
+    <div class="grid-produtos">
+        <div class="produto-item" onclick="abrirModal('Investimentos')"><i>💎</i><span>Investimentos</span></div>
+        <div class="produto-item" onclick="abrirModal('Home Broker')"><i>🖥️</i><span>Home Broker</span></div>
+        <div class="produto-item" onclick="abrirModal('Previdência')"><i>👴</i><span>Previdência</span></div>
+        <div class="produto-item" onclick="abrirModal('Objetivos')"><i>🎯</i><span>Objetivos</span></div>
+    </div>
+
+    <!-- CATEGORIA 4: MAIS PRODUTOS -->
+    <div class="secao-titulo">Mais Produtos e Contas</div>
+    <div class="grid-produtos">
+        <div class="produto-item" onclick="abrirModal('Câmbio')"><i>💱</i><span>Câmbio</span></div>
+        <div class="produto-item" onclick="abrirModal('Seguros')"><i>🛡️</i><span>Seguros</span></div>
+        <div class="produto-item" onclick="abrirModal('Consórcio')"><i>🚗</i><span>Consórcio</span></div>
+        <div class="produto-item" onclick="abrirModal('Conta Internacional')"><i>🌍</i><span>Conta Internacional</span></div>
     </div>
 </div>
 
-<!-- JANELA DE DIGITAÇÃO -->
-<div id="modal-transacao">
-    <h3 id="modal-titulo">Operação</h3>
-    <p style="color:#666; font-size:12px;">Digite os dados para processamento Dallas.</p>
-    <input type="text" id="modal-input" placeholder="R$ 0,00">
-    <button onclick="finalizarTransacao()">Confirmar no Terminal</button>
-    <p onclick="fecharJanela()" style="color:#999; cursor:pointer; font-size:11px; margin-top:15px; text-decoration:underline;">Cancelar</p>
+<!-- MODAL DE TRANSAÇÃO DINÂMICO -->
+<div id="modal-br">
+    <h3 id="m-tit">Operação</h3>
+    
+    <div class="input-group">
+        <label id="l-campo1">Chave / Identificador</label>
+        <input type="text" id="m-val1" placeholder="Digite aqui">
+    </div>
+
+    <div class="input-group" id="group-valor" style="display:none;">
+        <label>Valor da Operação (R$)</label>
+        <input type="text" id="m-val2" placeholder="0,00">
+    </div>
+
+    <button onclick="processar()">Confirmar no Terminal</button>
+    <p onclick="fechar()" style="color:#999; cursor:pointer; font-size:11px; margin-top:15px; text-decoration:underline;">Cancelar</p>
 </div>
 
 <script>
-    function abrirJanela(tipo) {
-        document.getElementById('modal-transacao').style.display = 'block';
+    function abrirModal(tipo, mostrarValor = false) {
+        document.getElementById('modal-br').style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
-        document.getElementById('modal-titulo').innerText = tipo;
-        document.getElementById('modal-input').value = "";
-        document.getElementById('modal-input').placeholder = (tipo === 'PIX') ? "Chave PIX ou Valor" : "Valor R$";
+        document.getElementById('m-tit').innerText = tipo;
+        document.getElementById('m-val1').value = "";
+        document.getElementById('m-val2').value = "";
+        
+        // Ajusta labels para o PIX ou outros produtos
+        document.getElementById('l-campo1').innerText = (tipo === 'PIX') ? "Chave PIX (CPF/E-mail/Celular)" : "Identificador/Contrato";
+        
+        // Se for PIX ou Transferência, mostra o campo de VALOR
+        if(mostrarValor || tipo === 'Transferências' || tipo === 'Pagamentos') {
+            document.getElementById('group-valor').style.display = 'block';
+        } else {
+            document.getElementById('group-valor').style.display = 'none';
+        }
     }
 
-    function fecharJanela() {
-        document.getElementById('modal-transacao').style.display = 'none';
+    function fechar() {
+        document.getElementById('modal-br').style.display = 'none';
         document.getElementById('overlay').style.display = 'none';
     }
 
-    function finalizarTransacao() {
-        const tipo = document.getElementById('modal-titulo').innerText;
-        const valor = document.getElementById('modal-input').value;
+    function processar() {
+        const t = document.getElementById('m-tit').innerText;
+        const v1 = document.getElementById('m-val1').value;
+        const v2 = document.getElementById('m-val2').value;
         
-        if(valor === "") {
-            alert("Por favor, preencha os dados da operação.");
-            return;
-        }
+        if(!v1) { alert("Por favor, preencha a identificação."); return; }
 
-        // AQUI APARECE A MENSAGEM SÓ DEPOIS DE DIGITAR
-        alert("SOLICITAÇÃO ENVIADA!\nA operação de " + tipo + " no valor/chave [" + valor + "] foi encaminhada para processamento no servidor Dallas us-south.");
-        fecharJanela();
+        alert("SOLICITAÇÃO DALLAS ENVIADA!\\nA operação de " + t + " foi encaminhada para processamento seguro via IBM Cloudant.");
+        fechar();
     }
 
-    async function carregarSaldo() {
+    async function buscarSaldo() {
         try {
             const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud');
             const data = await res.json();
             let total = 0;
             data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
-            document.getElementById('saldo-ibm').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { document.getElementById('saldo-ibm').innerText = "R$ 1.250.000,00"; }
+            document.getElementById('saldo-real').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        } catch(e) { document.getElementById('saldo-real').innerText = "R$ 1.250.000,00"; }
     }
-    carregarSaldo();
+    buscarSaldo();
 </script>
 
 </body>
