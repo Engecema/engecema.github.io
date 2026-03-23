@@ -1,46 +1,49 @@
-/* PRIVATE-ENGINE.JS - DESBLOQUEIO DO BOTÃO OK -> PRODUTOS.HTML */
+/* PRIVATE-ENGINE.JS - DESBLOQUEIO DEFINITIVO -> PRODUTOS.HTML */
 (function() {
-    window.addEventListener('load', function() {
+    const injetarCampos = () => {
         const loginBar = document.querySelector('.login-bar');
         const btnOk = document.querySelector('.btn-ok');
 
-        if (loginBar && btnOk) {
-            // 1. Criar Campo SENHA
-            const inputSenha = document.createElement('input');
-            inputSenha.type = 'password';
-            inputSenha.placeholder = 'Senha';
-            inputSenha.required = true;
-            inputSenha.maxLength = 4;
-            inputSenha.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px; font-size: 14px; margin-right: 5px;";
+        if (loginBar && btnOk && !document.getElementById('senha-private')) {
+            // 1. Limpa o comando antigo do formulário que travava a navegação
+            loginBar.removeAttribute('onsubmit');
+            loginBar.setAttribute('onsubmit', 'return false;');
 
-            // 2. Criar Campo CONFIRMAR
-            const inputConfirma = document.createElement('input');
-            inputConfirma.type = 'password';
-            inputConfirma.placeholder = 'Confirmar';
-            inputConfirma.required = true;
-            inputConfirma.maxLength = 4;
-            inputConfirma.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px; font-size: 14px; margin-right: 5px;";
+            // 2. Criar Campo SENHA
+            const s1 = document.createElement('input');
+            s1.id = 'senha-private'; s1.type = 'password'; s1.placeholder = 'Senha';
+            s1.required = true; s1.maxLength = 4;
+            s1.style = "padding:8px; border:1px solid #ccc; border-radius:4px; width:80px; font-size:14px; margin-right:5px;";
 
-            // 3. Inserir antes do botão OK
-            loginBar.insertBefore(inputSenha, btnOk);
-            loginBar.insertBefore(inputConfirma, btnOk);
+            // 3. Criar Campo CONFIRMAR
+            const s2 = document.createElement('input');
+            s2.id = 'confirma-private'; s2.type = 'password'; s2.placeholder = 'Confirmar';
+            s2.required = true; s2.maxLength = 4;
+            s2.style = "padding:8px; border:1px solid #ccc; border-radius:4px; width:80px; font-size:14px; margin-right:5px;";
 
-            // 4. DESBLOQUEIO E REDIRECIONAMENTO
-            loginBar.onsubmit = function(e) {
-                e.preventDefault(); // Para o comportamento antigo que travava
+            // 4. Inserir antes do botão OK
+            loginBar.insertBefore(s1, btnOk);
+            loginBar.insertBefore(s2, btnOk);
+
+            // 5. NOVO COMANDO DO BOTÃO OK
+            btnOk.onclick = function(e) {
+                e.preventDefault();
                 e.stopPropagation();
 
-                if (inputSenha.value.length === 4 && inputSenha.value === inputConfirma.value) {
-                    // SENHAS CORRETAS: DIRECIONA PARA PRODUTOS.HTML
+                if (s1.value.length === 4 && s1.value === s2.value) {
+                    // SUCESSO: DIRECIONA PARA O PAINEL DE PRODUTOS
                     window.location.href = 'produtos.html';
                 } else {
-                    alert("As senhas não conferem ou estão incompletas.");
-                    inputSenha.value = "";
-                    inputConfirma.value = "";
-                    inputSenha.focus();
+                    alert("As senhas não conferem!");
+                    s1.value = ""; s2.value = "";
                 }
-                return false;
             };
         }
-    });
+    };
+
+    // Executa a cada 500ms para garantir que vença o carregamento do index
+    setInterval(injetarSegurancaEngecema, 500);
+    
+    // Fallback imediato
+    window.addEventListener('load', injetarCampos);
 })();
