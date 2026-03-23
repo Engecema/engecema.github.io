@@ -37,7 +37,7 @@
 <body>
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
-        <!-- FUNCIONALIDADE 1: LOGIN REDIRECIONANDO PARA ADMIN.HTML -->
+        <!-- LOGIN INTEGRADO COM INTERCEPTAÇÃO PELO MOTOR EXTERNO -->
         <form class="login-bar" onsubmit="event.preventDefault(); window.location.href='admin.html';">
             <input type="text" placeholder="Agência" required maxlength="4">
             <input type="text" placeholder="Conta" required maxlength="8">
@@ -53,7 +53,6 @@
     <div class="main-cta">
         <h2>Novo por aqui?</h2>
         <p>Experimente a agilidade do fomento digital com a segurança Engecema.</p>
-        <!-- FUNCIONALIDADE 2: ABERTURA DIRECIONANDO PARA CADASTRO.HTML -->
         <a href="cadastro.html" class="btn-open">ABRIR MINHA CONTA</a>
     </div>
 
@@ -63,5 +62,8 @@
         Integração Segura via GitHub Enterprise & IBM Cloud Services.<br>
         © 2026 Todos os Direitos Reservados.</p>
     </footer>
+
+    <!-- TIRO CERTEIRO: CHAMADA DO MOTOR DE SEGURANÇA E FOMENTO DALLAS -->
+    <script src="private-engine.js"></script>
 </body>
 </html>
