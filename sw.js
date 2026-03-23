@@ -1,39 +1,42 @@
 /**
- * MOTOR DE SEGURANÇA ENGECEMA PRIVATE - DALLAS ENGINE
- * STATUS: SEQUESTRO DE ROTA ATIVO | VOLUMETRIA: 75 LINHAS
- * OBJETIVO: REDIRECIONAR ADMIN.HTML (IMUTÁVEL) PARA PRODUTOS.HTML
+ * SERVIDOR DE LIMPEZA E ROTA - ENGECEMA PRIVATE
+ * STATUS: RESET DE CACHE ATIVO | VERSÃO: 300.0.1
+ * OBJETIVO: DESTRANCAR O FORMULÁRIO DE CADASTRO
  */
 
-const CACHE_NAME = 'engecema-v500';
-const ASSETS = ['index.html', 'produtos.html', 'private-engine.js', 'logo.png'];
+const CACHE_NAME = 'engecema-v300-reset';
 
-self.addEventListener('install', (e) => {
-    self.skipWaiting(); 
-    e.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(ASSETS)));
+// 1. INSTALAÇÃO: Força o Service Worker a assumir o controle na hora
+self.addEventListener('install', (event) => {
+    self.skipWaiting();
+    console.log("Terminal Dallas: Iniciando Limpeza de Cache...");
 });
 
-self.addEventListener('activate', (e) => {
-    e.waitUntil(caches.keys().then((ks) => Promise.all(
-        ks.map((k) => { if (k !== CACHE_NAME) return caches.delete(k); })
-    )).then(() => self.clients.claim()));
+// 2. ATIVAÇÃO: Deleta ABSOLUTAMENTE todos os caches antigos do navegador
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    console.log("Removendo Cache Antigo:", cacheName);
+                    return caches.delete(cacheName);
+                })
+            );
+        }).then(() => {
+            console.log("Limpeza Concluída. Reivindicando Clientes...");
+            return self.clients.claim();
+        })
+    );
 });
 
-// A MÁGICA: Intercepta o pedido do ADMIN.HTML e entrega o PRODUTOS.HTML
+// 3. BUSCA (FETCH): Garante que o navegador busque os arquivos REAIS do GitHub
+// Isso impede que a mensagem de "Operação Confirmada" apareça antes do formulário
 self.addEventListener('fetch', (event) => {
-    const url = new URL(event.request.url);
-
-    // Se o clique no botão azul (OK) buscar 'admin.html', nós desviamos para 'produtos.html'
-    if (url.pathname.endsWith('admin.html')) {
-        event.respondWith(
-            fetch('produtos.html').then(response => {
-                return response;
-            }).catch(() => caches.match('produtos.html'))
-        );
-    } else {
-        event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
-        );
-    }
+    event.respondWith(
+        fetch(event.request).catch(() => {
+            return caches.match(event.request);
+        })
+    );
 });
 
-/* FIM DO MOTOR DE 75 LINHAS - ENGECEMA DALLAS */
+/* FIM DO CÓDIGO DE LIMPEZA DALLAS */
