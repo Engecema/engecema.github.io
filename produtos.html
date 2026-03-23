@@ -4,32 +4,82 @@
     <meta charset="UTF-8">
     <title>Engecema Private | Painel de Ativos</title>
     <style>
-        :root { --red: #cc092f; --gold: #c5a059; --dark: #0e0e0e; }
-        body { background: var(--dark); color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        :root { --red: #cc092f; --gold: #c5a059; --dark: #0e0e0e; --card: #1c1c1c; }
+        body { background: var(--dark); color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
         
-        header { background: #000; padding: 20px 50px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .logo { height: 35px; }
+        header { background: #000; padding: 20px 50px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { height: 30px; }
         
-        .container { padding: 80px 50px; max-width: 1000px; margin: 0 auto; }
-        .card-saldo { background: #1c1c1c; padding: 60px; border-left: 6px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .label { color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
-        .valor { color: var(--gold); font-size: 56px; margin: 10px 0; font-weight: 300; }
-        .sync { color: #333; font-size: 10px; border-top: 1px solid #222; padding-top: 15px; margin-top: 20px; }
+        .container { padding: 40px 50px; max-width: 1100px; margin: 0 auto; }
+        
+        /* CARD DE SALDO PRINCIPAL */
+        .card-saldo { background: var(--card); padding: 40px; border-left: 6px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 40px; }
+        .label { color: #666; text-transform: uppercase; font-size: 10px; letter-spacing: 2px; }
+        .valor { color: var(--gold); font-size: 48px; margin: 10px 0; font-weight: 300; }
+
+        /* GRID DE PRODUTOS */
+        h2 { color: var(--gold); font-weight: 300; text-transform: uppercase; font-size: 18px; letter-spacing: 2px; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .grid-produtos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        .produto { background: var(--card); padding: 25px; border-radius: 4px; border: 1px solid #222; transition: 0.3s; }
+        .produto:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .prod-tag { color: var(--gold); font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .prod-nome { font-size: 18px; margin: 10px 0; }
+        .prod-info { color: #888; font-size: 13px; line-height: 1.5; height: 40px; }
+        .prod-taxa { color: #fff; font-weight: bold; font-size: 16px; margin: 15px 0; }
+        
+        .btn-investir { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--red); color: var(--red); font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-investir:hover { background: var(--red); color: #fff; }
+
+        .sync { color: #333; font-size: 10px; text-align: center; margin-top: 40px; }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" class="logo">
-        <div style="color:var(--gold); font-size:10px;">SESSÃO SEGURA: DALLAS US-SOUTH</div>
+        <div style="color:var(--gold); font-size:10px; letter-spacing: 1px;">TERMINAL DALLAS US-SOUTH</div>
     </header>
 
     <div class="container">
+        <!-- SALDO REAL IBM CLOUDANT -->
         <div class="card-saldo">
-            <span class="label">Patrimônio Consolidado</span>
-            <h1 id="valor-real-ibm">Consultando IBM Cloud...</h1>
-            <div class="sync">Sincronizado via Cloudant Webhook em tempo real.</div>
+            <span class="label">Patrimônio Líquido Disponível</span>
+            <h1 id="valor-real-ibm">Carregando...</h1>
         </div>
+
+        <h2>Produtos de Fomento e Investimento</h2>
+        
+        <div class="grid-produtos">
+            <!-- PRODUTO 1 -->
+            <div class="produto">
+                <span class="prod-tag">Fomento</span>
+                <div class="prod-nome">Antecipação de Recebíveis</div>
+                <div class="prod-info">Liquidez imediata para o fluxo de caixa da sua empresa.</div>
+                <div class="prod-taxa">Taxas a partir de 0,89% a.m.</div>
+                <button class="btn-investir" onclick="alert('Solicitação enviada ao consultor Dallas.')">Simular Agora</button>
+            </div>
+
+            <!-- PRODUTO 2 -->
+            <div class="produto">
+                <span class="prod-tag">Renda Fixa</span>
+                <div class="prod-nome">CDB Private Engecema</div>
+                <div class="prod-info">Segurança com garantia FGC e rentabilidade diferenciada.</div>
+                <div class="prod-taxa">Rentabilidade: 112% do CDI</div>
+                <button class="btn-investir" onclick="alert('Iniciando alocação em Renda Fixa...')">Investir</button>
+            </div>
+
+            <!-- PRODUTO 3 -->
+            <div class="produto">
+                <span class="prod-tag">Crédito</span>
+                <div class="prod-nome">Capital de Giro</div>
+                <div class="prod-info">Linha de crédito exclusiva para expansão tecnológica.</div>
+                <div class="prod-taxa">Carência de até 12 meses</div>
+                <button class="btn-investir" onclick="alert('Seu gerente entrará em contato em 15 min.')">Solicitar</button>
+            </div>
+        </div>
+
+        <div class="sync">Sincronização em tempo real via Cloudant IBM Services © 2026</div>
     </div>
 
     <script>
@@ -39,19 +89,15 @@
                 const res = await fetch(API);
                 const data = await res.json();
                 let total = 0;
-                // Soma o campo 'valor' de todos os documentos (os 7 que você possui)
                 data.rows.forEach(r => { 
                     if(r.doc.valor) total += parseFloat(r.doc.valor); 
                 });
-                
                 document.getElementById('valor-real-ibm').innerText = 
                     total > 0 ? "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : "R$ 1.250.000,00";
             } catch(e) {
                 document.getElementById('valor-real-ibm').innerText = "R$ 1.250.000,00";
             }
         }
-        
-        // Executa a busca assim que a página abre
         buscarSaldoReal();
     </script>
 </body>
