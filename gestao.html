@@ -21,6 +21,7 @@
         th { text-align: left; padding: 12px; font-size: 11px; color: #999; text-transform: uppercase; border-bottom: 2px solid #f5f5f5; }
         td { padding: 12px; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
         .btn-del { color: var(--brad-red); border: 1px solid var(--brad-red); background: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: bold; }
+        .proxy-alert { background: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; margin-bottom: 20px; text-align: center; display: none; }
     </style>
 </head>
 <body>
@@ -31,6 +32,12 @@
 </header>
 
 <div class="container">
+    <!-- ALERTA DO PROXY -->
+    <div id="aviso-proxy" class="proxy-alert">
+        Atenção: Se os dados não carregarem, <a href="https://herokuapp.com" target="_blank">clique aqui e ative o acesso temporário</a>.
+    </div>
+
+    <!-- FORMULÁRIO DE CADASTRO -->
     <div class="card">
         <h2>Inclusão de Colaborador</h2>
         <div class="grid-form">
@@ -54,6 +61,7 @@
         </div>
     </div>
 
+    <!-- LISTAGEM DE EQUIPE -->
     <div class="card">
         <h2>Quadro Geral de Equipe</h2>
         <table>
@@ -74,17 +82,30 @@
 </div>
 
 <script>
-    // CONFIGURAÇÕES TÉCNICAS (API KEY EMBUTIDA NA URL)
+    // CONFIGURAÇÕES IBM CLOUDANT
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO = "colaboradores_engecema";
+    
+    // PROXY PARA PULAR O BLOQUEIO DE CORS
+    const PROXY = "https://herokuapp.com";
 
-    // 1. CARREGAR LISTA (URL-AUTH)
+    function getHeaders() {
+        const headers = new Headers();
+        headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
+        return headers;
+    }
+
+    // 1. CARREGAR LISTA
     async function carregarEquipe() {
-        const urlSegura = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
+        const urlFinal = PROXY + `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
         
         try {
-            const res = await fetch(urlSegura);
+            const res = await fetch(urlFinal, { headers: getHeaders() });
+            if (res.status === 403) {
+                document.getElementById('aviso-proxy').style.display = 'block';
+                throw new Error("Proxy desativado");
+            }
             if (!res.ok) throw new Error("Erro na IBM");
 
             const data = await res.json();
@@ -103,16 +124,14 @@
                         <td><button class="btn-del" onclick="deletar('${d._id}','${d._rev}')">REMOVER</button></td>
                     </tr>`;
             });
-            if (data.rows.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum colaborador registrado.</td></tr>";
-            }
+            document.getElementById('aviso-proxy').style.display = 'none';
         } catch(e) { 
-            console.error("Erro de conexão:", e);
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Aguardando liberação do nó IBM (CORS)...</td></tr>";
+            console.error(e);
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede. Verifique o acesso ao Proxy.</td></tr>";
         }
     }
 
-    // 2. CADASTRAR (URL-AUTH)
+    // 2. CADASTRAR
     async function cadastrarColaborador() {
         const nome = document.getElementById('nome').value;
         const cargo = document.getElementById('cargo').value;
@@ -120,32 +139,32 @@
         if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
 
         const novo = { nome, cargo, depto, criado_em: new Date().toISOString() };
-        const urlPost = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}`;
+        const urlPost = PROXY + `https://${HOST_IBM}/${BANCO}`;
+        const headers = getHeaders();
+        headers.set('Content-Type', 'application/json');
 
         try {
             const res = await fetch(urlPost, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(novo)
             });
             if(res.ok) {
-                alert("Colaborador cadastrado!");
+                alert("Colaborador cadastrado com sucesso!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
                 carregarEquipe();
-            } else {
-                alert("Erro ao gravar dados na IBM.");
             }
-        } catch(e) { alert("Falha na gravação. Verifique o domínio no CORS."); }
+        } catch(e) { alert("Falha na gravação. Ative o Proxy primeiro."); }
     }
 
-    // 3. REMOVER (URL-AUTH)
+    // 3. REMOVER
     async function deletar(id, rev) {
-        if(!confirm("Remover este colaborador permanentemente?")) return;
-        const urlDelete = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/${id}?rev=${rev}`;
+        if(!confirm("Deseja remover este colaborador?")) return;
+        const urlDelete = PROXY + `https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`;
         try {
-            const res = await fetch(urlDelete, { method: 'DELETE' });
-            if(res.ok) carregarEquipe();
+            await fetch(urlDelete, { method: 'DELETE', headers: getHeaders() });
+            carregarEquipe();
         } catch(e) { alert("Erro ao deletar."); }
     }
 
