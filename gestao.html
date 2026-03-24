@@ -22,6 +22,7 @@
         td { padding: 12px; font-size: 13px; border-bottom: 1px solid #eee; }
         .form-cred { display: flex; gap: 10px; margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 4px; }
         .form-cred input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; font-size: 12px; }
+        .btn-del { color: var(--br-red); border: 1px solid var(--br-red); padding: 4px 8px; border-radius: 3px; cursor: pointer; background: transparent; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -52,7 +53,6 @@
             <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar IBM</button>
         </div>
 
-        <!-- 1. AUDITORIA DE CLIENTES -->
         <div class="box-tabela">
             <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria de Clientes</h2>
             <table>
@@ -61,7 +61,6 @@
             </table>
         </div>
 
-        <!-- 2. GESTÃO DE EQUIPE -->
         <div class="box-tabela">
             <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe</h2>
             <div class="form-cred">
@@ -79,27 +78,28 @@
 </div>
 
 <script>
-    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    // INSIRA SUA NOVA API KEY ABAIXO
+    const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const BASE_URL = "https://appdomain.cloud";
     const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
     
-    const colaboradores_locais = { "admin": "dallas2026", "gestor": "engecema2026" };
+    const credenciais_fixas = { "admin": "dallas2026", "gestor": "engecema2026" };
 
     function validarAcesso() {
         const u = document.getElementById('user').value;
         const p = document.getElementById('pass').value;
-        if (colaboradores_locais[u] === p) {
-            sessionStorage.setItem('sessao-dallas', 'ativa');
+        if (credenciais_fixas[u] === p) {
+            sessionStorage.setItem('sessao-engecema', 'ativa');
             document.getElementById('login-gestao').style.display = 'none';
             document.getElementById('painel-real').style.display = 'block';
             sincronizarTudo();
         } else { alert("Acesso Negado"); }
     }
 
-    function sair() { sessionStorage.removeItem('sessao-dallas'); window.location.reload(); }
+    function sair() { sessionStorage.removeItem('sessao-engecema'); window.location.reload(); }
 
     window.onload = function() {
-        if(sessionStorage.getItem('sessao-dallas') === 'ativa') {
+        if(sessionStorage.getItem('sessao-engecema') === 'ativa') {
             document.getElementById('login-gestao').style.display = 'none';
             document.getElementById('painel-real').style.display = 'block';
             sincronizarTudo();
@@ -129,7 +129,10 @@
                 }
             });
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; }
+        } catch(e) { 
+            console.error(e);
+            document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; 
+        }
     }
 
     async function listarEquipe() {
@@ -143,7 +146,7 @@
             data.rows.forEach(r => {
                 const d = r.doc;
                 if (d._id.startsWith('_design/')) return;
-                tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>***</td><td><button onclick="deletarDoc('${d._id}','${d._rev}','colaboradores_engecema')" style="color:red; cursor:pointer;">Remover</button></td></tr>`;
+                tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>***</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}','colaboradores_engecema')">REMOVER</button></td></tr>`;
             });
         } catch(e) { console.error("Erro equipe", e); }
     }
@@ -163,12 +166,12 @@
                 headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' },
                 body: JSON.stringify(novo)
             });
-            if(res.ok) { alert("Sucesso!"); listarEquipe(); }
+            if(res.ok) { alert("Colaborador cadastrado!"); sincronizarTudo(); }
         } catch(e) { alert("Erro ao cadastrar."); }
     }
 
     async function deletarDoc(id, rev, banco) {
-        if(!confirm("Deseja remover?")) return;
+        if(!confirm("Deseja remover este registro?")) return;
         try {
             await fetch(`${BASE_URL}/${banco}/${id}?rev=${rev}`, { method: 'DELETE', headers: { 'Authorization': AUTH } });
             sincronizarTudo();
