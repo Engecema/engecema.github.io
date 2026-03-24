@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <title>Engecema | Gestão de Pessoal (RH)</title>
     <style>
-        :root { --brad-red: #cc092f; --bg: #f0f2f5; --text: #333; }
+        :root { --brad-red: #cc092f; --bg: #f0f2f5; --text: #333; --border: #ddd; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
-        header { background: #fff; padding: 15px 40px; border-bottom: 4px solid var(--brad-red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header { background: #fff; padding: 12px 40px; border-bottom: 4px solid var(--brad-red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo { font-weight: 900; color: var(--brad-red); font-size: 20px; }
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-        
-        .card { background: #fff; padding: 25px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .card { background: #fff; padding: 25px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 3px solid #ccc; }
         h2 { font-size: 15px; color: var(--brad-red); text-transform: uppercase; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        
         .grid-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end; }
         .field { display: flex; flex-direction: column; gap: 5px; }
-        .field label { font-size: 11px; font-weight: bold; color: #888; }
-        .field input, .field select { padding: 10px; border: 1px solid #ddd; border-radius: 3px; font-size: 13px; }
-        
-        .btn-add { background: var(--brad-red); color: #fff; border: none; padding: 11px 25px; border-radius: 3px; cursor: pointer; font-weight: bold; }
-        
+        .field label { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; }
+        .field input, .field select { padding: 10px; border: 1px solid var(--border); border-radius: 3px; font-size: 13px; }
+        .btn-add { background: var(--brad-red); color: #fff; border: none; padding: 11px 25px; border-radius: 3px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-add:hover { background: #a50725; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { text-align: left; padding: 12px; font-size: 11px; color: #999; text-transform: uppercase; border-bottom: 2px solid #f5f5f5; }
         td { padding: 12px; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
@@ -34,31 +31,31 @@
 </header>
 
 <div class="container">
-    <!-- CADASTRO -->
+    <!-- FORMULÁRIO DE CADASTRO -->
     <div class="card">
-        <h2>Novo Colaborador</h2>
+        <h2>Inclusão de Colaborador</h2>
         <div class="grid-form">
             <div class="field">
-                <label>NOME COMPLETO</label>
-                <input type="text" id="nome" placeholder="Nome do funcionário">
+                <label>Nome Completo</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva">
             </div>
             <div class="field">
-                <label>CARGO / FUNÇÃO</label>
-                <input type="text" id="cargo" placeholder="Ex: Engenheiro">
+                <label>Cargo / Função</label>
+                <input type="text" id="cargo" placeholder="Ex: Engenheiro Civil">
             </div>
             <div class="field">
-                <label>DEPARTAMENTO</label>
+                <label>Departamento</label>
                 <select id="depto">
-                    <option value="Engenharia">Engenharia</option>
                     <option value="Operacional">Operacional</option>
                     <option value="Administrativo">Administrativo</option>
+                    <option value="Engenharia">Engenharia</option>
                 </select>
             </div>
             <button class="btn-add" onclick="cadastrarColaborador()">CADASTRAR</button>
         </div>
     </div>
 
-    <!-- LISTAGEM -->
+    <!-- LISTAGEM DE EQUIPE -->
     <div class="card">
         <h2>Quadro Geral de Equipe</h2>
         <table>
@@ -72,22 +69,35 @@
                 </tr>
             </thead>
             <tbody id="corpo-tabela">
-                <!-- Dados carregados da IBM -->
+                <!-- Dados carregados da IBM aparecerão aqui -->
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
+    // CONFIGURAÇÕES TÉCNICAS IBM CLOUDANT
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO = "colaboradores_engecema";
-    const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
 
+    // Função para gerar o cabeçalho de autenticação (Basic Auth)
+    function getAuthHeaders() {
+        const headers = new Headers();
+        headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
+        headers.set('Accept', 'application/json');
+        return headers;
+    }
+
+    // LISTAR COLABORADORES (SINCRONIA)
     async function carregarEquipe() {
         const url = `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
         try {
-            const res = await fetch(url, { headers: { 'Authorization': AUTH } });
+            const res = await fetch(url, { 
+                method: 'GET',
+                headers: getAuthHeaders(),
+                mode: 'cors'
+            });
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
@@ -104,44 +114,59 @@
                         <td><button class="btn-del" onclick="deletar('${d._id}','${d._rev}')">REMOVER</button></td>
                     </tr>`;
             });
-        } catch(e) { console.error("Erro ao carregar lista."); }
+        } catch(e) { 
+            console.error("Erro ao carregar lista:", e);
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange;'>Modo Offline ou Erro de CORS.</td></tr>";
+        }
     }
 
+    // CADASTRAR NOVO COLABORADOR (DESTRAVADO)
     async function cadastrarColaborador() {
         const nome = document.getElementById('nome').value;
         const cargo = document.getElementById('cargo').value;
         const depto = document.getElementById('depto').value;
 
-        if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
+        if(!nome || !cargo) return alert("Por favor, preencha Nome e Cargo.");
 
         const novo = { nome, cargo, depto, criado_em: new Date().toISOString() };
-        
+        const headers = getAuthHeaders();
+        headers.set('Content-Type', 'application/json');
+
         try {
             const res = await fetch(`https://${HOST_IBM}/${BANCO}`, {
                 method: 'POST',
-                headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' },
-                body: JSON.stringify(novo)
+                headers: headers,
+                body: JSON.stringify(novo),
+                mode: 'cors'
             });
             if(res.ok) {
-                alert("Colaborador cadastrado!");
+                alert("Colaborador cadastrado com sucesso!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
                 carregarEquipe();
+            } else {
+                throw new Error("Erro na gravação: " + res.status);
             }
-        } catch(e) { alert("Erro ao salvar."); }
+        } catch(e) { 
+            console.error("Erro ao salvar:", e);
+            alert("Falha técnica no cadastro. Verifique a configuração de CORS na IBM Cloud."); 
+        }
     }
 
+    // REMOVER COLABORADOR
     async function deletar(id, rev) {
-        if(!confirm("Deseja remover este colaborador?")) return;
+        if(!confirm("Deseja remover este colaborador permanentemente?")) return;
         try {
             await fetch(`https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`, {
                 method: 'DELETE',
-                headers: { 'Authorization': AUTH }
+                headers: getAuthHeaders(),
+                mode: 'cors'
             });
             carregarEquipe();
         } catch(e) { alert("Erro ao deletar."); }
     }
 
+    // Inicialização ao abrir a página
     window.onload = carregarEquipe;
 </script>
 </body>
