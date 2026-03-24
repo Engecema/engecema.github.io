@@ -22,7 +22,7 @@
         td { padding: 12px; font-size: 13px; border-bottom: 1px solid #eee; }
         .form-cred { display: flex; gap: 10px; margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 4px; }
         .form-cred input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; font-size: 12px; }
-        .btn-del { color: var(--br-red); border: 1px solid var(--br-red); padding: 4px 8px; border-radius: 3px; cursor: pointer; background: transparent; font-size: 10px; font-weight: bold; }
+        .btn-simular { background: #ce9c00; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 11px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -49,15 +49,20 @@
     <div class="container">
         <div class="card">
             <span style="color:#888; font-size:11px; font-weight:bold;">VOLUME TOTAL SOB CUSTÓDIA</span>
-            <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 0,00</h1>
-            <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar IBM</button>
+            <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 1.250.000,00</h1>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar IBM</button>
+                <button onclick="simularPix()" class="btn-simular">LANÇAR PIX SIMULADO (+R$ 5.000)</button>
+            </div>
         </div>
 
         <div class="box-tabela">
             <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria Master SP</h2>
             <table>
                 <thead><tr><th>Data</th><th>ID</th><th>Status</th><th>Valor</th></tr></thead>
-                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando dados...</td></tr></tbody>
+                <tbody id="corpo-tabela">
+                    <tr><td colspan="4" style="color:#ce9c00; font-weight:bold; text-align:center; padding:20px;">MODO SIMULAÇÃO ATIVO (CORS BLOQUEADO)</td></tr>
+                </tbody>
             </table>
         </div>
 
@@ -67,23 +72,22 @@
                 <input type="text" id="new-user" placeholder="Nome">
                 <input type="text" id="new-id" placeholder="Login">
                 <input type="password" id="new-pass" placeholder="Senha">
-                <button onclick="cadastrarColaborador()" style="background:#15803d; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">CADASTRAR</button>
+                <button onclick="cadastrarColaboradorSimulado()" style="background:#15803d; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">CADASTRAR (SIMULAR)</button>
             </div>
             <table>
                 <thead><tr><th>Colaborador</th><th>ID</th><th>Sincronia</th><th>Ação</th></tr></thead>
-                <tbody id="corpo-colab"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando equipe...</td></tr></tbody>
+                <tbody id="corpo-colab">
+                    <tr><td>Admin Master</td><td>admin_sp</td><td>Local</td><td>-</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // CREDENCIAIS IBM
+    let saldoSimulado = 1250000.00;
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
-    const BANCO_MASTER = "master_engecema_sp";
-    const BANCO_EQUIPE = "colaboradores_engecema";
-
     const credenciais_fixas = { "admin": "dallas2026", "gestor": "engecema2026" };
 
     function validarAcesso() {
@@ -107,82 +111,52 @@
         if(sessionStorage.getItem('sessao-ativa') === 'sim') { exibirPainel(); }
     };
 
-    async function sincronizarTudo() {
-        await fetchIBM(BANCO_MASTER, 'corpo-tabela', true);
-        await fetchIBM(BANCO_EQUIPE, 'corpo-colab', false);
+    function sincronizarTudo() {
+        // Tenta buscar na IBM, se falhar o catch já trata o modo simulação
+        fetchIBM('master_engecema_sp', 'corpo-tabela', true);
     }
 
     async function fetchIBM(banco, elementId, isMaster) {
-        // TÉCNICA: Headers para Auth oficial da IBM
         const urlLimpa = `https://${HOST_IBM}/${banco}/_all_docs?include_docs=true`;
         const headers = new Headers();
         headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
 
         try {
             const res = await fetch(urlLimpa, { method: 'GET', headers: headers, mode: 'cors' });
-            
-            if (!res.ok) throw new Error("Erro CORS");
-
+            if (!res.ok) throw new Error("CORS");
+            // Se chegar aqui, o CORS foi liberado!
             const data = await res.json();
-            const tbody = document.getElementById(elementId);
-            tbody.innerHTML = "";
-            let total = 0;
-
-            data.rows.forEach(r => {
-                const d = r.doc;
-                if (d._id.startsWith('_design/')) return;
-                if (isMaster) {
-                    let v = String(d.valor || 0).replace(/[R$\s.]/g, '').replace(',', '.');
-                    total += parseFloat(v) || 0;
-                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>OK</td><td>${d.valor || '---'}</td></tr>`;
-                } else {
-                    tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Ativo</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}','${banco}')">REMOVER</button></td></tr>`;
-                }
-            });
-
-            // Se o banco estiver vazio mas conectado, mantém saldo master
-            if (isMaster) {
-                let saldoFinal = total > 0 ? total : 1250000.00;
-                document.getElementById('total-custodia').innerText = "R$ " + saldoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            }
-
+            // ... (lógica de preenchimento real se o CORS permitir no futuro)
         } catch(e) {
-            console.warn("Modo Simulação Ativado devido ao erro de CORS");
-            if (isMaster) {
-                // FORÇA O SALDO DE 1.250.000,00 PARA SIMULAÇÕES EM CASO DE ERRO
-                document.getElementById('total-custodia').innerText = "R$ 1.250.000,00";
-                document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:#ce9c00; font-weight:bold; text-align:center; padding:20px;">MODO SIMULAÇÃO ATIVO (CORS BLOQUEADO)</td></tr>`;
-            } else {
-                document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:#999; text-align:center;">Aguardando liberação de rede...</td></tr>`;
-            }
+            console.warn("Mantendo Modo Simulação.");
         }
     }
 
-    async function cadastrarColaborador() {
-        const nome = document.getElementById('new-user').value;
-        const login = document.getElementById('new-id').value;
-        const pass = document.getElementById('new-pass').value;
-        if(!nome || !login || !pass) return alert("Preencha tudo");
-
-        const novo = { nome, login, senha: btoa(pass), criado_em: new Date().toISOString() };
-        const headers = new Headers();
-        headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
-        headers.set('Content-Type', 'application/json');
-
-        try {
-            const res = await fetch(`https://${HOST_IBM}/${BANCO_EQUIPE}`, { method: 'POST', headers, body: JSON.stringify(novo), mode: 'cors' });
-            if(res.ok) { alert("Gravado na IBM!"); sincronizarTudo(); }
-        } catch(e) { alert("Erro de rede. Dados não gravados."); }
+    // FUNÇÕES DE SIMULAÇÃO (PARA APRESENTAÇÃO)
+    function simularPix() {
+        saldoSimulado += 5000.00;
+        document.getElementById('total-custodia').innerText = "R$ " + saldoSimulado.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        
+        const tbody = document.getElementById('corpo-tabela');
+        const novaLinha = `<tr>
+            <td>${new Date().toLocaleDateString('pt-BR')}</td>
+            <td>PX${Math.floor(Math.random()*1000)}</td>
+            <td style="color:green; font-weight:bold;">RECEBIDO</td>
+            <td>R$ 5.000,00</td>
+        </tr>`;
+        
+        if(tbody.innerHTML.includes("MODO SIMULAÇÃO")) tbody.innerHTML = "";
+        tbody.innerHTML = novaLinha + tbody.innerHTML;
     }
 
-    async function deletarDoc(id, rev, banco) {
-        if(!confirm("Remover registro?")) return;
-        const headers = new Headers();
-        headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
-        try {
-            await fetch(`https://${HOST_IBM}/${banco}/${id}?rev=${rev}`, { method: 'DELETE', headers, mode: 'cors' });
-            sincronizarTudo();
-        } catch(e) { alert("Erro ao deletar."); }
+    function cadastrarColaboradorSimulado() {
+        const nome = document.getElementById('new-user').value;
+        const login = document.getElementById('new-id').value;
+        if(!nome || !login) return alert("Preencha os campos!");
+
+        const tbody = document.getElementById('corpo-colab');
+        tbody.innerHTML += `<tr><td>${nome}</td><td>${login}</td><td>Local</td><td>-</td></tr>`;
+        alert("Colaborador cadastrado (Modo Simulação)");
     }
 </script>
 </body>
