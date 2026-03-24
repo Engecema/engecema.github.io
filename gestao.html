@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Engecema | Gestão de Pessoal (RH)</title>
     <style>
-        :root { --brad-red: #cc092f; --bg: #f0f2f5; --text: #333; --border: #ddd; }
+        :root { --brad-red: #cc092f; --bg: #f0f2f5; --text: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         header { background: #fff; padding: 12px 40px; border-bottom: 4px solid var(--brad-red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo { font-weight: 900; color: var(--brad-red); font-size: 20px; }
@@ -14,7 +14,7 @@
         .grid-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end; }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field label { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; }
-        .field input, .field select { padding: 10px; border: 1px solid var(--border); border-radius: 3px; font-size: 13px; }
+        .field input, .field select { padding: 10px; border: 1px solid #ddd; border-radius: 3px; font-size: 13px; }
         .btn-add { background: var(--brad-red); color: #fff; border: none; padding: 11px 25px; border-radius: 3px; cursor: pointer; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { text-align: left; padding: 12px; font-size: 11px; color: #999; text-transform: uppercase; border-bottom: 2px solid #f5f5f5; }
@@ -26,7 +26,7 @@
 
 <header>
     <div class="logo">ENGECEMA <span style="font-weight:100; color:#666;">| GESTÃO DE PESSOAL</span></div>
-    <div style="font-size: 10px; font-weight: bold; color: #999;">MODO: ADMINISTRATIVO RH</div>
+    <div style="font-size: 10px; font-weight: bold; color: #999;">PRIVATE ENGINE ACTIVE</div>
 </header>
 
 <div class="container">
@@ -49,7 +49,7 @@
                     <option value="Engenharia">Engenharia</option>
                 </select>
             </div>
-            <button class="btn-add" onclick="cadastrarColaborador()">CADASTRAR</button>
+            <button class="btn-add" id="btn-cadastrar" onclick="engineExecutarCadastro()">CADASTRAR</button>
         </div>
     </div>
 
@@ -66,113 +66,110 @@
                 </tr>
             </thead>
             <tbody id="corpo-tabela">
-                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando com IBM Cloudant...</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando via Private Engine...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // CONFIGURAÇÕES TÉCNICAS (IBM CLOUDANT)
-    const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
-    const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
-    const BANCO = "colaboradores_engecema";
+    // PRIVATE ENGINE CONFIG (Lógica de Ontem)
+    const ENGINE_CONFIG = {
+        key: "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY",
+        host: "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud",
+        db: "colaboradores_engecema"
+    };
 
-    function getAuthHeaders() {
+    const engineHeaders = () => {
         const h = new Headers();
-        h.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
-        h.set('Accept', 'application/json');
+        h.set('Authorization', 'Basic ' + btoa("apikey:" + ENGINE_CONFIG.key));
+        h.set('Content-Type', 'application/json');
         return h;
-    }
+    };
 
-    // LISTAR COLABORADORES (SINCRONIA)
-    async function carregarEquipe() {
-        const url = `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
+    async function engineCarregarEquipe() {
+        const url = `https://${ENGINE_CONFIG.host}/${ENGINE_CONFIG.db}/_all_docs?include_docs=true`;
         try {
-            const res = await fetch(url, { 
-                method: 'GET',
-                headers: getAuthHeaders(),
-                mode: 'cors'
-            });
-
-            if (!res.ok) throw new Error("Erro na Resposta IBM");
-
+            const res = await fetch(url, { method: 'GET', headers: engineHeaders(), mode: 'cors' });
+            if (!res.ok) throw new Error("IBM_REJECT");
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
-
+            
             if (data.rows.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum colaborador registrado.</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum registro.</td></tr>";
                 return;
             }
 
             data.rows.forEach(r => {
                 const d = r.doc;
                 if (d._id.startsWith('_design/')) return;
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
-                        <td><strong>${d.nome}</strong></td>
-                        <td>${d.cargo}</td>
-                        <td>${d.depto}</td>
-                        <td><button class="btn-del" onclick="deletar('${d._id}','${d._rev}')">REMOVER</button></td>
-                    </tr>`;
+                tbody.innerHTML += `<tr>
+                    <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
+                    <td><strong>${d.nome}</strong></td>
+                    <td>${d.cargo}</td>
+                    <td>${d.depto}</td>
+                    <td><button class="btn-del" onclick="engineDeletar('${d._id}','${d._rev}')">REMOVER</button></td>
+                </tr>`;
             });
-        } catch(e) { 
-            console.error("Erro ao carregar lista:", e);
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede: Verifique a Extensão CORS e o botão SAVE na IBM.</td></tr>";
+        } catch(e) {
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Private Engine: Erro de Rede ou CORS.</td></tr>";
         }
     }
 
-    // CADASTRAR NOVO COLABORADOR (DESTRAVADO)
-    async function cadastrarColaborador() {
-        const nome = document.getElementById('nome').value;
-        const cargo = document.getElementById('cargo').value;
-        const depto = document.getElementById('depto').value;
+    async function engineExecutarCadastro() {
+        const btn = document.getElementById('btn-cadastrar');
+        btn.disabled = true; // Impede duplo clique
+        btn.innerText = "PROCESSANDO...";
 
-        if(!nome || !cargo) return alert("Por favor, preencha Nome e Cargo.");
+        const doc = {
+            nome: document.getElementById('nome').value,
+            cargo: document.getElementById('cargo').value,
+            depto: document.getElementById('depto').value,
+            criado_em: new Date().toISOString()
+        };
 
-        const novoDoc = { nome, cargo, depto, criado_em: new Date().toISOString() };
-        const h = getAuthHeaders();
-        h.set('Content-Type', 'application/json');
+        if(!doc.nome || !doc.cargo) {
+            alert("Preencha Nome e Cargo.");
+            btn.disabled = false;
+            btn.innerText = "CADASTRAR";
+            return;
+        }
 
         try {
-            const res = await fetch(`https://${HOST_IBM}/${BANCO}`, {
+            const res = await fetch(`https://${ENGINE_CONFIG.host}/${ENGINE_CONFIG.db}`, {
                 method: 'POST',
-                headers: h,
-                body: JSON.stringify(novoDoc),
+                headers: engineHeaders(),
+                body: JSON.stringify(doc),
                 mode: 'cors'
             });
-
             if(res.ok) {
-                alert("Colaborador cadastrado com sucesso!");
+                alert("Cadastro Realizado!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
-                carregarEquipe();
-            } else {
-                alert("IBM recusou o acesso (Erro " + res.status + ").");
+                engineCarregarEquipe();
             }
-        } catch(e) { 
-            console.error("Erro ao salvar:", e);
-            alert("Botão Destravado: Falha técnica na rede. Verifique a Extensão Allow CORS."); 
+        } catch(e) {
+            alert("Erro de Conexão. Verifique a Extensão Allow CORS.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "CADASTRAR";
         }
     }
 
-    // REMOVER COLABORADOR
-    async function deletar(id, rev) {
-        if(!confirm("Deseja remover este colaborador?")) return;
+    async function engineDeletar(id, rev) {
+        if(!confirm("Remover colaborador?")) return;
         try {
-            await fetch(`https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`, {
+            await fetch(`https://${ENGINE_CONFIG.host}/${ENGINE_CONFIG.db}/${id}?rev=${rev}`, {
                 method: 'DELETE',
-                headers: getAuthHeaders(),
+                headers: engineHeaders(),
                 mode: 'cors'
             });
-            carregarEquipe();
-        } catch(e) { alert("Erro ao deletar."); }
+            engineCarregarEquipe();
+        } catch(e) { alert("Erro ao excluir."); }
     }
 
-    // Inicialização ao abrir a página
-    window.onload = carregarEquipe;
+    window.onload = engineCarregarEquipe;
 </script>
 </body>
 </html>
