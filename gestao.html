@@ -53,16 +53,14 @@
             <button onclick="sincronizar()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar IBM</button>
         </div>
 
-        <!-- 1. TABELA CLIENTES -->
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditória de Clientes (registrar.html)</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditória de Clientes (Base registrar.html)</h2>
             <table>
                 <thead><tr><th>Data</th><th>Nome</th><th>Documento</th><th>E-mail</th></tr></thead>
                 <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Buscando Clientes...</td></tr></tbody>
             </table>
         </div>
 
-        <!-- 2. TABELA EQUIPE (COM CORREÇÃO DE BUSCA) -->
         <div class="box-tabela">
             <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe (Base colaboradores_engecema)</h2>
             <div class="form-cred">
@@ -114,7 +112,7 @@
                 const d = r.doc;
                 if(d.nome) tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d.nome}</td><td>${d.documento || d.cpf}</td><td>${d.email}</td></tr>`;
             });
-        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4'>Erro de conexão clientes.</td></tr>"; }
+        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'>Erro de Sincronização Clientes.</td></tr>"; }
 
         listarEquipe();
     }
@@ -122,7 +120,6 @@
     async function listarEquipe() {
         const tbody = document.getElementById('corpo-colab');
         try {
-            // CORREÇÃO CRÍTICA: Adicionado include_docs=true para a Equipe aparecer
             const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers: { 'Authorization': AUTH } });
             const data = await res.json();
             tbody.innerHTML = "";
@@ -133,7 +130,9 @@
                 }
             });
             if(data.rows.length === 0) tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Nenhum colaborador na base.</td></tr>";
-        } catch(e) { tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Erro ao acessar base de Equipe.</td></tr>"; }
+        } catch(e) { 
+            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'>Aguardando Autorização CORS (Banco de Equipe).</td></tr>"; 
+        }
     }
 
     async function cadastrarColaborador() {
