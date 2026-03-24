@@ -31,7 +31,6 @@
 </header>
 
 <div class="container">
-    <!-- FORMULÁRIO DE CADASTRO -->
     <div class="card">
         <h2>Inclusão de Colaborador</h2>
         <div class="grid-form">
@@ -55,7 +54,6 @@
         </div>
     </div>
 
-    <!-- LISTAGEM DE EQUIPE -->
     <div class="card">
         <h2>Quadro Geral de Equipe</h2>
         <table>
@@ -69,35 +67,26 @@
                 </tr>
             </thead>
             <tbody id="corpo-tabela">
-                <!-- Dados carregados da IBM aparecerão aqui -->
+                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando com IBM Cloudant...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // CONFIGURAÇÕES TÉCNICAS IBM CLOUDANT
+    // CONFIGURAÇÕES TÉCNICAS (API KEY EMBUTIDA NA URL)
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO = "colaboradores_engecema";
 
-    // Função para gerar o cabeçalho de autenticação (Basic Auth)
-    function getAuthHeaders() {
-        const headers = new Headers();
-        headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
-        headers.set('Accept', 'application/json');
-        return headers;
-    }
-
-    // LISTAR COLABORADORES (SINCRONIA)
+    // 1. CARREGAR LISTA (URL-AUTH)
     async function carregarEquipe() {
-        const url = `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
+        const urlSegura = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
+        
         try {
-            const res = await fetch(url, { 
-                method: 'GET',
-                headers: getAuthHeaders(),
-                mode: 'cors'
-            });
+            const res = await fetch(urlSegura);
+            if (!res.ok) throw new Error("Erro na IBM");
+
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
@@ -114,59 +103,52 @@
                         <td><button class="btn-del" onclick="deletar('${d._id}','${d._rev}')">REMOVER</button></td>
                     </tr>`;
             });
+            if (data.rows.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum colaborador registrado.</td></tr>";
+            }
         } catch(e) { 
-            console.error("Erro ao carregar lista:", e);
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange;'>Modo Offline ou Erro de CORS.</td></tr>";
+            console.error("Erro de conexão:", e);
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Aguardando liberação do nó IBM (CORS)...</td></tr>";
         }
     }
 
-    // CADASTRAR NOVO COLABORADOR (DESTRAVADO)
+    // 2. CADASTRAR (URL-AUTH)
     async function cadastrarColaborador() {
         const nome = document.getElementById('nome').value;
         const cargo = document.getElementById('cargo').value;
         const depto = document.getElementById('depto').value;
-
-        if(!nome || !cargo) return alert("Por favor, preencha Nome e Cargo.");
+        if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
 
         const novo = { nome, cargo, depto, criado_em: new Date().toISOString() };
-        const headers = getAuthHeaders();
-        headers.set('Content-Type', 'application/json');
+        const urlPost = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}`;
 
         try {
-            const res = await fetch(`https://${HOST_IBM}/${BANCO}`, {
+            const res = await fetch(urlPost, {
                 method: 'POST',
-                headers: headers,
-                body: JSON.stringify(novo),
-                mode: 'cors'
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novo)
             });
             if(res.ok) {
-                alert("Colaborador cadastrado com sucesso!");
+                alert("Colaborador cadastrado!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
                 carregarEquipe();
             } else {
-                throw new Error("Erro na gravação: " + res.status);
+                alert("Erro ao gravar dados na IBM.");
             }
-        } catch(e) { 
-            console.error("Erro ao salvar:", e);
-            alert("Falha técnica no cadastro. Verifique a configuração de CORS na IBM Cloud."); 
-        }
+        } catch(e) { alert("Falha na gravação. Verifique o domínio no CORS."); }
     }
 
-    // REMOVER COLABORADOR
+    // 3. REMOVER (URL-AUTH)
     async function deletar(id, rev) {
-        if(!confirm("Deseja remover este colaborador permanentemente?")) return;
+        if(!confirm("Remover este colaborador permanentemente?")) return;
+        const urlDelete = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/${id}?rev=${rev}`;
         try {
-            await fetch(`https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`, {
-                method: 'DELETE',
-                headers: getAuthHeaders(),
-                mode: 'cors'
-            });
-            carregarEquipe();
+            const res = await fetch(urlDelete, { method: 'DELETE' });
+            if(res.ok) carregarEquipe();
         } catch(e) { alert("Erro ao deletar."); }
     }
 
-    // Inicialização ao abrir a página
     window.onload = carregarEquipe;
 </script>
 </body>
