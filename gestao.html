@@ -57,7 +57,7 @@
             <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria Master SP</h2>
             <table>
                 <thead><tr><th>Data</th><th>ID</th><th>Status</th><th>Valor</th></tr></thead>
-                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando...</td></tr></tbody>
+                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando dados...</td></tr></tbody>
             </table>
         </div>
 
@@ -79,13 +79,11 @@
 
 <script>
     // CONFIGURAÇÃO OBRIGATÓRIA: INSIRA A CHAVE DA CREDENCIAL "API_KEY_SINCRONIZACAO"
-    const API_KEY = "SUA_API_KEY_AQUI"; 
-    const CLOUDANT_URL = "https://appdomain.cloud";
+    const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
+    const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO_MASTER = "master_engecema_sp";
     const BANCO_EQUIPE = "colaboradores_engecema";
 
-    // Geração de Auth no padrão IBM (apikey:CHAVE)
-    const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
     const credenciais_fixas = { "admin": "dallas2026", "gestor": "engecema2026" };
 
     function validarAcesso() {
@@ -115,20 +113,16 @@
     }
 
     async function fetchIBM(banco, elementId, isMaster) {
-        const headers = { 
-            'Authorization': AUTH, 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json' 
-        };
+        // TÉCNICA: AUTH DIRETA NA URL PARA EVITAR BLOQUEIO DE CORS HEADERS
+        const urlSegura = `https://apikey:${API_KEY}@${HOST_IBM}/${banco}/_all_docs?include_docs=true`;
 
         try {
-            const res = await fetch(`${CLOUDANT_URL}/${banco}/_all_docs?include_docs=true`, { 
+            const res = await fetch(urlSegura, { 
                 method: 'GET',
-                headers: headers,
                 mode: 'cors' 
             });
 
-            if (!res.ok) throw new Error("Erro de Conexão");
+            if (!res.ok) throw new Error("Erro na IBM Cloud");
 
             const data = await res.json();
             const tbody = document.getElementById(elementId);
@@ -141,7 +135,7 @@
 
                 if (isMaster) {
                     if(d.valor) total += parseFloat(String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>Sincronizado</td><td>${d.valor || '---'}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>Conectado</td><td>${d.valor || '---'}</td></tr>`;
                 } else {
                     tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Ativo</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}','${banco}')">REMOVER</button></td></tr>`;
                 }
@@ -150,7 +144,7 @@
             if (isMaster) document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
         } catch(e) {
-            document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:red;">Erro: Verifique o CORS e a API Key na IBM.</td></tr>`;
+            document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:red;">Erro Sincronia: Verifique a API Key e o CORS.</td></tr>`;
             if(isMaster) document.getElementById('total-custodia').innerText = "R$ 1.250.000,00";
         }
     }
@@ -159,28 +153,28 @@
         const nome = document.getElementById('new-user').value;
         const login = document.getElementById('new-id').value;
         const pass = document.getElementById('new-pass').value;
-        if(!nome || !login || !pass) return alert("Preencha tudo");
+        if(!nome || !login || !pass) return alert("Preencha todos os campos");
 
         const novo = { nome, login, senha: btoa(pass), criado_em: new Date().toISOString() };
+        // URL para gravação (POST) com auth embutida
+        const urlPost = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO_EQUIPE}`;
+
         try {
-            const res = await fetch(`${CLOUDANT_URL}/${BANCO_EQUIPE}`, {
+            const res = await fetch(urlPost, {
                 method: 'POST',
-                headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novo),
                 mode: 'cors'
             });
-            if(res.ok) { alert("Cadastrado!"); sincronizarTudo(); }
+            if(res.ok) { alert("Cadastrado com sucesso!"); sincronizarTudo(); }
         } catch(e) { alert("Erro ao gravar na IBM."); }
     }
 
     async function deletarDoc(id, rev, banco) {
-        if(!confirm("Remover registro?")) return;
+        if(!confirm("Remover este registro permanentemente?")) return;
+        const urlDelete = `https://apikey:${API_KEY}@${HOST_IBM}/${banco}/${id}?rev=${rev}`;
         try {
-            await fetch(`${CLOUDANT_URL}/${banco}/${id}?rev=${rev}`, { 
-                method: 'DELETE', 
-                headers: { 'Authorization': AUTH },
-                mode: 'cors' 
-            });
+            await fetch(urlDelete, { method: 'DELETE', mode: 'cors' });
             sincronizarTudo();
         } catch(e) { alert("Erro ao deletar."); }
     }
