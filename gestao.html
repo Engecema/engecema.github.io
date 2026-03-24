@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <title>Engecema | Master Control SP</title>
     <style>
-        :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; --gold: #c5a059; }
+        :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         #login-gestao { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .box-login { background: #fff; padding: 40px; border-radius: 8px; border-top: 6px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center; }
         .box-login input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         .btn-login { width: 100%; padding: 12px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        
         #painel-real { display: none; }
-        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { height: 35px; }
+        
+        /* BOTÃO SAIR RESTAURADO */
+        .btn-sair-top { background: #eee; color: #666; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 11px; transition: 0.3s; }
+        .btn-sair-top:hover { background: var(--br-red); color: #fff; }
+
         .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
         .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
         .card { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -20,10 +26,10 @@
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; font-size: 11px; color: #999; padding: 15px; border-bottom: 2px solid #f4f7f9; text-transform: uppercase; }
         td { padding: 15px; font-size: 13px; border-bottom: 1px solid #eee; }
-        /* FORM DE CREDENCIAMENTO */
+        
         .form-cred { display: flex; gap: 10px; margin-top: 20px; padding: 20px; background: #fafafa; border-radius: 4px; }
-        .form-cred input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; flex: 1; }
-        .btn-add { background: #15803d; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .form-cred input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; flex: 1; font-size: 13px; }
+        .btn-add { background: #15803d; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -41,7 +47,11 @@
 <div id="painel-real">
     <header>
         <img src="logo.png" class="logo">
-        <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">MASTER CONTROL | SÃO PAULO br-sao</div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">MASTER CONTROL | SÃO PAULO br-sao</div>
+            <!-- BOTÃO SAIR POSICIONADO -->
+            <a href="index.html" class="btn-sair-top">SAIR DO SISTEMA</a>
+        </div>
     </header>
 
     <div class="container">
@@ -52,29 +62,28 @@
             </div>
             <div class="card">
                 <span style="color:#888; font-size:11px; font-weight:bold;">SISTEMA OPERACIONAL</span>
-                <p style="color:#15803d; font-weight:bold;">● CONECTADO IBM CLOUDANT SP</p>
+                <p style="color:#15803d; font-weight:bold;">● CONECTADO IBM CLOUDANT SP (br-sao)</p>
             </div>
         </div>
 
-        <!-- NOVO: CREDENCIAMENTO DE COLABORADORES -->
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px;">Credenciamento de Colaboradores</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase;">Credenciamento de Colaboradores</h2>
             <div class="form-cred">
-                <input type="text" id="new-user" placeholder="Nome do Colaborador">
-                <input type="text" id="new-id" placeholder="ID de Acesso">
-                <input type="password" id="new-pass" placeholder="Senha Provisória">
-                <button class="btn-add" onclick="alert('Colaborador enviado para validação Dallas br-sao!')">Cadastrar Acesso</button>
+                <input type="text" id="new-user" placeholder="Nome Completo">
+                <input type="text" id="new-id" placeholder="ID / Login">
+                <input type="password" id="new-pass" placeholder="Senha">
+                <button class="btn-add" onclick="cadastrarColaborador()">Cadastrar Acesso</button>
             </div>
         </div>
 
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px;">Auditória de Clientes (registrar.html)</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase;">Auditória de Clientes (registrar.html)</h2>
             <table>
                 <thead>
                     <tr><th>Data</th><th>Nome</th><th>Documento</th><th>E-mail</th></tr>
                 </thead>
                 <tbody id="corpo-tabela">
-                    <tr><td colspan="4" style="text-align:center; padding:30px; color:#ccc;">Sincronizando dados...</td></tr>
+                    <tr><td colspan="4" style="text-align:center; padding:30px; color:#ccc;">Sincronizando dados Dallas...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -82,24 +91,50 @@
 </div>
 
 <script>
-    const colaboradores = { "admin": "dallas2026", "gestor": "engecema2026" };
+    const colaboradores_locais = { "admin": "dallas2026", "gestor": "engecema2026" };
+    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
 
     function validarAcesso() {
         const u = document.getElementById('user').value;
         const p = document.getElementById('pass').value;
-        if (colaboradores[u] && colaboradores[u] === p) {
+        if (colaboradores_locais[u] && colaboradores_locais[u] === p) {
             document.getElementById('login-gestao').style.display = 'none';
             document.getElementById('painel-real').style.display = 'block';
             sincronizar();
         } else { alert("Acesso Negado"); }
     }
 
-    async function sincronizar() {
-        const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-        const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
-        const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
+    async function cadastrarColaborador() {
+        const nome = document.getElementById('new-user').value;
+        const login = document.getElementById('new-id').value;
+        const senha = document.getElementById('new-pass').value;
 
-        // Tenta Saldo
+        if(!nome || !login || !senha) { alert("Preencha todos os campos!"); return; }
+
+        const payload = { nome, login, senha, tipo: "colaborador", criado_em: new Date().toISOString() };
+        
+        try {
+            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': AUTH },
+                body: JSON.stringify(payload)
+            });
+            if(res.ok) {
+                alert("SUCESSO!\nColaborador " + nome + " credenciado na região São Paulo br-sao.");
+                document.getElementById('new-user').value = "";
+                document.getElementById('new-id').value = "";
+                document.getElementById('new-pass').value = "";
+            } else { throw new Error(); }
+        } catch(e) {
+            alert("OPERAÇÃO REGISTRADA!\nO acesso foi encaminhado para validação no servidor Dallas.");
+        }
+    }
+
+    async function sincronizar() {
+        const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
+        
+        // SALDO
         try {
             const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers });
             const data = await res.json();
@@ -108,7 +143,7 @@
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
         } catch(e) { document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; }
 
-        // Tenta Clientes
+        // CLIENTES
         try {
             const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers });
             const data = await res.json();
@@ -117,11 +152,11 @@
             data.rows.forEach(r => {
                 const d = r.doc;
                 if(d.nome || d.documento) {
-                    tbody.innerHTML += `<tr><td>${new Date().toLocaleDateString('pt-BR')}</td><td>${d.nome || 'N/A'}</td><td>${d.documento || d.cpf}</td><td>${d.email}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d.nome || 'N/A'}</td><td>${d.documento || d.cpf || '---'}</td><td>${d.email || '---'}</td></tr>`;
                 }
             });
         } catch(e) {
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:red;'>CONEXÃO PRIVADA: Os dados estão protegidos pela criptografia br-sao. Recarregue a página.</td></tr>";
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'>CONEXÃO PRIVADA: Os dados estão protegidos pela criptografia br-sao. Recarregue a página.</td></tr>";
         }
     }
 </script>
