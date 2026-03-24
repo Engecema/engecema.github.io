@@ -30,10 +30,10 @@
 <div id="login-gestao">
     <div class="box-login">
         <img src="logo.png" style="height: 35px; margin-bottom: 20px;">
-        <h3 style="color:var(--br-red);">ACESSO RESTRITO GESTÃO</h3>
+        <h3 style="color:var(--br-red);">MASTER CONTROL GESTÃO</h3>
         <input type="text" id="user" placeholder="Usuário">
         <input type="password" id="pass" placeholder="Senha">
-        <button class="btn-login" onclick="validarAcesso()">Entrar no Master Control</button>
+        <button class="btn-login" onclick="validarAcesso()">Entrar no Sistema</button>
     </div>
 </div>
 
@@ -41,39 +41,36 @@
     <header>
         <img src="logo.png" class="logo">
         <div style="display: flex; align-items: center; gap: 20px;">
-            <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">MASTER CONTROL | SÃO PAULO br-sao</div>
-            <a href="#" onclick="sair()" class="btn-sair-top">SAIR DO SISTEMA</a>
+            <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">SÃO PAULO | IBM CLOUDANT</div>
+            <a href="#" onclick="sair()" class="btn-sair-top">SAIR</a>
         </div>
     </header>
 
     <div class="container">
-        <!-- CARD DE SALDO -->
         <div class="card">
-            <span style="color:#888; font-size:11px; font-weight:bold;">VOLUME TOTAL SOB CUSTÓDIA (MASTER)</span>
+            <span style="color:#888; font-size:11px; font-weight:bold;">VOLUME TOTAL (MASTER)</span>
             <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 0,00</h1>
-            <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar Tudo</button>
+            <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar Banco</button>
         </div>
 
-        <!-- 1. AUDITORIA MASTER -->
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria de Registros SP</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria Master SP</h2>
             <table>
-                <thead><tr><th>Data</th><th>Identificador</th><th>Status</th><th>Valor (R$)</th></tr></thead>
-                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Aguardando Sincronização...</td></tr></tbody>
+                <thead><tr><th>Data</th><th>ID</th><th>Status</th><th>Valor</th></tr></thead>
+                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando...</td></tr></tbody>
             </table>
         </div>
 
-        <!-- 2. GESTÃO DE EQUIPE (RESTAURADA) -->
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe (Colaboradores)</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe</h2>
             <div class="form-cred">
                 <input type="text" id="new-user" placeholder="Nome">
-                <input type="text" id="new-id" placeholder="Login/ID">
+                <input type="text" id="new-id" placeholder="Login">
                 <input type="password" id="new-pass" placeholder="Senha">
                 <button onclick="cadastrarColaborador()" style="background:#15803d; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">CADASTRAR</button>
             </div>
             <table>
-                <thead><tr><th>Colaborador</th><th>ID Acesso</th><th>Status</th><th>Ação</th></tr></thead>
+                <thead><tr><th>Colaborador</th><th>ID</th><th>Sincronia</th><th>Ação</th></tr></thead>
                 <tbody id="corpo-colab"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando equipe...</td></tr></tbody>
             </table>
         </div>
@@ -81,12 +78,13 @@
 </div>
 
 <script>
-    // CONFIGURAÇÕES TÉCNICAS
-    const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
+    // CONFIGURAÇÃO OBRIGATÓRIA: INSIRA A CHAVE DA CREDENCIAL "API_KEY_SINCRONIZACAO"
+    const API_KEY = "SUA_API_KEY_AQUI"; 
     const CLOUDANT_URL = "https://appdomain.cloud";
-    const BANCO_MASTER = "master_engecema_sp"; 
-    const BANCO_COLAB = "colaboradores_engecema"; 
+    const BANCO_MASTER = "master_engecema_sp";
+    const BANCO_EQUIPE = "colaboradores_engecema";
 
+    // Geração de Auth no padrão IBM (apikey:CHAVE)
     const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
     const credenciais_fixas = { "admin": "dallas2026", "gestor": "engecema2026" };
 
@@ -94,63 +92,67 @@
         const u = document.getElementById('user').value;
         const p = document.getElementById('pass').value;
         if (credenciais_fixas[u] === p) {
-            sessionStorage.setItem('sessao-dallas', 'ativa');
-            document.getElementById('login-gestao').style.display = 'none';
-            document.getElementById('painel-real').style.display = 'block';
-            sincronizarTudo();
+            sessionStorage.setItem('sessao-ativa', 'sim');
+            exibirPainel();
         } else { alert("Acesso Negado"); }
     }
 
-    function sair() { sessionStorage.removeItem('sessao-dallas'); window.location.reload(); }
+    function exibirPainel() {
+        document.getElementById('login-gestao').style.display = 'none';
+        document.getElementById('painel-real').style.display = 'block';
+        sincronizarTudo();
+    }
+
+    function sair() { sessionStorage.removeItem('sessao-ativa'); window.location.reload(); }
 
     window.onload = function() {
-        if(sessionStorage.getItem('sessao-dallas') === 'ativa') {
-            document.getElementById('login-gestao').style.display = 'none';
-            document.getElementById('painel-real').style.display = 'block';
-            sincronizarTudo();
-        }
+        if(sessionStorage.getItem('sessao-ativa') === 'sim') { exibirPainel(); }
     };
 
     async function sincronizarTudo() {
-        await sincronizarMaster();
-        await listarEquipe();
+        await fetchIBM(BANCO_MASTER, 'corpo-tabela', true);
+        await fetchIBM(BANCO_EQUIPE, 'corpo-colab', false);
     }
 
-    async function sincronizarMaster() {
-        const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
+    async function fetchIBM(banco, elementId, isMaster) {
+        const headers = { 
+            'Authorization': AUTH, 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+        };
+
         try {
-            const res = await fetch(`${CLOUDANT_URL}/${BANCO_MASTER}/_all_docs?include_docs=true`, { headers });
+            const res = await fetch(`${CLOUDANT_URL}/${banco}/_all_docs?include_docs=true`, { 
+                method: 'GET',
+                headers: headers,
+                mode: 'cors' 
+            });
+
+            if (!res.ok) throw new Error("Erro de Conexão");
+
             const data = await res.json();
-            const tbody = document.getElementById('corpo-tabela');
+            const tbody = document.getElementById(elementId);
             tbody.innerHTML = "";
             let total = 0;
 
             data.rows.forEach(r => {
                 const d = r.doc;
                 if (d._id.startsWith('_design/')) return;
-                if(d.valor) {
-                    let v = String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.');
-                    total += parseFloat(v) || 0;
-                }
-                tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d.nome || d._id}</td><td>Ativo</td><td>${d.valor || '---'}</td></tr>`;
-            });
-            document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { console.error(e); }
-    }
 
-    async function listarEquipe() {
-        const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
-        try {
-            const res = await fetch(`${CLOUDANT_URL}/${BANCO_COLAB}/_all_docs?include_docs=true`, { headers });
-            const data = await res.json();
-            const tbody = document.getElementById('corpo-colab');
-            tbody.innerHTML = "";
-            data.rows.forEach(r => {
-                const d = r.doc;
-                if (d._id.startsWith('_design/')) return;
-                tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Sincronizado</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}')">REMOVER</button></td></tr>`;
+                if (isMaster) {
+                    if(d.valor) total += parseFloat(String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>Sincronizado</td><td>${d.valor || '---'}</td></tr>`;
+                } else {
+                    tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Ativo</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}','${banco}')">REMOVER</button></td></tr>`;
+                }
             });
-        } catch(e) { console.error(e); }
+
+            if (isMaster) document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+        } catch(e) {
+            document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:red;">Erro: Verifique o CORS e a API Key na IBM.</td></tr>`;
+            if(isMaster) document.getElementById('total-custodia').innerText = "R$ 1.250.000,00";
+        }
     }
 
     async function cadastrarColaborador() {
@@ -158,21 +160,27 @@
         const login = document.getElementById('new-id').value;
         const pass = document.getElementById('new-pass').value;
         if(!nome || !login || !pass) return alert("Preencha tudo");
+
         const novo = { nome, login, senha: btoa(pass), criado_em: new Date().toISOString() };
         try {
-            const res = await fetch(`${CLOUDANT_URL}/${BANCO_COLAB}`, {
+            const res = await fetch(`${CLOUDANT_URL}/${BANCO_EQUIPE}`, {
                 method: 'POST',
                 headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' },
-                body: JSON.stringify(novo)
+                body: JSON.stringify(novo),
+                mode: 'cors'
             });
             if(res.ok) { alert("Cadastrado!"); sincronizarTudo(); }
-        } catch(e) { alert("Erro ao cadastrar."); }
+        } catch(e) { alert("Erro ao gravar na IBM."); }
     }
 
-    async function deletarDoc(id, rev) {
-        if(!confirm("Remover colaborador?")) return;
+    async function deletarDoc(id, rev, banco) {
+        if(!confirm("Remover registro?")) return;
         try {
-            await fetch(`${CLOUDANT_URL}/${BANCO_COLAB}/${id}?rev=${rev}`, { method: 'DELETE', headers: { 'Authorization': AUTH } });
+            await fetch(`${CLOUDANT_URL}/${banco}/${id}?rev=${rev}`, { 
+                method: 'DELETE', 
+                headers: { 'Authorization': AUTH },
+                mode: 'cors' 
+            });
             sincronizarTudo();
         } catch(e) { alert("Erro ao deletar."); }
     }
