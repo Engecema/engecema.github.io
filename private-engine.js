@@ -1,6 +1,6 @@
 /**
  * ENGECEMA PRIVATE - ENGINE DALLAS
- * VERSÃO DESTRAVAMENTO TOTAL (LIGHTWEIGHT FETCH)
+ * VERSÃO ULTRA-LIGHT (SEM HEADERS MANUAIS)
  */
 
 const ENGINE_CONFIG = {
@@ -9,39 +9,32 @@ const ENGINE_CONFIG = {
 };
 
 const EngecemaData = {
-    // Busca de dados
+    // Busca de dados (Tabela)
     async buscar(banco) {
-        const url = `https://${ENGINE_CONFIG.host}/${banco}/_all_docs?include_docs=true`;
+        // Técnica: Autenticação na URL para evitar que o navegador peça permissão de Header
+        const url = `https://apikey:${ENGINE_CONFIG.key}@${ENGINE_CONFIG.host}/${banco}/_all_docs?include_docs=true`;
         try {
-            // Usamos btoa para a apikey e enviamos via Header simples
-            const auth = 'Basic ' + btoa("apikey:" + ENGINE_CONFIG.key);
-            const res = await fetch(url, { 
-                method: 'GET', 
-                headers: { 'Authorization': auth }
-            });
+            const res = await fetch(url); 
             if (!res.ok) throw new Error("Acesso Negado");
             return await res.json();
         } catch (e) {
-            console.error("Erro Engine:", e);
+            console.error("Erro Engine Buscar:", e);
             throw e;
         }
     },
 
-    // Gravação de dados
+    // Gravação de dados (Botão Cadastrar)
     async gravar(banco, doc) {
-        const url = `https://${ENGINE_CONFIG.host}/${banco}`;
+        const url = `https://apikey:${ENGINE_CONFIG.key}@${ENGINE_CONFIG.host}/${banco}`;
         try {
-            const auth = 'Basic ' + btoa("apikey:" + ENGINE_CONFIG.key);
             const res = await fetch(url, { 
                 method: 'POST', 
-                headers: { 
-                    'Authorization': auth,
-                    'Content-Type': 'application/json'
-                }, 
+                headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify(doc)
             });
             return res.ok;
         } catch (e) {
+            console.error("Erro Engine Gravar:", e);
             return false;
         }
     }
