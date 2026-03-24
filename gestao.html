@@ -2,6 +2,8 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
     <title>Engecema | Master Control SP</title>
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
@@ -93,45 +95,53 @@
     }
 
     async function sincronizar() {
-        // Saldo
+        const timestamp = new Date().getTime(); // Gera um número único para furar o cache
+        
+        // 1. Saldo
         try {
-            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers: { 'Authorization': AUTH } });
+            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${timestamp}`, { headers: { 'Authorization': AUTH } });
             const data = await res.json();
             let total = 0;
             data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
         } catch(e) { document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; }
 
-        // Clientes
+        // 2. Clientes
         try {
-            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers: { 'Authorization': AUTH } });
+            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${timestamp}`, { headers: { 'Authorization': AUTH } });
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
             data.rows.forEach(r => {
                 const d = r.doc;
-                if(d.nome) tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d.nome}</td><td>${d.documento || d.cpf}</td><td>${d.email}</td></tr>`;
+                if(d.nome) tbody.innerHTML += `<tr><td>\${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>\${d.nome}</td><td>\${d.documento || d.cpf}</td><td>\${d.email}</td></tr>`;
             });
-        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'>Erro de Sincronização Clientes.</td></tr>"; }
+        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='text-align:center;'>Erro de rede: Tente Ctrl+F5.</td></tr>"; }
 
         listarEquipe();
     }
 
     async function listarEquipe() {
+        const timestamp = new Date().getTime();
         const tbody = document.getElementById('corpo-colab');
         try {
-            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers: { 'Authorization': AUTH } });
+            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${timestamp}`, { headers: { 'Authorization': AUTH } });
             const data = await res.json();
             tbody.innerHTML = "";
+            
+            if (data.rows.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Base vazia.</td></tr>";
+                return;
+            }
+
             data.rows.forEach(r => {
                 const d = r.doc;
                 if(d && d.login) {
-                    tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>${d.senha}</td><td><button class="btn-del" onclick="removerColab('${d._id}', '${d._rev}')">Excluir</button></td></tr>`;
+                    tbody.innerHTML += `<tr><td>\${d.nome}</td><td>\${d.login}</td><td>\${d.senha}</td><td><button class="btn-del" onclick="removerColab('\${d._id}', '\${d._rev}')">Excluir</button></td></tr>`;
                 }
             });
-            if(data.rows.length === 0) tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Nenhum colaborador na base.</td></tr>";
         } catch(e) { 
-            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'>Aguardando Autorização CORS (Banco de Equipe).</td></tr>"; 
+            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'><strong>CORS BLOQUEADO PELO NAVEGADOR</strong><br>Use uma Janela Anônima ou limpe o histórico.</td></tr>"; 
         }
     }
 
@@ -141,19 +151,22 @@
         const senha = document.getElementById('new-pass').value;
         if(!nome || !login || !senha) return alert("Preencha tudo!");
         const payload = { nome, login, senha, criado_em: new Date().toISOString() };
-        await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': AUTH }, body: JSON.stringify(payload)
-        });
-        alert("Cadastrado com Sucesso!");
-        listarEquipe();
+        
+        try {
+            await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', {
+                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': AUTH }, body: JSON.stringify(payload)
+            });
+            alert("Colaborador Cadastrado!");
+            listarEquipe();
+        } catch(e) { alert("Erro ao gravar. Tente novamente."); }
     }
 
     async function removerColab(id, rev) {
         if(confirm("Deseja remover este acesso?")) {
-            await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${id}?rev=${rev}`, {
+            await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/\${id}?rev=\${rev}`, {
                 method: 'DELETE', headers: { 'Authorization': AUTH }
             });
-            alert("Removido!");
+            alert("Acesso Removido!");
             listarEquipe();
         }
     }
