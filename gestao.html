@@ -10,7 +10,7 @@
         .logo { font-weight: 900; color: var(--brad-red); font-size: 20px; }
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
         .card { background: #fff; padding: 25px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 3px solid #ccc; }
-        h2 { font-size: 15px; color: var(--brad-red); text-transform: uppercase; margin: 0 0 10px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        h2 { font-size: 15px; color: var(--brad-red); text-transform: uppercase; margin: 0 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .grid-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end; }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field label { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; }
@@ -66,30 +66,39 @@
                 </tr>
             </thead>
             <tbody id="corpo-tabela">
-                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando...</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando com IBM Cloudant...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // CONFIGURAÇÕES DIRETAS (USA EXTENSÃO "ALLOW CORS")
+    // CONFIGURAÇÕES TÉCNICAS (IBM CLOUDANT)
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO = "colaboradores_engecema";
 
-    // 1. CARREGAR LISTA
+    function getAuthHeaders() {
+        const h = new Headers();
+        h.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
+        h.set('Accept', 'application/json');
+        return h;
+    }
+
     async function carregarEquipe() {
-        // Autenticação embutida na URL
-        const urlSegura = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
-        
+        const url = `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
         try {
-            const res = await fetch(urlSegura);
-            if (!res.ok) throw new Error("Erro na IBM");
+            const res = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
+            if (!res.ok) throw new Error("Erro IBM");
 
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
+
+            if (data.rows.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum colaborador registrado.</td></tr>";
+                return;
+            }
 
             data.rows.forEach(r => {
                 const d = r.doc;
@@ -103,45 +112,44 @@
                         <td><button class="btn-del" onclick="deletar('${d._id}','${d._rev}')">REMOVER</button></td>
                     </tr>`;
             });
-            if(data.rows.length === 0) tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum registro.</td></tr>";
         } catch(e) { 
-            console.error(e);
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede. Verifique se a extensão Allow CORS está LIGADA.</td></tr>";
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede: Verifique se a extensão Allow CORS está ATIVA (Laranja) e aperte F5.</td></tr>";
         }
     }
 
-    // 2. CADASTRAR
     async function cadastrarColaborador() {
         const nome = document.getElementById('nome').value;
         const cargo = document.getElementById('cargo').value;
         const depto = document.getElementById('depto').value;
         if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
 
-        const novo = { nome, cargo, depto, criado_em: new Date().toISOString() };
-        const urlPost = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}`;
+        const novoDoc = { nome, cargo, depto, criado_em: new Date().toISOString() };
+        const h = getAuthHeaders();
+        h.set('Content-Type', 'application/json');
 
         try {
-            const res = await fetch(urlPost, {
+            const res = await fetch(`https://${HOST_IBM}/${BANCO}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(novo)
+                headers: h,
+                body: JSON.stringify(novoDoc)
             });
             if(res.ok) {
-                alert("Colaborador cadastrado!");
+                alert("Colaborador cadastrado com sucesso!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
                 carregarEquipe();
             }
-        } catch(e) { alert("Falha na gravação. Ative a extensão Allow CORS."); }
+        } catch(e) { alert("Falha na comunicação. Verifique a extensão Allow CORS."); }
     }
 
-    // 3. REMOVER
     async function deletar(id, rev) {
         if(!confirm("Remover este colaborador?")) return;
-        const urlDelete = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/${id}?rev=${rev}`;
         try {
-            const res = await fetch(urlDelete, { method: 'DELETE' });
-            if(res.ok) carregarEquipe();
+            await fetch(`https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`, { 
+                method: 'DELETE', 
+                headers: getAuthHeaders() 
+            });
+            carregarEquipe();
         } catch(e) { alert("Erro ao deletar."); }
     }
 
