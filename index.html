@@ -5,69 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" type="image/png" href="logo.png">
-    <title>Engecema | RH Bradesco Mirror</title>
+    <title>Engecema | Painel de Gestão RH</title>
     <style>
-        :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; }
-        
-        header { 
-            background: #fff; padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 6px solid var(--br-red); box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        :root { 
+            --br-red: #cc092f; 
+            --br-blue: #004481; 
+            --bg-light: #f4f7f9; 
         }
-        .logo { height: 55px; }
         
-        /* BARRA DE LOGIN */
-        .login-bar { display: flex; gap: 10px; align-items: center; }
-        .login-bar input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100px; font-size: 14px; }
-        .btn-ok { background: var(--br-blue); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            background: var(--bg-light); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
         
-        /* BOTÃO SAIR (FICA NO LUGAR DO LOGIN) */
-        #btn-sair { display: none; background: #eee; color: #cc092f; border: 1px solid #cc092f; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; }
+        /* HEADER ESTILO BRADESCO RH */
+        header { 
+            background: #fff; 
+            padding: 12px 8%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 6px solid var(--br-red); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        
+        .logo { height: 50px; }
+        
+        .auth-container { display: flex; align-items: center; gap: 15px; }
 
-        .hero { background: #fff; padding: 70px 20px; text-align: center; border-bottom: 1px solid #ddd; }
-        .hero h1 { font-size: 2.8em; margin: 0; font-weight: 300; }
+        /* FORMULÁRIO DE LOGIN */
+        .login-bar { display: flex; gap: 8px; align-items: center; }
+        .login-bar input { 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            width: 90px; 
+            font-size: 14px; 
+        }
+        
+        .btn-ok { 
+            background: var(--br-blue); 
+            color: #fff; 
+            border: none; 
+            padding: 8px 22px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: 0.3s; 
+        }
+        .btn-ok:hover { background: #002d55; }
+
+        /* BOTÃO DE SAIR (LOGOUT) - PADRÃO VERMELHO/BRANCO */
+        #btn-logout { 
+            display: none; /* Inicia oculto, o JS ativa após login */
+            background: var(--br-red); 
+            color: #fff; 
+            border: none; 
+            padding: 9px 20px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+        #btn-logout:hover { background: #a50725; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* CONTEÚDO PRINCIPAL */
+        .hero { 
+            background: #fff; 
+            padding: 60px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #eee; 
+        }
+        .hero h1 { font-size: 2.5em; margin: 0; font-weight: 300; color: #333; }
         .hero h1 b { color: var(--br-red); font-weight: 800; }
+        .hero p { color: #666; font-size: 1.1em; margin-top: 10px; }
 
-        .main-cta { max-width: 450px; margin: -40px auto 60px; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; }
-        .btn-open { display: block; background: var(--br-red); color: #fff; padding: 18px; text-decoration: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; margin-top: 20px; }
+        .main-cta { 
+            max-width: 450px; 
+            margin: -30px auto 60px; 
+            background: #fff; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            text-align: center; 
+            border: 1px solid #eee;
+        }
+        
+        .btn-open { 
+            display: block; 
+            background: var(--br-red); 
+            color: #fff; 
+            padding: 16px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            margin-top: 20px; 
+            transition: 0.3s; 
+        }
+        .btn-open:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        footer { margin-top: auto; background: #fff; text-align: center; padding: 40px 20px; border-top: 1px solid #eee; color: #555; font-size: 0.95em; }
+        footer { 
+            margin-top: auto; 
+            background: #fff; 
+            text-align: center; 
+            padding: 30px; 
+            border-top: 1px solid #eee; 
+            color: #888; 
+            font-size: 0.85em; 
+        }
     </style>
 </head>
 <body>
+
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
         
-        <div id="auth-area">
-            <!-- O FORMULÁRIO AGORA CHAMA A FUNÇÃO DE SEGURANÇA -->
+        <div class="auth-container">
+            <!-- Formulário de Login (Agência e Conta) -->
             <form id="form-login" class="login-bar" onsubmit="validarAcesso(event)">
                 <input type="text" id="ag" placeholder="Agência" required maxlength="4">
                 <input type="text" id="ct" placeholder="Conta" required maxlength="8">
                 <button type="submit" class="btn-ok">OK</button>
             </form>
-            
-            <!-- BOTÃO DE SAIR QUE SERÁ ATIVADO PELO MOTOR -->
-            <button id="btn-sair" onclick="executarSair()">SAIR DO RH</button>
+
+            <!-- Botão Sair - Aparecerá após o login -->
+            <button id="btn-logout" onclick="executarSair()">Sair / Logout</button>
         </div>
     </header>
 
-    <div class="hero">
-        <h1><b>Fomento Mercantil</b> e Tecnologia</h1>
-        <p>Acesse seu Internet Banking ou abra sua conta digital agora.</p>
-    </div>
+    <main id="main-content">
+        <div class="hero">
+            <h1><b>Gestão de RH</b> Engecema</h1>
+            <p>Painel Administrativo para controle de equipes e colaboradores.</p>
+        </div>
 
-    <div class="main-cta">
-        <h2>Novo por aqui?</h2>
-        <p>Experimente a agilidade do fomento digital com a segurança Engecema.</p>
-        <a href="registrar.html" class="btn-open">ABRIR MINHA CONTA</a>
-    </div>
+        <div class="main-cta">
+            <h3>Portal de Colaboradores</h3>
+            <p>Acesse o sistema Dallas para inclusão de novos membros e visualização do quadro geral.</p>
+            <a href="registrar.html" class="btn-open">SOLICITAR NOVO ACESSO</a>
+        </div>
+    </main>
 
     <footer>
         <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
-        Integração Segura via GitHub Enterprise & IBM Cloud.<br>
+        Integração Segura via GitHub Enterprise & IBM Cloud Services.<br>
         © 2026 Todos os Direitos Reservados.</p>
     </footer>
 
+    <!-- Script de Inteligência Dallas -->
     <script src="private-engine.js"></script>
 </body>
 </html>
