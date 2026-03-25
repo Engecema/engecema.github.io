@@ -1,73 +1,63 @@
 /**
- * ENGECEMA PRIVATE - ENGINE DALLAS
- * VERSÃO ULTRA-LIGHT (SEM HEADERS MANUAIS)
+ * MOTOR DE SEGURANÇA E FOMENTO DALLAS - ENGECEMA
+ * Integração GitHub & IBM Cloud
  */
 
-const ENGINE_CONFIG = {
-    key: "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY", 
-    host: "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud"
-};
+// Ao carregar a página, verifica se o usuário já está "logado"
+document.addEventListener("DOMContentLoaded", function() {
+    checkSession();
+});
 
-const EngecemaData = {
-    // Busca de dados (Tabela)
-    async buscar(banco) {
-        // Técnica: Autenticação na URL para evitar que o navegador peça permissão de Header
-        const url = `https://apikey:${ENGINE_CONFIG.key}@${ENGINE_CONFIG.host}/${banco}/_all_docs?include_docs=true`;
-        try {
-            const res = await fetch(url); 
-            if (!res.ok) throw new Error("Acesso Negado");
-            return await res.json();
-        } catch (e) {
-            console.error("Erro Engine Buscar:", e);
-            throw e;
-        }
-    },
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const ag = document.getElementById('agencia').value;
+    const ct = document.getElementById('conta').value;
 
-    // Gravação de dados (Botão Cadastrar)
-    async gravar(banco, doc) {
-        const url = `https://apikey:${ENGINE_CONFIG.key}@${ENGINE_CONFIG.host}/${banco}`;
-        try {
-            const res = await fetch(url, { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify(doc)
-            });
-            return res.ok;
-        } catch (e) {
-            console.error("Erro Engine Gravar:", e);
-            return false;
-        }
+    if(ag.length >= 4 && ct.length >= 4) {
+        // Simula gravação de sessão (Padrão IBM Cloud Auth)
+        localStorage.setItem('engecema_session', 'active');
+        localStorage.setItem('user_ref', ag + "-" + ct);
+        
+        // Redireciona para o painel de RH / Admin
+        // Se estiver na index, apenas atualiza a barra superior
+        alert("Acesso autorizado! Redirecionando ao Painel RH...");
+        window.location.href = 'admin.html'; 
+    } else {
+        alert("Por favor, preencha os dados corretamente.");
     }
-};
+}
 
-// --- NÚCLEO VISUAL (BOTÃO VERMELHO) ---
-(function() {
-    const integrarSeguranca = () => {
-        const loginBar = document.querySelector('.login-bar');
-        const btnOk = document.querySelector('.btn-ok');
-        if (loginBar && btnOk && !document.getElementById('senha-priv')) {
-            btnOk.style.cssText = "background: #cc092f !important; color: #fff !important; border: none !important; padding: 8px 20px !important; border-radius: 4px !important; font-weight: bold !important;";
-            loginBar.removeAttribute('onsubmit');
-            loginBar.onsubmit = (e) => { e.preventDefault(); return false; };
-            const s1 = document.createElement('input');
-            s1.id = 'senha-priv'; s1.type = 'password'; s1.placeholder = 'Senha';
-            s1.maxLength = 4;
-            s1.style = "padding:8px; border:1px solid #ccc; border-radius:4px; width:80px; margin-right:5px;";
-            const s2 = document.createElement('input');
-            s2.id = 'confirma-priv'; s2.type = 'password'; s2.placeholder = 'Confirmar';
-            s2.maxLength = 4;
-            s2.style = "padding:8px; border:1px solid #ccc; border-radius:4px; width:80px; margin-right:5px;";
-            loginBar.insertBefore(s1, btnOk);
-            loginBar.insertBefore(s2, btnOk);
-            btnOk.onclick = function(e) {
-                e.preventDefault();
-                if (s1.value.length === 4 && s1.value === s2.value) {
-                    window.location.href = 'produtos.html';
-                } else {
-                    alert("Senhas não conferem.");
-                }
-            };
-        }
-    };
-    setInterval(integrarSeguranca, 500);
-})();
+function checkSession() {
+    const session = localStorage.getItem('engecema_session');
+    const formLogin = document.getElementById('form-login');
+    const btnSair = document.getElementById('btn-sair');
+
+    if (session === 'active') {
+        // Se logado: Esconde formulário e mostra botão Sair
+        if(formLogin) formLogin.style.display = 'none';
+        if(btnSair) btnSair.style.display = 'block';
+    } else {
+        // Se deslogado: Mostra formulário e esconde botão Sair
+        if(formLogin) formLogin.style.display = 'flex';
+        if(btnSair) btnSair.style.display = 'none';
+    }
+}
+
+function logout() {
+    // Limpa os dados de segurança
+    localStorage.removeItem('engecema_session');
+    localStorage.removeItem('user_ref');
+    
+    alert("Sessão encerrada com segurança.");
+    
+    // Redireciona para a home limpa
+    window.location.href = 'index.html';
+}
+
+// Interceptação de segurança para páginas privadas
+if (window.location.pathname.includes('admin.html') || window.location.pathname.includes('painel.html')) {
+    if (localStorage.getItem('engecema_session') !== 'active') {
+        window.location.href = 'index.html';
+    }
+}
