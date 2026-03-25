@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>Engecema Admin | Painel de Gestão</title>
+    <title>Engecema Admin | Painel de Gestão São Paulo</title>
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-bottom: 100px; }
         
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+        }
+
+        /* HEADER FIXO COM BOTÃO DE SAIR */
         header { 
-            background: #fff; 
+            background: #ffffff; 
             padding: 15px 40px; 
             border-bottom: 5px solid var(--br-red); 
             display: flex; 
@@ -21,69 +29,111 @@
             z-index: 9999; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
+
         .logo { height: 35px; }
 
-        /* Estilo do Botão de Sair */
-        .btn-sair-direto { 
-            background-color: #cc092f !important; 
+        /* ESTILO DO BOTÃO SAIR (PADRÃO VERMELHO BRADESCO) */
+        .btn-sair-admin { 
+            background: #cc092f !important; 
             color: #ffffff !important; 
             border: none !important; 
-            padding: 10px 20px !important; 
+            padding: 10px 25px !important; 
             border-radius: 4px !important; 
             font-weight: bold !important; 
             cursor: pointer !important; 
             text-transform: uppercase !important;
-            font-size: 12px !important;
+            font-size: 13px !important;
+            text-decoration: none !important;
             display: inline-block !important;
-            visibility: visible !important;
+            transition: background 0.3s;
+        }
+        .btn-sair-admin:hover { background: #a50725 !important; }
+
+        /* CONTEÚDO DO PAINEL */
+        .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+        
+        .card-gestao { 
+            background: #fff; 
+            padding: 30px; 
+            border-left: 8px solid var(--br-red); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            margin-bottom: 30px; 
+        }
+        
+        .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
+        
+        .secao-titulo { 
+            color: var(--br-red); 
+            font-size: 13px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            margin: 40px 0 15px 0; 
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 5px; 
         }
 
-        .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
-        .card-gestao { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
-        .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-        .item-br { background: #fff; padding: 15px 5px; text-align: center; border: 1px solid #eee; cursor: pointer; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 95px; }
+        .grid-servicos { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 15px; 
+        }
         
-        #modal-br { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 10000; align-items: center; justify-content: center; }
-        .modal-content { background: #fff; padding: 40px; border: 2px solid var(--br-red); width: 320px; border-radius: 8px; text-align: center; }
+        .item-br { 
+            background: #fff; 
+            padding: 20px; 
+            text-align: center; 
+            border: 1px solid #eee; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .item-br:hover { border-color: var(--br-red); transform: translateY(-2px); }
+        .item-br i { font-size: 24px; font-style: normal; margin-bottom: 10px; }
+        .item-br span { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #555; }
+
     </style>
 </head>
 <body>
 
 <header>
-    <img src="logo.png" class="logo">
+    <img src="logo.png" alt="Engecema" class="logo">
+    
     <div style="display: flex; align-items: center; gap: 20px;">
         <div style="text-align: right; line-height: 1.2;">
-            <span style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO RH</span>
+            <span style="font-size: 10px; font-weight: bold; color: var(--br-red);">GESTÃO RH SÃO PAULO</span><br>
+            <span style="font-size: 9px; color: #999;">SESSÃO IBM CLOUD ATIVA</span>
         </div>
-        <!-- BOTÃO COM FUNÇÃO INTERNA PARA TESTE IMEDIATO -->
-        <button class="btn-sair-direto" onclick="localStorage.clear(); window.location.href='index.html';">
+        
+        <!-- BOTÃO DE SAIR COM COMANDO DE LIMPEZA DE CACHE INTEGRADO -->
+        <a href="index.html" class="btn-sair-admin" onclick="localStorage.clear(); sessionStorage.clear();">
             Sair / Logout
-        </button>
+        </a>
     </div>
 </header>
 
 <div class="container">
+    <!-- PATRIMÔNIO REAL -->
     <div class="card-gestao">
-        <span style="color:#888; font-size:11px; font-weight:bold;">Patrimônio sob Gestão Engecema</span>
+        <span style="color:#888; text-transform:uppercase; font-size:11px; font-weight:bold;">Patrimônio Consolidado sob Gestão</span>
         <h1 class="valor-p">R$ 1.240.500,00</h1>
-        <div style="color:#15803d; font-size:10px; font-weight:bold;">● Sincronizado IBM Cloud São Paulo</div>
+        <div style="color:#15803d; font-size:10px; font-weight:bold;">● Sincronizado Regional São Paulo (BR-SAO)</div>
     </div>
 
-    <div class="secao-titulo">Gestão de Equipes</div>
+    <!-- GESTÃO DE EQUIPE -->
+    <div class="secao-titulo">Inclusão de Colaboradores e Quadro Geral</div>
     <div class="grid-servicos">
-        <div class="item-br" onclick="document.getElementById('modal-br').style.display='flex'"><i>👥</i><span>Equipes</span></div>
-        <div class="item-br" onclick="document.getElementById('modal-br').style.display='flex'"><i>📋</i><span>Quadro Geral</span></div>
-        <div class="item-br" onclick="localStorage.clear(); window.location.href='index.html';"><i>❌</i><span>Sair</span></div>
-    </div>
-</div>
-
-<div id="modal-br">
-    <div class="modal-content">
-        <h3>Operação RH</h3>
-        <p>Função em desenvolvimento para integração IBM Cloudant.</p>
-        <button onclick="document.getElementById('modal-br').style.display='none'" style="width:100%; padding:10px; background:var(--br-red); color:#fff; border:none; cursor:pointer;">Fechar</button>
+        <div class="item-br"><i>👥</i><span>Equipes Ativas</span></div>
+        <div class="item-br"><i>📝</i><span>Novo Cadastro</span></div>
+        <div class="item-br"><i>📊</i><span>Relatórios</span></div>
+        <div class="item-br"><i>📅</i><span>Escalas</span></div>
+        <!-- OPÇÃO DE SAIR TAMBÉM NA GRADE -->
+        <div class="item-br" onclick="localStorage.clear(); window.location.href='index.html';" style="border-color: #ffcccc;">
+            <i style="color:red;">❌</i><span style="color:red;">Sair</span>
+        </div>
     </div>
 </div>
 
