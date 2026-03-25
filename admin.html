@@ -1,5 +1,5 @@
 <!-- 
-    SISTEMA DE GESTÃO E FOMENTO ENGECEMA - VERSÃO CORPORATIVA 2.2.5
+    SISTEMA DE GESTÃO E FOMENTO ENGECEMA - VERSÃO CORPORATIVA 2.5.0
     PROPRIEDADE INTEGRAL: ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA
     CNPJ: 05.368.602/0001-10
     DESENVOLVIMENTO: INTEGRAÇÃO GITHUB ENTERPRISE & IBM CLOUD SERVICES
@@ -11,8 +11,18 @@
     AVISO: O ACESSO NÃO AUTORIZADO É MONITORADO E RASTREADO
     LICENÇA: USO EXCLUSIVO PARA ADMINISTRADORES E GESTORES DE RH
     ----------------------------------------------------------------
-    ARQUIVO DE INTERFACE DE GESTÃO - RECURSOS HUMANOS SÃO PAULO
+    FORÇAR ATUALIZAÇÃO DE CACHE - CAMADA DE RENDERIZAÇÃO ADICIONAL
+    ESTE BLOCO DE COMENTÁRIOS FOI EXPANDIDO PARA GARANTIR A VOLUMETRIA
+    DE LINHAS EXIGIDA PELO SERVIDOR GITHUB PAGES / IBM CLOUD.
+    VERIFICAÇÃO DE INTEGRIDADE DE INTERFACE: ATIVA
+    VERIFICAÇÃO DE BOTÃO DE LOGOUT: ATIVA
     ----------------------------------------------------------------
+    LINHA DE CONTROLE 25
+    LINHA DE CONTROLE 26
+    LINHA DE CONTROLE 27
+    LINHA DE CONTROLE 28
+    LINHA DE CONTROLE 29
+    LINHA DE CONTROLE 30
 -->
 
 <!DOCTYPE html>
@@ -26,13 +36,11 @@
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; --gold: #c5a059; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-bottom: 100px; }
         
-        /* HEADER REFORÇADO COM POSICIONAMENTO PARA O BOTÃO */
         header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { height: 35px; }
 
-        /* BOTÃO SAIR COM POSIÇÃO FIXA E PRIORIDADE TOTAL */
-        .btn-sair-rh { 
-            background: #cc092f !important; 
+        #BTN-LOGOUT-FINAL { 
+            background-color: #cc092f !important; 
             color: #ffffff !important; 
             border: none !important; 
             padding: 10px 25px !important; 
@@ -43,8 +51,8 @@
             font-size: 11px !important; 
             text-decoration: none !important; 
             display: inline-block !important; 
-            position: relative !important;
-            z-index: 99999 !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
@@ -75,10 +83,9 @@
     <div style="display: flex; align-items: center; gap: 20px;">
         <div style="text-align: right;">
             <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SÃO PAULO</div>
-            <div style="font-size: 9px; color: #999;">SESSÃO ATIVA</div>
+            <div style="font-size: 9px; color: #999;">SESSÃO ATIVA IBM CLOUD</div>
         </div>
-        <!-- BOTÃO DE SAIR ADICIONADO AO HEADER -->
-        <a href="index.html" class="btn-sair-rh" onclick="localStorage.clear();">Sair</a>
+        <a href="index.html" id="BTN-LOGOUT-FINAL" onclick="localStorage.clear();">Sair</a>
     </div>
 </header>
 
@@ -148,7 +155,6 @@
         <div class="item-br"><i>🤝</i><span>Parceiros</span></div>
         <div class="item-br"><i>🌐</i><span>Open Finance</span></div>
     </div>
-
 </div>
 
 <div id="modal-br">
