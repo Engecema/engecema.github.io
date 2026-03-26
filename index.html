@@ -22,7 +22,6 @@
             min-height: 100vh; 
         }
         
-        /* HEADER ESTILO BRADESCO RH */
         header { 
             background: #fff; 
             padding: 12px 8%; 
@@ -37,7 +36,6 @@
         
         .auth-container { display: flex; align-items: center; gap: 15px; }
 
-        /* FORMULÁRIO DE LOGIN */
         .login-bar { display: flex; gap: 8px; align-items: center; }
         .login-bar input { 
             padding: 8px; 
@@ -59,9 +57,8 @@
         }
         .btn-ok:hover { background: #002d55; }
 
-        /* BOTÃO DE SAIR (LOGOUT) - PADRÃO VERMELHO/BRANCO */
         #btn-logout { 
-            display: none; /* Inicia oculto, o JS ativa após login */
+            display: none; 
             background: var(--br-red); 
             color: #fff; 
             border: none; 
@@ -73,9 +70,8 @@
             font-size: 12px;
             transition: 0.3s;
         }
-        #btn-logout:hover { background: #a50725; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        #btn-logout:hover { background: #a50725; }
 
-        /* CONTEÚDO PRINCIPAL */
         .hero { 
             background: #fff; 
             padding: 60px 20px; 
@@ -127,14 +123,13 @@
         <img src="logo.png" alt="Engecema" class="logo">
         
         <div class="auth-container">
-            <!-- Formulário de Login (Agência e Conta) -->
-            <form id="form-login" class="login-bar" onsubmit="validarAcesso(event)">
+            <!-- Camada de Formulário Dinâmico -->
+            <form id="form-login" class="login-bar">
                 <input type="text" id="ag" placeholder="Agência" required maxlength="4">
                 <input type="text" id="ct" placeholder="Conta" required maxlength="8">
-                <button type="submit" class="btn-ok">OK</button>
+                <button type="button" onclick="validarAcessoLocal()" class="btn-ok">OK</button>
             </form>
 
-            <!-- Botão Sair - Aparecerá após o login -->
             <button id="btn-logout" onclick="executarSair()">Sair / Logout</button>
         </div>
     </header>
@@ -146,9 +141,10 @@
         </div>
 
         <div class="main-cta">
-            <h3>Portal de Colaboradores</h3>
-            <p>Acesse o sistema Dallas para inclusão de novos membros e visualização do quadro geral.</p>
-            <a href="registrar.html" class="btn-open">SOLICITAR NOVO ACESSO</a>
+            <h3 id="titulo-boas-vindas">Portal de Colaboradores</h3>
+            <p id="msg-acesso">Acesse o sistema Dallas para inclusão de novos membros e visualização do quadro geral.</p>
+            <!-- Link que só funciona com o Token -->
+            <a href="gestao.html" id="btn-painel" class="btn-open">ACESSAR PAINEL DE GESTÃO</a>
         </div>
     </main>
 
@@ -158,7 +154,38 @@
         © 2026 Todos os Direitos Reservados.</p>
     </footer>
 
-    <!-- Script de Inteligência Dallas -->
-    <script src="private-engine.js"></script>
+    <script>
+        // Camada de Lógica de Autenticação
+        function validarAcessoLocal() {
+            const ag = document.getElementById('ag').value;
+            const ct = document.getElementById('ct').value;
+
+            // Simulação de validação (Posteriormente conectaremos à IBM Cloudant)
+            if(ag.length >= 3 && ct.length >= 4) {
+                // GERAÇÃO DO TOKEN DE PROTEÇÃO
+                localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
+                alert("Acesso autorizado! Redirecionando...");
+                window.location.href = 'gestao.html';
+            } else {
+                alert("Credenciais Inválidas para o Sistema Dallas.");
+            }
+        }
+
+        function executarSair() {
+            localStorage.removeItem('engecema_auth_token');
+            location.reload();
+        }
+
+        // Verifica estado ao carregar a página
+        window.onload = function() {
+            const token = localStorage.getItem('engecema_auth_token');
+            if(token === 'TOKEN_VALIDO_PRODUCAO') {
+                document.getElementById('form-login').style.display = 'none';
+                document.getElementById('btn-logout').style.display = 'block';
+                document.getElementById('titulo-boas-vindas').innerText = "Sessão Ativa";
+                document.getElementById('btn-painel').innerText = "IR PARA O PAINEL AGORA";
+            }
+        }
+    </script>
 </body>
 </html>
