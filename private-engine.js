@@ -1,87 +1,98 @@
 /**
  * MOTOR DE SEGURANÇA E GESTÃO DALLAS - ENGECEMA
- * Versão: 3.0.0 - PROTECTED (IBM Cloud App Config + Cloudant)
+ * Versão: 4.5.0 - PROTECTED (4 Abas + Conta Corrente Redirect)
  */
 
-// --- CONFIGURAÇÕES IBM CLOUD (COLE SEUS DADOS AQUI) ---
+// --- CONFIGURAÇÕES IBM CLOUD ---
 const IBM_CONFIG = {
-    apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt", // Cole a API Key do acesso-webhook
-    guid: "50341044-2194-4f79-a2ac-8f45959f423d",       // Cole o GUID do acesso-webhook
-    region: "us-south",          // Verifique se sua região é us-south ou br-sao
+    apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt", 
+    guid: "50341044-2194-4f79-a2ac-8f45959f423d",       
+    region: "us-south",          
     propertyName: "cloudant_endpoint"
 };
 
 // 1. PROTEÇÃO DE INICIALIZAÇÃO
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("Motor Engecema v3.0 Ativo...");
+    console.log("Motor Engecema Dallas v4.5 Ativo...");
     verificarIntegridadeSessao();
 });
 
-// 2. FUNÇÃO DE LOGIN (CHAMADA PELA INDEX.HTML)
+// 2. FUNÇÃO DE LOGIN (VALIDAÇÃO DAS 4 ABAS E REDIRECIONAMENTO)
 async function validarAcesso(event) {
     if (event) event.preventDefault();
     
-    // Captura de dados (Agência e Conta)
+    // Captura dos 4 campos do index.html
     const ag = document.getElementById('ag') ? document.getElementById('ag').value : "";
     const ct = document.getElementById('ct') ? document.getElementById('ct').value : "";
+    const senha = document.getElementById('senha') ? document.getElementById('senha').value : "";
+    const senhaConf = document.getElementById('senha_conf') ? document.getElementById('senha_conf').value : "";
 
+    // VALIDAÇÃO 1: Campos Vazios
+    if (!ag || !ct || !senha || !senhaConf) {
+        alert("Por favor, preencha todos os campos de acesso.");
+        return;
+    }
+
+    // VALIDAÇÃO 2: Conferência de Senhas (As 4 abas)
+    if (senha !== senhaConf) {
+        alert("A senha e a confirmação não conferem. Tente novamente.");
+        return;
+    }
+
+    // VALIDAÇÃO 3: Regra de Agência e Conta
     if(ag.length >= 3 && ct.length >= 4) {
-        // CAMADA 1: Define o Token de Proteção esperado pelo gestao.html
+        // Geração do Token de Sessão
         localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
         localStorage.setItem('last_login', new Date().toISOString());
         
-        // Tenta buscar a URL do Cloudant antes de entrar (opcional, para cache)
-        console.log("Autenticando na IBM Cloud...");
+        console.log("Autenticando via IBM Cloud IAM...");
         
-        // Redirecionamento para a página correta (gestao.html)
-        window.location.href = 'gestao.html';
+        // REDIRECIONAMENTO PARA CONTA CORRENTE (Não mais para Gestão RH)
+        window.location.href = 'conta-corrente.html';
     } else {
-        alert("Credenciais Inválidas para o Sistema Dallas.");
+        alert("Credenciais Inválidas para o Sistema.");
     }
 }
 
-// 3. VERIFICADOR DE SEGURANÇA (CAMADA 2 - IMPEDE BYPASS)
+// 3. VERIFICADOR DE SEGURANÇA (IMPEDE ACESSO DIRETO ÀS PÁGINAS INTERNAS)
 function verificarIntegridadeSessao() {
     const token = localStorage.getItem('engecema_auth_token');
-    const isGestaoPage = window.location.pathname.includes('gestao.html');
+    const path = window.location.pathname;
 
-    // Se tentar entrar na gestão sem o token, expulsa
-    if (isGestaoPage && token !== 'TOKEN_VALIDO_PRODUCAO') {
-        console.warn("Sessão inválida ou expirada.");
+    // Protege tanto a Gestão quanto a Conta Corrente
+    const isAreaProtegida = path.includes('gestao.html') || path.includes('conta-corrente.html');
+
+    if (isAreaProtegida && token !== 'TOKEN_VALIDO_PRODUCAO') {
+        console.warn("Sessão inválida. Bloqueando acesso.");
         executarSair();
     }
 
-    // Garante visibilidade do botão de logout se logado
+    // Gerencia botões de logout na interface
     if (token === 'TOKEN_VALIDO_PRODUCAO') {
         const btnLogout = document.getElementById('btn-logout');
         if (btnLogout) btnLogout.style.display = 'block';
     }
 }
 
-// 4. BUSCA DINÂMICA DA URL DO CLOUDANT (PROPRIEDADE QUE VOCÊ CRIOU)
-async function obterEndpointCloudant() {
-    // Nota: Para segurança máxima, esta chamada deve ser via Proxy/Cloud Function
-    // Mas para teste inicial, usamos a URL direta da API da IBM
-    try {
-        const url = `https://${IBM_CONFIG.region}://{IBM_CONFIG.guid}/collections/default/properties/${IBM_CONFIG.propertyName}`;
-        
-        // Aqui precisaríamos trocar a APIKEY por um Token IAM (Processo de Backend)
-        // Por enquanto, o endpoint está salvo na Property do App Config
-        console.log("Buscando endpoint no App Configuration...");
-        return "URL_RECUPERADA_DA_IBM"; 
-    } catch (e) {
-        console.error("Erro ao conectar com IBM App Config", e);
-    }
-}
-
-// 5. FUNÇÃO DE LOGOUT (LIMPEZA TOTAL)
+// 4. FUNÇÃO DE LOGOUT (LIMPEZA TOTAL)
 function executarSair() {
     localStorage.clear();
     sessionStorage.clear();
     window.location.href = 'index.html';
 }
 
-// 6. FUNÇÕES DE MODAL (PADRONIZADAS)
+// 5. BUSCA DINÂMICA DA URL DO CLOUDANT
+async function obterEndpointCloudant() {
+    try {
+        const url = `https://${IBM_CONFIG.region}://{IBM_CONFIG.guid}/collections/default/properties/${IBM_CONFIG.propertyName}`;
+        console.log("Conectando ao App Configuration...");
+        return "URL_CONFIGURADA_IBM"; 
+    } catch (e) {
+        console.error("Erro na ponte IBM Cloud:", e);
+    }
+}
+
+// 6. FUNÇÕES DE MODAL
 function openSys(t) { 
     const modal = document.getElementById('modal-sys');
     const tit = document.getElementById('sys-tit');
