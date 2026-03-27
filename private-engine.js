@@ -1,5 +1,5 @@
 /**
- * MOTOR DALLAS v5.6 - DESTRAVADO
+ * MOTOR DALLAS v5.7.0 - ACESSO TOTAL AOS ITENS
  */
 
 const IBM_CONFIG = {
@@ -8,8 +8,8 @@ const IBM_CONFIG = {
     region: "us-south"
 };
 
-// --- CONTROLE DE SALDO DINÂMICO ---
-let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo')?.replace(/\./g, '').replace(',', '.') || 1250000.00);
+// Controle de Saldo Dinâmico
+let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo') || 1250000.00);
 
 document.addEventListener("DOMContentLoaded", function() {
     atualizarDisplaySaldo();
@@ -21,24 +21,44 @@ function atualizarDisplaySaldo() {
     if (el) el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// --- FUNÇÃO PARA ABRIR QUALQUER ÍCONE (DESTRAVADO) ---
+// FUNÇÃO PARA ACESSAR CADA ITEM (DESTRAVA AS 7 SEÇÕES)
 function openSys(titulo) {
     const modal = document.getElementById('modal-sys');
     const head = document.getElementById('sys-tit');
     const body = document.getElementById('sys-conteudo');
 
+    if (!modal || !head || !body) return;
+
     head.innerText = titulo;
     modal.style.display = 'flex';
 
-    if (titulo === 'Pix') {
+    // Lógica Específica para alguns itens, Genérica para os outros
+    if (titulo === 'Extrato' || titulo === 'Extrato Mensal') {
         body.innerHTML = `
-            <p style="font-size:12px; color:#666;">Envie dinheiro instantaneamente</p>
-            <input type="text" id="pix-chave" placeholder="Chave CPF, E-mail ou Telefone">
-            <input type="number" id="pix-valor" placeholder="Valor R$">
-            <button class="btn-modal-acao" onclick="processarPix()">CONFIRMAR ENVIO</button>
+            <div style="text-align:left; font-size:12px;">
+                <p><strong>Lançamentos Recentes:</strong></p>
+                <hr>
+                <div style="display:flex; justify-content:space-between;"><span>DOC Recebido</span><span style="color:green;">+ R$ 1.250.000,00</span></div>
+                <p style="font-size:10px; color:#999;">Origem: Dallas Integration Services</p>
+            </div>
         `;
-    } else {
-        body.innerHTML = `<p>A interface de <strong>${titulo}</strong> está sendo sincronizada com o servidor Dallas.</p>`;
+    } 
+    else if (titulo === 'Pix' || titulo === 'Transferências') {
+        body.innerHTML = `
+            <input type="text" id="pix-chave" placeholder="Chave Pix ou Ag/Conta" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc;">
+            <input type="number" id="pix-valor" placeholder="Valor R$" style="width:100%; padding:10px; border:1px solid #ccc;">
+            <button onclick="processarTransacao()" style="background:#cc092f; color:#fff; width:100%; border:none; padding:12px; margin-top:10px; cursor:pointer; font-weight:bold;">CONFIRMAR OPERAÇÃO</button>
+        `;
+    }
+    else {
+        // Mensagem padrão para os outros 40+ itens
+        body.innerHTML = `
+            <div style="padding:20px;">
+                <i style="font-size:40px; display:block; margin-bottom:10px;">⚙️</i>
+                <p>Acessando módulo <strong>${titulo}</strong>...</p>
+                <p style="font-size:11px; color:#666;">Conectando à base de dados Cloudant-yr via IBM IAM Safe.</p>
+            </div>
+        `;
     }
 }
 
@@ -46,20 +66,20 @@ function closeSys() {
     document.getElementById('modal-sys').style.display = 'none';
 }
 
-// --- SIMULAÇÃO DE TRANSAÇÃO PIX ---
-function processarPix() {
+function processarTransacao() {
     const valor = parseFloat(document.getElementById('pix-valor').value);
-    if (!valor || valor <= 0) return alert("Insira um valor válido.");
-    if (valor > saldoAtual) return alert("Saldo insuficiente para esta transação.");
+    if (!valor || valor <= 0) return alert("Digite um valor válido.");
+    if (valor > saldoAtual) return alert("Saldo insuficiente.");
 
     saldoAtual -= valor;
     localStorage.setItem('sessao_saldo', saldoAtual.toFixed(2));
     
-    alert("Pix enviado com sucesso!");
+    alert("Operação realizada com sucesso!");
     atualizarDisplaySaldo();
     closeSys();
 }
 
+// Funções de Login e Sessão
 function validarAcesso(event) {
     if (event) event.preventDefault();
     localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
