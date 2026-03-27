@@ -16,6 +16,7 @@
         header { position: fixed; top: 0; width: 100%; background: #fff; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; border-bottom: 5px solid var(--br-red); box-sizing: border-box; z-index: 1000; }
         .logo { height: 40px; }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        
         .card-resumo { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--br-blue); }
         .saldo-valor { font-size: 36px; font-weight: 800; color: var(--br-blue); }
         .secao-titulo { font-size: 13px; font-weight: 900; color: var(--br-red); text-transform: uppercase; margin: 35px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
@@ -24,9 +25,9 @@
         .item-servico:hover { border-color: var(--br-red); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
         .item-servico i { font-size: 24px; margin-bottom: 10px; color: #444; }
         .item-servico span { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
-        #modal-sys { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-box { background: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; border-top: 8px solid var(--br-red); }
-        .btn-fechar { background: #eee; color: #333; border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        
+        .btn-voltar { background: #666; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+        .btn-sair { background: var(--br-red); color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -34,115 +35,104 @@
         <img src="logo.png" class="logo">
         <div style="text-align: right;">
             <div style="font-size: 11px; color: #666;">AG 0405 | CC 556264-3 | <strong>GEONI CESAR DE MATOS</strong></div>
-            <button onclick="executarSair()" style="background:var(--br-red); color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:5px;">SAIR</button>
+            <button class="btn-sair" onclick="executarSair()" style="margin-top: 5px;">SAIR</button>
         </div>
     </header>
 
     <div class="container">
-        <div class="card-resumo">
-            <div><span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
-            <div class="saldo-valor" id="display-saldo">R$ 1.250.000,00</div></div>
-            <button onclick="openSys('Saldo e Extrato')" style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
+        <!-- TELA 1: MENU PRINCIPAL (7 SEÇÕES) -->
+        <div id="tela-home">
+            <div class="card-resumo">
+                <div><span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
+                <div class="saldo-valor" id="display-saldo">R$ 1.250.000,00</div></div>
+                <button onclick="openSys('Saldo e Extrato')" style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
+            </div>
+
+            <div class="secao-titulo">1. Transações e Consultas (15 itens)</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Agendamentos')"><i>📅</i><span>Agendamentos</span></div>
+                <div class="item-servico" onclick="openSys('Buscador de Boletos')"><i>🔍</i><span>Buscador de Boletos</span></div>
+                <div class="item-servico" onclick="openSys('Cartões')"><i>💳</i><span>Cartões</span></div>
+                <div class="item-servico" onclick="openSys('Comprovantes')"><i>🧾</i><span>Comprovantes</span></div>
+                <div class="item-servico" onclick="openSys('Debito Automático')"><i>🔄</i><span>Debito Automático</span></div>
+                <div class="item-servico" onclick="openSys('Debito de Veículos')"><i>🚗</i><span>Debito de Veículos</span></div>
+                <div class="item-servico" onclick="openSys('Imposto de Renda')"><i>📋</i><span>Imposto de Renda</span></div>
+                <div class="item-servico" onclick="openSys('Meus Bancos')"><i>🏦</i><span>Meus Bancos</span></div>
+                <div class="item-servico" onclick="openSys('Pagamentos')"><i>📄</i><span>Pagamentos</span></div>
+                <div class="item-servico" onclick="openSys('Pix')"><i>📱</i><span>Pix</span></div>
+                <div class="item-servico" onclick="openSys('Recarga')"><i>📲</i><span>Recarga</span></div>
+                <div class="item-servico" onclick="openSys('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
+                <div class="item-servico" onclick="openSys('Saque')"><i>💵</i><span>Saque</span></div>
+                <div class="item-servico" onclick="openSys('Transferência')"><i>💸</i><span>Transferência</span></div>
+                <div class="item-servico" onclick="openSys('Vender pelo Celular')"><i>🛍️</i><span>Vender pelo Celular</span></div>
+            </div>
+
+            <div class="secao-titulo">2. Empréstimos e Financiamentos</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Credito Imobiliário')"><i>🏠</i><span>Credito Imobiliário</span></div>
+                <div class="item-servico" onclick="openSys('Empréstimos')"><i>💰</i><span>Empréstimos</span></div>
+                <div class="item-servico" onclick="openSys('Limite de Credito')"><i>📈</i><span>Limite de Credito</span></div>
+                <div class="item-servico" onclick="openSys('Renegociação de Dividas')"><i>🤝</i><span>Renegociação de Dividas</span></div>
+            </div>
+
+            <div class="secao-titulo">3. Investimentos</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Agora Home Broker')"><i>📉</i><span>Agora Home Broker</span></div>
+                <div class="item-servico" onclick="openSys('Investimentos')"><i>💎</i><span>Investimentos</span></div>
+                <div class="item-servico" onclick="openSys('Objetivos')"><i>🎯</i><span>Objetivos</span></div>
+                <div class="item-servico" onclick="openSys('Previdência')"><i>💼</i><span>Previdência</span></div>
+            </div>
+
+            <div class="secao-titulo">4. Mais Produtos e Contas</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Cambio')"><i>💱</i><span>Cambio</span></div>
+                <div class="item-servico" onclick="openSys('Captalização')"><i>🎁</i><span>Captalização</span></div>
+                <div class="item-servico" onclick="openSys('Cheques')"><i>📝</i><span>Cheques</span></div>
+                <div class="item-servico" onclick="openSys('Consorcio')"><i>🏢</i><span>Consorcio</span></div>
+                <div class="item-servico" onclick="openSys('Conta Internacional')"><i>🌍</i><span>Conta Internacional</span></div>
+                <div class="item-servico" onclick="openSys('Conta Nextjoy')"><i>🎮</i><span>Conta Nextjoy</span></div>
+                <div class="item-servico" onclick="openSys('Seguros')"><i>🛡️</i><span>Seguros</span></div>
+            </div>
+
+            <div class="secao-titulo">5. Compras e Benefícios</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Mimos')"><i>🎁</i><span>Mimos</span></div>
+                <div class="item-servico" onclick="openSys('Mundo Disney')"><i>🏰</i><span>Mundo Disney</span></div>
+                <div class="item-servico" onclick="openSys('Shop')"><i>🛒</i><span>Shop</span></div>
+                <div class="item-servico" onclick="openSys('Tag de Pedágio')"><i>🚗</i><span>Tag de Pedágio</span></div>
+            </div>
+
+            <div class="secao-titulo">6. Perfil e Ajuda</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Atualização Cadastral')"><i>👤</i><span>Atualização Cadastral</span></div>
+                <div class="item-servico" onclick="openSys('Autorização e Contratos')"><i>📄</i><span>Autorização e Contratos</span></div>
+                <div class="item-servico" onclick="openSys('Tia')"><i>🤖</i><span>Tia</span></div>
+                <div class="item-servico" onclick="openSys('Cesta de Serviço')"><i>🧺</i><span>Cesta de Serviço</span></div>
+                <div class="item-servico" onclick="openSys('Chat')"><i>💬</i><span>Chat</span></div>
+                <div class="item-servico" onclick="openSys('Encerrar Conta')"><i>🛑</i><span>Encerrar Conta</span></div>
+                <div class="item-servico" onclick="openSys('Perfil')"><i>🆔</i><span>Perfil</span></div>
+                <div class="item-servico" onclick="openSys('Portabilidade de Salário')"><i>💼</i><span>Portabilidade de Salário</span></div>
+                <div class="item-servico" onclick="openSys('Segurança')"><i>🔐</i><span>Segurança</span></div>
+            </div>
+
+            <div class="secao-titulo">7. Permissões</div>
+            <div class="grid-servicos">
+                <div class="item-servico" onclick="openSys('Autorização de Parceiros')"><i>🤝</i><span>Autorização de Parceiros</span></div>
+                <div class="item-servico" onclick="openSys('Autorização de Whatsapp')"><i>📱</i><span>Autorização de Whatsapp</span></div>
+                <div class="item-servico" onclick="openSys('Minhas Autorizações')"><i>👁️</i><span>Minhas Autorizações</span></div>
+                <div class="item-servico" onclick="openSys('Open Finance')"><i>⚙️</i><span>Open Finance</span></div>
+            </div>
         </div>
 
-        <!-- 1. TRANSAÇÕES E CONSULTAS -->
-        <div class="secao-titulo">1. Transações e Consultas (15 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Agendamentos')"><i>📅</i><span>Agendamentos</span></div>
-            <div class="item-servico" onclick="openSys('Buscador de Boletos')"><i>🔍</i><span>Buscador de Boletos</span></div>
-            <div class="item-servico" onclick="openSys('Cartões')"><i>💳</i><span>Cartões</span></div>
-            <div class="item-servico" onclick="openSys('Comprovantes')"><i>🧾</i><span>Comprovantes</span></div>
-            <div class="item-servico" onclick="openSys('Debito Automático')"><i>🔄</i><span>Debito Automático</span></div>
-            <div class="item-servico" onclick="openSys('Debito de Veículos')"><i>🚗</i><span>Debito de Veículos</span></div>
-            <div class="item-servico" onclick="openSys('Imposto de Renda')"><i>📋</i><span>Imposto de Renda</span></div>
-            <div class="item-servico" onclick="openSys('Meus Bancos')"><i>🏦</i><span>Meus Bancos</span></div>
-            <div class="item-servico" onclick="openSys('Pagamentos')"><i>📄</i><span>Pagamentos</span></div>
-            <div class="item-servico" onclick="openSys('Pix')"><i>📱</i><span>Pix</span></div>
-            <div class="item-servico" onclick="openSys('Recarga')"><i>📲</i><span>Recarga</span></div>
-            <div class="item-servico" onclick="openSys('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
-            <div class="item-servico" onclick="openSys('Saque')"><i>💵</i><span>Saque</span></div>
-            <div class="item-servico" onclick="openSys('Transferência')"><i>💸</i><span>Transferência</span></div>
-            <div class="item-servico" onclick="openSys('Vender pelo Celular')"><i>🛍️</i><span>Vender pelo Celular</span></div>
-        </div>
-
-        <!-- 2. EMPRÉSTIMOS E FINANCIAMENTOS -->
-        <div class="secao-titulo">2. Empréstimos e Financiamentos (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Credito Imobiliário')"><i>🏠</i><span>Credito Imobiliário</span></div>
-            <div class="item-servico" onclick="openSys('Empréstimos')"><i>💰</i><span>Empréstimos</span></div>
-            <div class="item-servico" onclick="openSys('Limite de Credito')"><i>📈</i><span>Limite de Credito</span></div>
-            <div class="item-servico" onclick="openSys('Renegociação de Dividas')"><i>🤝</i><span>Renegociação de Dividas</span></div>
-        </div>
-
-        <!-- 3. INVESTIMENTOS -->
-        <div class="secao-titulo">3. Investimentos (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Agora Home Broker')"><i>📉</i><span>Agora Home Broker</span></div>
-            <div class="item-servico" onclick="openSys('Investimentos')"><i>💎</i><span>Investimentos</span></div>
-            <div class="item-servico" onclick="openSys('Objetivos')"><i>🎯</i><span>Objetivos</span></div>
-            <div class="item-servico" onclick="openSys('Previdência')"><i>💼</i><span>Previdência</span></div>
-        </div>
-
-        <!-- 4. MAIS PRODUTOS E CONTAS -->
-        <div class="secao-titulo">4. Mais Produtos e Contas (7 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Cambio')"><i>💱</i><span>Cambio</span></div>
-            <div class="item-servico" onclick="openSys('Captalização')"><i>🎁</i><span>Captalização</span></div>
-            <div class="item-servico" onclick="openSys('Cheques')"><i>📝</i><span>Cheques</span></div>
-            <div class="item-servico" onclick="openSys('Consorcio')"><i>🏢</i><span>Consorcio</span></div>
-            <div class="item-servico" onclick="openSys('Conta Internacional')"><i>🌍</i><span>Conta Internacional</span></div>
-            <div class="item-servico" onclick="openSys('Conta Nextjoy')"><i>🎮</i><span>Conta Nextjoy</span></div>
-            <div class="item-servico" onclick="openSys('Seguros')"><i>🛡️</i><span>Seguros</span></div>
-        </div>
-
-        <!-- 5. COMPRAS E BENEFÍCIOS -->
-        <div class="secao-titulo">5. Compras e Benefícios (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Mimos')"><i>🎁</i><span>Mimos</span></div>
-            <div class="item-servico" onclick="openSys('Mundo Disney')"><i>🏰</i><span>Mundo Disney</span></div>
-            <div class="item-servico" onclick="openSys('Shop')"><i>🛒</i><span>Shop</span></div>
-            <div class="item-servico" onclick="openSys('Tag de Pedágio')"><i>🚗</i><span>Tag de Pedágio</span></div>
-        </div>
-
-        <!-- 6. PERFIL E AJUDA -->
-        <div class="secao-titulo">6. Perfil e Ajuda (9 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Atualização Cadastral')"><i>👤</i><span>Atualização Cadastral</span></div>
-            <div class="item-servico" onclick="openSys('Autorização e Contratos')"><i>📄</i><span>Autorização e Contratos</span></div>
-            <div class="item-servico" onclick="openSys('Tia')"><i>🤖</i><span>Tia</span></div>
-            <div class="item-servico" onclick="openSys('Cesta de Serviço')"><i>🧺</i><span>Cesta de Serviço</span></div>
-            <div class="item-servico" onclick="openSys('Chat')"><i>💬</i><span>Chat</span></div>
-            <div class="item-servico" onclick="openSys('Encerrar Conta')"><i>🛑</i><span>Encerrar Conta</span></div>
-            <div class="item-servico" onclick="openSys('Perfil')"><i>🆔</i><span>Perfil</span></div>
-            <div class="item-servico" onclick="openSys('Portabilidade de Salário')"><i>💼</i><span>Portabilidade de Salário</span></div>
-            <div class="item-servico" onclick="openSys('Segurança')"><i>🔐</i><span>Segurança</span></div>
-        </div>
-
-        <!-- 7. PERMISSÕES -->
-        <div class="secao-titulo">7. Permissões (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico" onclick="openSys('Autorização de Parceiros')"><i>🤝</i><span>Autorização de Parceiros</span></div>
-            <div class="item-servico" onclick="openSys('Autorização de Whatsapp')"><i>📱</i><span>Autorização de Whatsapp</span></div>
-            <div class="item-servico" onclick="openSys('Minhas Autorizações')"><i>👁️</i><span>Minhas Autorizações</span></div>
-            <div class="item-servico" onclick="openSys('Open Finance')"><i>⚙️</i><span>Open Finance</span></div>
-        </div>
-    </div>
-
-    <!-- MODAL DE SISTEMA -->
-    <div id="modal-sys">
-        <div class="modal-box">
-            <h3 id="sys-tit">Operação</h3>
-            <div id="sys-conteudo"></div>
-            <button class="btn-fechar" onclick="closeSys()">VOLTAR / CANCELAR</button>
+        <!-- TELA 2: ÁREA DE SERVIÇO (DINÂMICA) -->
+        <div id="tela-servico" style="display:none;">
+            <button class="btn-voltar" onclick="voltarHome()">⬅ VOLTAR AO MENU</button>
+            <div id="conteudo-dinamico" style="background:#fff; padding:30px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <!-- Conteúdo injetado pelo motor -->
+            </div>
         </div>
     </div>
 
     <script src="private-engine.js"></script>
-    <script>
-        window.addEventListener('load', function() {
-            const saldo = localStorage.getItem('sessao_saldo');
-            if (saldo) { document.getElementById('display-saldo').innerText = 'R$ ' + saldo; }
-        });
-    </script>
 </body>
 </html>
