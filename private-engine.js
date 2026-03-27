@@ -1,56 +1,79 @@
 /**
- * MOTOR DE SEGURANÇA DALLAS - ENGECEMA
- * Versão: 5.5.0 - FIX: Injeção de Saldo Milionário
+ * MOTOR DALLAS v5.6 - DESTRAVADO
  */
 
 const IBM_CONFIG = {
     apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt", 
     guid: "50341044-2194-4f79-a2ac-8f45959f423d",       
-    region: "us-south",          
-    propertyName: "cloudant_endpoint"
+    region: "us-south"
 };
 
+// --- CONTROLE DE SALDO DINÂMICO ---
+let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo')?.replace(/\./g, '').replace(',', '.') || 1250000.00);
+
 document.addEventListener("DOMContentLoaded", function() {
+    atualizarDisplaySaldo();
     verificarIntegridadeSessao();
 });
 
-async function validarAcesso(event) {
-    if (event) event.preventDefault();
-    
-    const ag = document.getElementById('ag')?.value;
-    const ct = document.getElementById('ct')?.value;
-    const senha = document.getElementById('senha')?.value;
-    const senhaConf = document.getElementById('senha_conf')?.value;
+function atualizarDisplaySaldo() {
+    const el = document.getElementById('display-saldo');
+    if (el) el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
 
-    if (senha !== senhaConf) {
-        alert("As senhas não conferem!");
-        return;
-    }
+// --- FUNÇÃO PARA ABRIR QUALQUER ÍCONE (DESTRAVADO) ---
+function openSys(titulo) {
+    const modal = document.getElementById('modal-sys');
+    const head = document.getElementById('sys-tit');
+    const body = document.getElementById('sys-conteudo');
 
-    if(ag.length >= 3 && ct.length >= 4) {
-        // DEFINE O TOKEN E O SALDO DA SIMULAÇÃO
-        localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
-        localStorage.setItem('sessao_saldo', '1.250.000,00'); 
-        localStorage.setItem('last_login', new Date().toISOString());
-        
-        window.location.href = 'conta-corrente.html';
+    head.innerText = titulo;
+    modal.style.display = 'flex';
+
+    if (titulo === 'Pix') {
+        body.innerHTML = `
+            <p style="font-size:12px; color:#666;">Envie dinheiro instantaneamente</p>
+            <input type="text" id="pix-chave" placeholder="Chave CPF, E-mail ou Telefone">
+            <input type="number" id="pix-valor" placeholder="Valor R$">
+            <button class="btn-modal-acao" onclick="processarPix()">CONFIRMAR ENVIO</button>
+        `;
     } else {
-        alert("Dados insuficientes.");
+        body.innerHTML = `<p>A interface de <strong>${titulo}</strong> está sendo sincronizada com o servidor Dallas.</p>`;
     }
+}
+
+function closeSys() {
+    document.getElementById('modal-sys').style.display = 'none';
+}
+
+// --- SIMULAÇÃO DE TRANSAÇÃO PIX ---
+function processarPix() {
+    const valor = parseFloat(document.getElementById('pix-valor').value);
+    if (!valor || valor <= 0) return alert("Insira um valor válido.");
+    if (valor > saldoAtual) return alert("Saldo insuficiente para esta transação.");
+
+    saldoAtual -= valor;
+    localStorage.setItem('sessao_saldo', saldoAtual.toFixed(2));
+    
+    alert("Pix enviado com sucesso!");
+    atualizarDisplaySaldo();
+    closeSys();
+}
+
+function validarAcesso(event) {
+    if (event) event.preventDefault();
+    localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
+    window.location.href = 'conta-corrente.html';
 }
 
 function verificarIntegridadeSessao() {
     const token = localStorage.getItem('engecema_auth_token');
-    const path = window.location.pathname;
-    const paginasProtegidas = ['conta-corrente.html', 'gestao.html'];
-    
-    if (paginasProtegidas.some(p => path.includes(p)) && token !== 'TOKEN_VALIDO_PRODUCAO') {
-        executarSair();
+    if (window.location.pathname.includes('conta-corrente.html') && !token) {
+        window.location.href = 'index.html';
     }
 }
 
 function executarSair() {
     localStorage.clear();
-    sessionStorage.clear();
     window.location.href = 'index.html';
 }
