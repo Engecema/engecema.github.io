@@ -4,63 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>Engecema | Minha Conta</title>
+    <title>Bradesco | Sua Conta Corrente</title>
     
-    <!-- CAMADA DE PROTEÇÃO INSTANTÂNEA -->
     <script>
-        (function() {
-            if (!localStorage.getItem('engecema_auth_token')) {
-                window.location.href = 'index.html';
-            }
-        })();
+        if (!localStorage.getItem('engecema_auth_token')) { window.location.href = 'index.html'; }
     </script>
 
     <style>
-        :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); padding-top: 70px; }
+        :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); padding-top: 75px; }
         
         header { 
-            position: fixed; top: 0; width: 100%; background: #fff; height: 65px;
+            position: fixed; top: 0; width: 100%; background: #fff; height: 70px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; border-bottom: 4px solid var(--br-blue); box-sizing: border-box; z-index: 1000;
+            padding: 0 5%; border-bottom: 5px solid var(--br-red); box-sizing: border-box; z-index: 1000;
         }
-        .logo { height: 35px; }
-        .btn-sair { background: var(--br-red); color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .logo { height: 40px; }
 
-        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
-        .card-saldo { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 6px solid var(--br-blue); }
-        .label { color: #666; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        .valor { font-size: 32px; font-weight: 800; color: #333; margin: 10px 0; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        
+        /* CARD DE SALDO PRINCIPAL */
+        .card-resumo { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .saldo-txt { color: #666; font-size: 13px; font-weight: bold; }
+        .saldo-valor { font-size: 36px; font-weight: 800; color: var(--br-blue); }
 
-        .grid-atalhos { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-top: 30px; }
-        .item-atalho { background: #fff; padding: 20px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; border: 1px solid #ddd; }
-        .item-atalho:hover { border-color: var(--br-blue); transform: translateY(-3px); }
-        .item-atalho i { font-size: 24px; display: block; margin-bottom: 10px; }
-        .item-atalho span { font-size: 12px; font-weight: bold; color: #444; }
+        /* GRADE DE 15 SUBITENS DO PRIMEIRO ÍCONE */
+        .secao-titulo { font-size: 14px; font-weight: 900; color: var(--br-red); text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        
+        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        
+        .item-servico { 
+            background: #fff; padding: 20px 10px; text-align: center; border-radius: 6px; 
+            border: 1px solid #eee; cursor: pointer; transition: 0.2s; min-height: 100px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .item-servico:hover { border-color: var(--br-red); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .item-servico i { font-size: 28px; margin-bottom: 12px; color: #444; }
+        .item-servico span { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
+
+        .btn-sair { background: var(--br-red); color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" class="logo">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span style="font-size: 11px; color: #666;">Olá, <strong id="user-display">Usuário</strong></span>
-            <button class="btn-sair" onclick="executarSair()">SAIR</button>
+        <div style="text-align: right;">
+            <div style="font-size: 11px; color: #666;">CONTA CORRENTE | <strong>AG 0000 | CC 00000-0</strong></div>
+            <button class="btn-sair" onclick="executarSair()" style="margin-top: 5px;">SAIR</button>
         </div>
     </header>
 
     <div class="container">
-        <div class="card-saldo">
-            <span class="label">Saldo Disponível</span>
-            <div class="valor">R$ 0,00</div>
-            <div style="color: #15803d; font-size: 11px; font-weight: bold;">● Conta Corrente Digital Ativa</div>
+        <div class="card-resumo">
+            <div>
+                <span class="saldo-txt">SALDO TOTAL DISPONÍVEL</span>
+                <div class="saldo-valor">R$ 0,00</div>
+            </div>
+            <button style="background: var(--br-blue); color: #fff; border: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; cursor: pointer;">VER EXTRATO</button>
         </div>
 
-        <div class="grid-atalhos">
-            <div class="item-atalho"><i>💳</i><span>Cartões</span></div>
-            <div class="item-atalho"><i>💸</i><span>Transferir</span></div>
-            <div class="item-atalho"><i>📊</i><span>Extrato</span></div>
-            <div class="item-atalho"><i>📱</i><span>Pagamentos</span></div>
+        <!-- 1. BLOCO DE 15 SUBITENS (REFERÊNCIA BRADESCO) -->
+        <div class="secao-titulo">Saldos, Extratos e Comprovantes</div>
+        <div class="grid-servicos">
+            <div class="item-servico"><i>📄</i><span>Extrato Mensal</span></div>
+            <div class="item-servico"><i>📊</i><span>Extrato Período</span></div>
+            <div class="item-servico"><i>🧾</i><span>Comprovantes</span></div>
+            <div class="item-servico"><i>📅</i><span>Lançamentos</span></div>
+            <div class="item-servico"><i>📉</i><span>Rendimentos</span></div>
+            <div class="item-servico"><i>🏦</i><span>Saldos de Invest.</span></div>
+            <div class="item-servico"><i>📋</i><span>Informe de IR</span></div>
+            <div class="item-servico"><i>📨</i><span>Extrato por E-mail</span></div>
+            <div class="item-servico"><i>🔍</i><span>Buscar Lançamento</span></div>
+            <div class="item-servico"><i>📑</i><span>Segunda Via</span></div>
+            <div class="item-servico"><i>📆</i><span>Agendamentos</span></div>
+            <div class="item-servico"><i>✅</i><span>Autorizações</span></div>
+            <div class="item-servico"><i>📤</i><span>Exportar Dados</span></div>
+            <div class="item-servico"><i>🖨️</i><span>Versão Impressa</span></div>
+            <div class="item-servico"><i>🛡️</i><span>Extrato Consolidado</span></div>
+        </div>
+
+        <!-- 2. DEMAIS SERVIÇOS -->
+        <div class="secao-titulo">Outros Serviços</div>
+        <div class="grid-servicos">
+            <div class="item-servico"><i>📱</i><span>Pix</span></div>
+            <div class="item-servico"><i>💳</i><span>Cartões</span></div>
+            <div class="item-servico"><i>💸</i><span>Transferências</span></div>
+            <div class="item-servico"><i>💰</i><span>Empréstimos</span></div>
+            <div class="item-servico"><i>🛡️</i><span>Seguros</span></div>
         </div>
     </div>
 
