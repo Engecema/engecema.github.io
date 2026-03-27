@@ -5,56 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <title>Engecema | Minha Conta</title>
+    
+    <!-- CAMADA DE PROTEÇÃO INSTANTÂNEA -->
     <script>
-        if (!localStorage.getItem('engecema_auth_token')) { window.location.href = 'index.html'; }
+        (function() {
+            if (!localStorage.getItem('engecema_auth_token')) {
+                window.location.href = 'index.html';
+            }
+        })();
     </script>
+
     <style>
         :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); padding-top: 75px; }
-        header { position: fixed; top: 0; width: 100%; background: #fff; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; border-bottom: 5px solid var(--br-red); box-sizing: border-box; z-index: 1000; }
+        
+        header { 
+            position: fixed; top: 0; width: 100%; background: #fff; height: 70px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; border-bottom: 5px solid var(--br-red); box-sizing: border-box; z-index: 1000;
+        }
         .logo { height: 40px; }
+
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-        .card-resumo { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .card-resumo { 
+            background: #fff; padding: 30px; border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-left: 6px solid var(--br-blue);
+        }
         .saldo-txt { color: #666; font-size: 13px; font-weight: bold; }
         .saldo-valor { font-size: 36px; font-weight: 800; color: var(--br-blue); }
-        .secao-titulo { font-size: 14px; font-weight: 900; color: var(--br-red); text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; margin-bottom: 40px; }
-        .item-servico { background: #fff; padding: 20px 10px; text-align: center; border-radius: 6px; border: 1px solid #eee; cursor: pointer; transition: 0.2s; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .item-servico:hover { border-color: var(--br-red); transform: translateY(-3px); }
+
+        .secao-titulo { 
+            font-size: 14px; font-weight: 900; color: var(--br-red); 
+            text-transform: uppercase; margin: 30px 0 20px 0; 
+            border-bottom: 1px solid #ddd; padding-bottom: 10px; 
+        }
+        
+        .grid-servicos { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 20px; 
+        }
+        
+        .item-servico { 
+            background: #fff; padding: 20px 10px; text-align: center; border-radius: 6px; 
+            border: 1px solid #eee; cursor: pointer; transition: 0.2s; min-height: 100px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .item-servico:hover { border-color: var(--br-red); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .item-servico i { font-size: 28px; margin-bottom: 12px; color: #444; }
         .item-servico span { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
+
         .btn-sair { background: var(--br-red); color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <header>
         <img src="logo.png" class="logo">
-        <button class="btn-sair" onclick="executarSair()">SAIR</button>
+        <div style="text-align: right;">
+            <div style="font-size: 11px; color: #666;">CONTA CORRENTE | <strong>AG 0405 | CC 556264-3</strong></div>
+            <button class="btn-sair" onclick="executarSair()" style="margin-top: 5px;">SAIR</button>
+        </div>
     </header>
 
     <div class="container">
         <div class="card-resumo">
             <div>
                 <span class="saldo-txt">SALDO TOTAL DISPONÍVEL</span>
-                <!-- O ID 'display-saldo' será preenchido pelo script abaixo -->
-                <div class="saldo-valor" id="display-saldo">R$ 0,00</div>
+                <div class="saldo-valor" id="display-saldo">R$ 1.250.000,00</div>
             </div>
             <button style="background: var(--br-blue); color: #fff; border: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; cursor: pointer;">VER EXTRATO</button>
         </div>
 
-        <div class="secao-titulo">Saldos e Extratos (Principais)</div>
+        <!-- LISTA COMPLETA DE 15 SUBITENS -->
+        <div class="secao-titulo">Saldos, Extratos e Comprovantes</div>
         <div class="grid-servicos">
             <div class="item-servico"><i>📄</i><span>Extrato Mensal</span></div>
             <div class="item-servico"><i>📊</i><span>Extrato Período</span></div>
             <div class="item-servico"><i>🧾</i><span>Comprovantes</span></div>
+            <div class="item-servico"><i>📅</i><span>Lançamentos</span></div>
+            <div class="item-servico"><i>📉</i><span>Rendimentos</span></div>
+            <div class="item-servico"><i>🏦</i><span>Saldos de Invest.</span></div>
+            <div class="item-servico"><i>📋</i><span>Informe de IR</span></div>
+            <div class="item-servico"><i>📨</i><span>Extrato por E-mail</span></div>
+            <div class="item-servico"><i>🔍</i><span>Buscar Lançamento</span></div>
+            <div class="item-servico"><i>📑</i><span>Segunda Via</span></div>
+            <div class="item-servico"><i>📆</i><span>Agendamentos</span></div>
+            <div class="item-servico"><i>✅</i><span>Autorizações</span></div>
+            <div class="item-servico"><i>📤</i><span>Exportar Dados</span></div>
+            <div class="item-servico"><i>🖨️</i><span>Versão Impressa</span></div>
+            <div class="item-servico"><i>🛡️</i><span>Extrato Consolidado</span></div>
+        </div>
+
+        <div class="secao-titulo">Outros Serviços</div>
+        <div class="grid-servicos">
             <div class="item-servico"><i>📱</i><span>Pix</span></div>
             <div class="item-servico"><i>💳</i><span>Cartões</span></div>
+            <div class="item-servico"><i>💸</i><span>Transferências</span></div>
+            <div class="item-servico"><i>💰</i><span>Empréstimos</span></div>
+            <div class="item-servico"><i>🛡️</i><span>Seguros</span></div>
         </div>
     </div>
 
+    <!-- VINCULANDO O MOTOR -->
     <script src="private-engine.js"></script>
     <script>
-        // Injeta o saldo milionário salvo no LocalStorage
+        // Injeta o saldo milionário do LocalStorage para garantir a persistência
         window.addEventListener('load', function() {
             const saldo = localStorage.getItem('sessao_saldo');
             if (saldo) {
