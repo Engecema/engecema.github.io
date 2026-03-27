@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" type="image/png" href="logo.png">
-    <title>Engecema | Painel de Gestão RH</title>
+    <title>Engecema | Portal de Serviços RH</title>
     <style>
         :root { 
             --br-red: #cc092f; 
@@ -37,7 +37,6 @@
         
         .auth-container { display: flex; align-items: center; gap: 10px; }
 
-        /* FORMULÁRIO COM 4 ABAS LADO A LADO */
         .login-bar { display: flex; gap: 6px; align-items: center; }
         .login-bar input { 
             padding: 8px; 
@@ -46,9 +45,7 @@
             width: 85px; 
             font-size: 13px; 
             outline: none;
-            transition: 0.2s;
         }
-        .login-bar input:focus { border-color: var(--br-blue); box-shadow: 0 0 5px rgba(0,68,129,0.2); }
         
         .btn-ok { 
             background: var(--br-blue); 
@@ -58,38 +55,22 @@
             border-radius: 4px; 
             cursor: pointer; 
             font-weight: bold; 
-            transition: 0.3s; 
             text-transform: uppercase;
             font-size: 12px;
-        }
-        .btn-ok:hover { background: #002d55; }
-
-        #btn-logout { 
-            display: none; 
-            background: var(--br-red); 
-            color: #fff; 
-            border: none; 
-            padding: 9px 20px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            text-transform: uppercase;
-            font-size: 11px;
         }
 
         .hero { 
             background: #fff; 
-            padding: 60px 20px; 
+            padding: 50px 20px; 
             text-align: center; 
             border-bottom: 1px solid #eee; 
         }
         .hero h1 { font-size: 2.2em; margin: 0; font-weight: 300; color: #333; }
         .hero h1 b { color: var(--br-red); font-weight: 800; }
-        .hero p { color: #666; font-size: 1.1em; margin-top: 10px; }
 
         .main-cta { 
-            max-width: 480px; 
-            margin: -30px auto 60px; 
+            max-width: 500px; 
+            margin: -30px auto 40px; 
             background: #fff; 
             padding: 40px; 
             border-radius: 8px; 
@@ -97,7 +78,36 @@
             text-align: center; 
             border: 1px solid #eee;
         }
+
+        /* ESTILO DO ÍCONE E BOTÃO DE ABERTURA DE CONTA */
+        .abertura-conta {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
         
+        .icon-abertura {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .btn-abrir-conta {
+            display: inline-block;
+            background: #fff;
+            color: var(--br-blue);
+            border: 2px solid var(--br-blue);
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-abrir-conta:hover {
+            background: var(--br-blue);
+            color: #fff;
+        }
+
         .btn-open { 
             display: none; 
             background: var(--br-red); 
@@ -107,34 +117,25 @@
             border-radius: 4px; 
             font-weight: bold; 
             margin-top: 20px; 
-            transition: 0.3s; 
         }
-        .btn-open:hover { transform: translateY(-2px); opacity: 0.9; }
 
         footer { 
             margin-top: auto; 
             background: #fff; 
             text-align: center; 
             padding: 25px; 
-            border-top: 1px solid #eee; 
             color: #888; 
             font-size: 0.8em; 
         }
 
-        /* RESPONSIVIDADE PARA TELAS PEQUENAS */
-        @media (max-width: 900px) {
-            header { flex-direction: column; height: auto; padding: 15px; gap: 15px; }
-            .login-bar { flex-wrap: wrap; justify-content: center; }
-        }
+        #btn-logout { display: none; background: var(--br-red); color: #fff; border: none; padding: 9px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 11px;}
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
-        
         <div class="auth-container">
-            <!-- FORMULÁRIO COM 4 ABAS (AG / CT / SENHA / CONFIRMAR) -->
             <form id="form-login" class="login-bar" onsubmit="validarAcesso(event)" autocomplete="off">
                 <input type="text" id="ag" placeholder="Agência" required maxlength="4" autocomplete="off">
                 <input type="text" id="ct" placeholder="Conta" required maxlength="8" autocomplete="off">
@@ -142,43 +143,50 @@
                 <input type="password" id="senha_conf" placeholder="Confirmar" required maxlength="6" autocomplete="new-password">
                 <button type="submit" class="btn-ok">OK</button>
             </form>
-
             <button id="btn-logout" onclick="executarSair()">Sair / Logout</button>
         </div>
     </header>
 
-    <main id="main-content">
+    <main>
         <div class="hero">
-            <h1><b>Gestão de RH</b> Engecema</h1>
-            <p>Portal Administrativo Dallas | Controle de Equipes e Colaboradores.</p>
+            <h1><b>Portal de Gestão</b> Engecema</h1>
+            <p>Seja bem-vindo ao sistema de controle e serviços RH.</p>
         </div>
 
         <div class="main-cta">
-            <h3 id="titulo-boas-vindas">Acesso Restrito</h3>
-            <p id="msg-acesso">Insira as credenciais completas acima para liberar o painel de gestão.</p>
-            <a href="gestao.html" id="btn-painel" class="btn-open">ENTRAR NO SISTEMA AGORA</a>
+            <div id="area-publica">
+                <h3 id="titulo-boas-vindas">Acesso Restrito</h3>
+                <p id="msg-acesso">Utilize o menu superior para acessar sua conta ou inicie um novo cadastro abaixo.</p>
+                
+                <!-- ÍCONE E BOTÃO DE ABERTURA DE CONTA -->
+                <div class="abertura-conta">
+                    <span class="icon-abertura">📂</span>
+                    <a href="abrir-conta.html" class="btn-abrir-conta">QUERO ABRIR UMA CONTA</a>
+                    <p style="font-size: 11px; color: #999; margin-top: 10px;">Processo 100% digital via Dallas Integration</p>
+                </div>
+            </div>
+
+            <!-- Botão do Painel (Surgirá após o Login) -->
+            <a href="gestao.html" id="btn-painel" class="btn-open">ACESSAR MEU PAINEL DE GESTÃO</a>
         </div>
     </main>
 
     <footer>
         <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
-        Ambiente Seguro | IBM Cloud IAM Protection v4.0<br>
-        © 2026 Todos os Direitos Reservados.</p>
+        Ambiente Seguro | IBM Cloud IAM Protection v4.0</p>
     </footer>
 
-    <!-- MOTOR DE SEGURANÇA EXTERNO -->
     <script src="private-engine.js"></script>
 
     <script>
-        // GERENCIADOR DE INTERFACE LOCAL
         window.addEventListener('load', function() {
             const token = localStorage.getItem('engecema_auth_token');
             if(token === 'TOKEN_VALIDO_PRODUCAO') {
                 document.getElementById('form-login').style.display = 'none';
                 document.getElementById('btn-logout').style.display = 'block';
                 document.getElementById('btn-painel').style.display = 'block';
-                document.getElementById('titulo-boas-vindas').innerText = "Terminal Autenticado";
-                document.getElementById('msg-acesso').innerText = "Sua sessão IBM Cloud Dallas está ativa.";
+                document.getElementById('area-publica').style.display = 'none';
+                document.getElementById('titulo-boas-vindas').innerText = "Sessão Ativa";
             }
         });
     </script>
