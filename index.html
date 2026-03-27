@@ -4,188 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="shortcut icon" type="image/png" href="logo.png">
-    <title>Engecema | Painel de Gestão RH</title>
+    <title>Engecema | Acesso Restrito</title>
     <style>
-        :root { 
-            --br-red: #cc092f; 
-            --br-blue: #004481; 
-            --bg-light: #f4f7f9; 
-        }
-        
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            margin: 0; 
-            background: var(--bg-light); 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
-        }
+        :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; }
         
         header { 
-            background: #fff; 
-            padding: 12px 8%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 6px solid var(--br-red); 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            background: #fff; padding: 12px 8%; display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 6px solid var(--br-red); box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
-        
         .logo { height: 50px; }
         
-        .auth-container { display: flex; align-items: center; gap: 15px; }
-
         .login-bar { display: flex; gap: 8px; align-items: center; }
-        .login-bar input { 
-            padding: 8px; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-            width: 90px; 
-            font-size: 14px; 
-        }
+        .login-bar input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 90px; font-size: 14px; }
         
         .btn-ok { 
-            background: var(--br-blue); 
-            color: #fff; 
-            border: none; 
-            padding: 8px 22px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            transition: 0.3s; 
+            background: var(--br-blue); color: #fff; border: none; padding: 8px 22px; 
+            border-radius: 4px; cursor: pointer; font-weight: bold; 
         }
-        .btn-ok:hover { background: #002d55; }
 
-        #btn-logout { 
-            display: none; 
-            background: var(--br-red); 
-            color: #fff; 
-            border: none; 
-            padding: 9px 20px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            text-transform: uppercase;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-        #btn-logout:hover { background: #a50725; }
-
-        .hero { 
-            background: #fff; 
-            padding: 60px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid #eee; 
-        }
-        .hero h1 { font-size: 2.5em; margin: 0; font-weight: 300; color: #333; }
+        .hero { background: #fff; padding: 60px 20px; text-align: center; border-bottom: 1px solid #eee; }
         .hero h1 b { color: var(--br-red); font-weight: 800; }
-        .hero p { color: #666; font-size: 1.1em; margin-top: 10px; }
 
         .main-cta { 
-            max-width: 450px; 
-            margin: -30px auto 60px; 
-            background: #fff; 
-            padding: 40px; 
-            border-radius: 8px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            text-align: center; 
-            border: 1px solid #eee;
+            max-width: 450px; margin: -30px auto 60px; background: #fff; padding: 40px; 
+            border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; 
         }
         
         .btn-open { 
-            display: block; 
-            background: var(--br-red); 
-            color: #fff; 
-            padding: 16px; 
-            text-decoration: none; 
-            border-radius: 4px; 
-            font-weight: bold; 
-            margin-top: 20px; 
-            transition: 0.3s; 
+            display: block; background: var(--br-red); color: #fff; padding: 16px; 
+            text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; 
         }
-        .btn-open:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        footer { 
-            margin-top: auto; 
-            background: #fff; 
-            text-align: center; 
-            padding: 30px; 
-            border-top: 1px solid #eee; 
-            color: #888; 
-            font-size: 0.85em; 
-        }
+        footer { margin-top: auto; background: #fff; text-align: center; padding: 30px; color: #888; font-size: 0.85em; }
+        
+        #btn-logout { display: none; background: var(--br-red); color: #fff; border: none; padding: 9px 20px; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
-        
         <div class="auth-container">
-            <!-- Camada de Formulário Dinâmico -->
-            <form id="form-login" class="login-bar">
+            <!-- Chamando a função correta do private-engine.js -->
+            <form id="form-login" class="login-bar" onsubmit="validarAcesso(event)">
                 <input type="text" id="ag" placeholder="Agência" required maxlength="4">
-                <input type="text" id="ct" placeholder="Conta" required maxlength="8">
-                <button type="button" onclick="validarAcessoLocal()" class="btn-ok">OK</button>
+                <input type="password" id="ct" placeholder="Conta" required maxlength="8">
+                <button type="submit" class="btn-ok">OK</button>
             </form>
-
-            <button id="btn-logout" onclick="executarSair()">Sair / Logout</button>
+            <button id="btn-logout" onclick="executarSair()">SAIR</button>
         </div>
     </header>
 
-    <main id="main-content">
+    <main>
         <div class="hero">
             <h1><b>Gestão de RH</b> Engecema</h1>
-            <p>Painel Administrativo para controle de equipes e colaboradores.</p>
+            <p>Acesse com suas credenciais de Agência e Conta.</p>
         </div>
 
         <div class="main-cta">
             <h3 id="titulo-boas-vindas">Portal de Colaboradores</h3>
-            <p id="msg-acesso">Acesse o sistema Dallas para inclusão de novos membros e visualização do quadro geral.</p>
-            <!-- Link que só funciona com o Token -->
-            <a href="gestao.html" id="btn-painel" class="btn-open">ACESSAR PAINEL DE GESTÃO</a>
+            <p id="msg-acesso">Insira os dados acima para liberar o acesso ao Painel Dallas.</p>
+            <a href="gestao.html" id="btn-painel" class="btn-open" style="display:none;">ENTRAR NO PAINEL AGORA</a>
         </div>
     </main>
 
     <footer>
         <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
-        Integração Segura via GitHub Enterprise & IBM Cloud Services.<br>
-        © 2026 Todos os Direitos Reservados.</p>
+        Integração Segura via IBM Cloud IAM.</p>
     </footer>
 
+    <!-- VINCULANDO O MOTOR DALLAS -->
+    <script src="private-engine.js"></script>
     <script>
-        // Camada de Lógica de Autenticação
-        function validarAcessoLocal() {
-            const ag = document.getElementById('ag').value;
-            const ct = document.getElementById('ct').value;
-
-            // Simulação de validação (Posteriormente conectaremos à IBM Cloudant)
-            if(ag.length >= 3 && ct.length >= 4) {
-                // GERAÇÃO DO TOKEN DE PROTEÇÃO
-                localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
-                alert("Acesso autorizado! Redirecionando...");
-                window.location.href = 'gestao.html';
-            } else {
-                alert("Credenciais Inválidas para o Sistema Dallas.");
-            }
-        }
-
-        function executarSair() {
-            localStorage.removeItem('engecema_auth_token');
-            location.reload();
-        }
-
-        // Verifica estado ao carregar a página
-        window.onload = function() {
+        // Pequeno script para gerenciar a UI baseada no Token que o private-engine gera
+        window.addEventListener('load', function() {
             const token = localStorage.getItem('engecema_auth_token');
             if(token === 'TOKEN_VALIDO_PRODUCAO') {
                 document.getElementById('form-login').style.display = 'none';
                 document.getElementById('btn-logout').style.display = 'block';
-                document.getElementById('titulo-boas-vindas').innerText = "Sessão Ativa";
-                document.getElementById('btn-painel').innerText = "IR PARA O PAINEL AGORA";
+                document.getElementById('btn-painel').style.display = 'block';
+                document.getElementById('titulo-boas-vindas').innerText = "Bem-vindo!";
+                document.getElementById('msg-acesso').innerText = "Sua sessão IBM Cloud está ativa.";
             }
-        }
+        });
     </script>
 </body>
 </html>
