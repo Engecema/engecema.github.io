@@ -1,5 +1,5 @@
 /**
- * MOTOR DALLAS v6.8.0 - BUSCADOR DE BOLETOS (DDA)
+ * MOTOR DALLAS v6.9.0 - CORREÇÃO MÓDULO CARTÕES (GEONI C. MATOS)
  */
 
 const IBM_CONFIG = {
@@ -31,64 +31,84 @@ function openSys(titulo) {
     servico.style.display = 'block';
     window.scrollTo(0, 0);
 
-    // --- LÓGICA ESPECÍFICA PARA BUSCADOR DE BOLETOS ---
-    if (titulo === 'Buscador de Boletos') {
+    // --- 1. MÓDULO DE CARTÕES (VISUAL CORRIGIDO) ---
+    if (titulo === 'Cartões') {
         conteudo.innerHTML = `
-            <h2 style="color:#004481;">Buscador de Boletos (DDA)</h2>
-            <p style="font-size:12px; color:#666;">Boletos emitidos para o CPF: <strong>707.***.383-87</strong></p>
-            <div style="background:#fff; border:1px solid #ddd; padding:15px; border-radius:8px; text-align:left; margin-top:15px;">
-                <div style="border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <strong style="display:block; font-size:13px;">CONDOMINIO EDIFICIO DALLAS</strong>
-                        <span style="font-size:11px; color:#999;">Vencimento: 10/04/2026</span>
-                    </div>
-                    <div style="text-align:right;">
-                        <span style="display:block; font-weight:bold; color:#cc092f;">R$ 1.450,00</span>
-                        <button onclick="openSys('Pagamentos')" style="font-size:10px; background:#004481; color:#fff; border:none; padding:4px 8px; border-radius:3px; cursor:pointer;">PAGAR</button>
-                    </div>
-                </div>
-                <div style="padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <strong style="display:block; font-size:13px;">ENERGIA ELETRICA SP</strong>
-                        <span style="font-size:11px; color:#999;">Vencimento: 15/04/2026</span>
-                    </div>
-                    <div style="text-align:right;">
-                        <span style="display:block; font-weight:bold; color:#cc092f;">R$ 380,45</span>
-                        <button onclick="openSys('Pagamentos')" style="font-size:10px; background:#004481; color:#fff; border:none; padding:4px 8px; border-radius:3px; cursor:pointer;">PAGAR</button>
-                    </div>
+            <h2 style="color:#cc092f;">Meus Cartões</h2>
+            <div style="background: linear-gradient(135deg, #cc092f, #800000); color:#fff; padding:25px; border-radius:12px; text-align:left; position:relative; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom:20px;">
+                <p style="font-size:10px; letter-spacing:2px; margin-bottom:20px;">PLATINUM BUSINESS</p>
+                <p style="font-size:20px; font-family:monospace; margin:20px 0;">**** **** **** 4050</p>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                    <span>GEONI C MATOS</span>
+                    <span style="font-size:12px;">EXP: 03/30</span>
                 </div>
             </div>
-            <p style="font-size:10px; color:#999; margin-top:15px; text-align:center;">Serviço de busca ativa via IBM Cloudant-yr</p>
+            <div style="text-align:left; background:#fff; padding:15px; border-radius:8px; border:1px solid #eee;">
+                <p style="font-size:12px; margin:5px 0;"><strong>Limite total:</strong> R$ 150.000,00</p>
+                <p style="font-size:12px; margin:5px 0;"><strong>Limite disponível:</strong> <span style="color:green;">R$ 85.420,00</span></p>
+                <button onclick="alert('Funcionalidade de Bloqueio Temporário Ativa')" style="width:100%; margin-top:15px; padding:10px; background:none; border:1px solid #cc092f; color:#cc092f; border-radius:4px; font-weight:bold; cursor:pointer;">BLOQUEAR CARTÃO</button>
+            </div>
         `;
     } 
-    // --- MANTÉM AGENDAMENTOS SEPARADO ---
-    else if (titulo === 'Agendamentos') {
+    // --- 2. BUSCADOR DE BOLETOS (MANTIDO OK) ---
+    else if (titulo === 'Buscador de Boletos') {
         conteudo.innerHTML = `
-            <h2 style="color:#004481;">${titulo}</h2>
-            <div style="background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; text-align:left;">
-                <div style="text-align:center; color:#666;">
-                    <i style="font-size:30px; display:block;">📅</i>
-                    <p>Nenhum agendamento futuro encontrado.</p>
+            <h2 style="color:#004481;">Buscador de Boletos (DDA)</h2>
+            <p style="font-size:12px; color:#666;">CPF: 707.***.383-87</p>
+            <div style="background:#fff; border:1px solid #ddd; padding:15px; border-radius:8px; text-align:left; margin-top:15px;">
+                <div style="border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>CONDOMINIO EDIFICIO DALLAS</strong><br><span style="font-size:11px; color:#999;">Venc. 10/04/2026</span></div>
+                    <div style="text-align:right;"><span style="font-weight:bold; color:#cc092f;">R$ 1.450,00</span></div>
                 </div>
-                <button onclick="abrirTelaAgendar()" style="width:100%; padding:15px; background:var(--br-red); color:#fff; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">AGENDAR NOVO PAGAMENTO</button>
             </div>
         `;
     }
-    // --- LÓGICA PADRÃO PARA OUTROS ITENS ---
+    // --- 3. PIX / PAGAMENTOS / TRANSFERÊNCIA ---
     else if (['Pix', 'Transferência', 'Pagamentos'].includes(titulo)) {
-        conteudo.innerHTML = `<h2 style="color:#cc092f;">${titulo}</h2><input type="number" id="op-valor" placeholder="Valor R$" style="width:100%; padding:15px; margin:10px 0;"><button onclick="processarOperacao('${titulo}')" style="background:#cc092f; color:#fff; width:100%; border:none; padding:15px; font-weight:bold;">CONFIRMAR</button>`;
+        conteudo.innerHTML = `
+            <h2 style="color:#cc092f;">${titulo}</h2>
+            <input type="number" id="op-valor" placeholder="Valor R$" style="width:100%; padding:15px; margin:10px 0; border:1px solid #ddd; border-radius:4px;">
+            <button onclick="processarOperacao('${titulo}')" style="background:#cc092f; color:#fff; width:100%; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:4px;">CONFIRMAR</button>
+        `;
     }
+    // --- 4. TIA ---
+    else if (titulo === 'Tia') {
+        conteudo.innerHTML = `<div style="text-align:center;"><i style="font-size:50px;">🤖</i><h2 style="color:#cc092f;">Assistente TIA</h2><p>Olá Geoni!</p></div>`;
+    }
+    // --- 5. PADRÃO (OUTROS ITENS) ---
     else {
-        conteudo.innerHTML = `<h2 style="color:#cc092f;">${titulo}</h2><div style="text-align:center; padding:40px;"><i style="font-size:40px; color:#999; display:block;">📁</i><p>Módulo ${titulo} sincronizado.</p><button onclick="voltarHome()">VOLTAR</button></div>`;
+        conteudo.innerHTML = `
+            <h2 style="color:#cc092f;">${titulo}</h2>
+            <div style="text-align:center; padding:40px;">
+                <i style="font-size:40px; color:#999; display:block;">📁</i>
+                <p>Módulo <strong>${titulo}</strong> sincronizado com Cloudant-yr.</p>
+            </div>
+        `;
     }
 }
 
-// Funções de suporte permanecem iguais (voltarHome, processarOperacao, abrirTelaAgendar...)
-function abrirTelaAgendar() {
-    const conteudo = document.getElementById('conteudo-dinamico');
-    conteudo.innerHTML = `<h2 style="color:#cc092f;">Novo Agendamento</h2><input type="date" id="data-agenda" style="width:100%; padding:12px; margin:10px 0;"><input type="number" id="op-valor" placeholder="Valor R$" style="width:100%; padding:12px; margin:10px 0;"><button onclick="confirmarAgendamento()" style="width:100%; padding:15px; background:#004481; color:#fff; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">CONFIRMAR</button>`;
+function voltarHome() {
+    document.getElementById('tela-home').style.display = 'block';
+    document.getElementById('tela-servico').style.display = 'none';
+    atualizarDisplaySaldo();
 }
-function confirmarAgendamento() { alert("Agendamento realizado!"); voltarHome(); }
-function voltarHome() { document.getElementById('tela-home').style.display = 'block'; document.getElementById('tela-servico').style.display = 'none'; atualizarDisplaySaldo(); }
-function processarOperacao(tipo) { alert(`${tipo} realizado!`); voltarHome(); }
-function executarSair() { localStorage.clear(); window.location.href = 'index.html'; }
+
+function processarOperacao(tipo) {
+    const valor = parseFloat(document.getElementById('op-valor').value);
+    if (!valor || valor <= 0 || valor > saldoAtual) return alert("Erro no valor ou saldo.");
+    saldoAtual -= valor;
+    localStorage.setItem('sessao_saldo', saldoAtual.toFixed(2));
+    alert(`${tipo} realizado!`);
+    voltarHome();
+}
+
+function executarSair() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+}
+
+function verificarIntegridadeSessao() {
+    if (window.location.pathname.includes('conta-corrente.html') && !localStorage.getItem('engecema_auth_token')) {
+        window.location.href = 'index.html';
+    }
+}
