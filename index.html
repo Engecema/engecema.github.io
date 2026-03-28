@@ -45,11 +45,12 @@
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
         <div class="auth-container">
-            <form id="form-login" class="login-bar" onsubmit="validarAcesso(event)" autocomplete="off">
-                <input type="text" id="ag" placeholder="Agência" required maxlength="4" autocomplete="off">
-                <input type="text" id="ct" placeholder="Conta" required maxlength="8" autocomplete="off">
-                <input type="password" id="senha" placeholder="Senha" required maxlength="6" autocomplete="new-password">
-                <input type="password" id="senha_conf" placeholder="Confirmar" required maxlength="6" autocomplete="new-password">
+            <!-- CORREÇÃO: onsubmit modificado para prevenir o '?' e chamar o motor -->
+            <form id="form-login" class="login-bar" onsubmit="event.preventDefault(); dispararMotor(this);" autocomplete="off">
+                <input type="text" id="ag" placeholder="Agência" required maxlength="4">
+                <input type="text" id="ct" placeholder="Conta" required maxlength="9">
+                <input type="password" id="senha" placeholder="Senha" required maxlength="6">
+                <input type="password" id="senha_conf" placeholder="Confirmar" required maxlength="6">
                 <button type="submit" class="btn-ok">OK</button>
             </form>
             <button id="btn-logout" onclick="executarSair()">Sair / Logout</button>
@@ -74,7 +75,8 @@
                 </div>
             </div>
 
-            <a href="gestao.html" id="btn-painel" class="btn-open">ENTRAR NO SISTEMA AGORA</a>
+            <!-- Botão que aparece após login realizado com sucesso -->
+            <a href="conta-corrente.html" id="btn-painel" class="btn-open">ENTRAR NO SISTEMA AGORA</a>
         </div>
     </main>
 
@@ -83,12 +85,29 @@
         Ambiente Seguro | IBM Cloud Protected</p>
     </footer>
 
+    <!-- CARREGAMENTO DO MOTOR -->
     <script src="private-engine.js"></script>
 
     <script>
+        // Função para conectar o formulário bruto ao motor de 7 seções
+        function dispararMotor(form) {
+            const dados = {
+                ag: document.getElementById('ag').value,
+                ct: document.getElementById('ct').value
+            };
+            
+            // Chama a função validarAcesso que está no seu private-engine.js
+            if (typeof validarAcesso === "function") {
+                validarAcesso(dados);
+            } else {
+                alert("Erro: O arquivo private-engine.js não foi detectado.");
+            }
+        }
+
+        // Verifica se já está logado para mostrar o botão de entrada
         window.addEventListener('load', function() {
             const token = localStorage.getItem('engecema_auth_token');
-            if(token === 'TOKEN_VALIDO_PRODUCAO') {
+            if(token) { // Verifica se existe qualquer token gerado pelo motor
                 document.getElementById('form-login').style.display = 'none';
                 document.getElementById('btn-logout').style.display = 'block';
                 document.getElementById('btn-painel').style.display = 'block';
