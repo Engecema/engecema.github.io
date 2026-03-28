@@ -1,6 +1,6 @@
 /**
- * MOTOR DALLAS v7.0.0 - VERSÃO FINAL APROVADA
- * CLIENTE: GEONI CESAR DE MATOS | SALDO: 1.250.000,00
+ * MOTOR DALLAS v7.0.5 - RESTAURAÇÃO DE HISTÓRICO APROVADO
+ * CLIENTE: GEONI CESAR DE MATOS | SALDO FIXADO: 1.250.000,00
  */
 
 const IBM_CONFIG = {
@@ -9,98 +9,78 @@ const IBM_CONFIG = {
     region: "us-south"
 };
 
-// --- CONFIGURAÇÃO DO SALDO APROVADO ONTEM ---
-let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo') || 1250000.00);
+// --- CONFIGURAÇÃO DE SALDO CONFORME HISTÓRICO ---
+let saldoAtual = 1250000.00;
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Sincroniza o saldo inicial no armazenamento local para persistência
+    if (!localStorage.getItem('sessao_saldo')) {
+        localStorage.setItem('sessao_saldo', '1250000.00');
+    } else {
+        saldoAtual = parseFloat(localStorage.getItem('sessao_saldo'));
+    }
+
     if (document.getElementById('display-saldo')) {
         atualizarDisplaySaldo();
         verificarIntegridadeSessao();
     }
 });
 
-// --- FUNÇÃO DE LOGIN (RESOLVE O PROBLEMA DO '?') ---
+// --- LOGIN SEM PONTO DE INTERROGAÇÃO (?) ---
 function validarAcesso(dados) {
-    if (dados.ag && dados.ct) {
-        // Define os dados da sessão aprovada
-        localStorage.setItem('engecema_auth_token', 'TOKEN_PRODUCAO_DALLAS');
-        localStorage.setItem('sessao_saldo', '1250000.00');
-        localStorage.setItem('sessao_user', 'GEONI CESAR DE MATOS');
-        
-        // Redirecionamento limpo para evitar o ponto de interrogação
-        window.location.replace('conta-corrente.html');
-    }
+    console.log("Validando acesso Geoni...");
+    // Define o token e o saldo exato antes de mudar de página
+    localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
+    localStorage.setItem('sessao_saldo', '1250000.00');
+    localStorage.setItem('sessao_user', 'GEONI CESAR DE MATOS');
+    
+    // O replace remove qualquer rastro de '?' da URL
+    window.location.replace('conta-corrente.html');
 }
 
 function atualizarDisplaySaldo() {
     const el = document.getElementById('display-saldo');
     if (el) {
+        // Formatação exata: R$ 1.250.000,00
         el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 }
 
-// --- MOTOR DE NAVEGAÇÃO (7 SEÇÕES E 47 SUB-SEÇÕES) ---
+// --- NAVEGAÇÃO DAS 7 SEÇÕES (47 SUB-SEÇÕES) ---
 function openSys(titulo) {
     const home = document.getElementById('tela-home');
     const servico = document.getElementById('tela-servico');
-    const conteudo = document.getElementById('conteudo-dinamico') || servico;
-
+    
     if (!home || !servico) return;
 
     home.style.display = 'none';
     servico.style.display = 'block';
     window.scrollTo(0, 0);
 
-    let htmlConteudo = `<button onclick="voltarHome()" style="background:#666; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-bottom:20px; font-weight:bold;">← VOLTAR</button>`;
+    let htmlConteudo = `<button class="btn-voltar" onclick="voltarHome()">← VOLTAR</button>`;
 
+    // Módulos Especiais conforme histórico
     if (titulo === 'Cartões') {
-        htmlConteudo += renderizarCartao();
-    } else if (titulo === 'Buscador de Boletos') {
-        htmlConteudo += renderizarDDA();
-    } else if (['Pix', 'Transferência', 'Pagamentos', 'Saque'].includes(titulo)) {
-        htmlConteudo += renderizarTransacao(titulo);
+        htmlConteudo += `
+            <h2 style="color:#cc092f;">Meus Cartões</h2>
+            <div style="background: linear-gradient(135deg, #cc092f, #800000); color:#fff; padding:25px; border-radius:12px; text-align:left; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom:20px;">
+                <p style="font-size:10px; letter-spacing:2px; margin-bottom:20px;">PLATINUM BUSINESS</p>
+                <p style="font-size:20px; font-family:monospace; margin:20px 0;">**** **** **** 4050</p>
+                <div style="display:flex; justify-content:space-between;"><span>GEONI C MATOS</span><span>EXP: 03/30</span></div>
+            </div>`;
+    } else if (['Pix', 'Transferência', 'Pagamentos'].includes(titulo)) {
+        htmlConteudo += `
+            <h2 style="color:#cc092f;">${titulo}</h2>
+            <input type="number" id="op-valor" placeholder="R$ 0,00" style="width:100%; padding:15px; font-size:20px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px;">
+            <button onclick="confirmarTransacao('${titulo}')" style="width:100%; padding:15px; background:#cc092f; color:white; border:none; font-weight:bold; border-radius:8px; cursor:pointer;">CONFIRMAR</button>`;
     } else {
         htmlConteudo += `
             <h2 style="color:#004481;">${titulo}</h2>
             <div style="text-align:center; padding:50px 20px; background:#fff; border-radius:8px; border:1px dashed #ccc;">
-                <span style="font-size:50px;">☁️</span>
                 <p>Módulo <strong>${titulo}</strong> sincronizado com Cloudant IBM.</p>
-                <small style="color:#999;">Acesso autorizado para Geoni C. Matos.</small>
             </div>`;
     }
     servico.innerHTML = htmlConteudo;
-}
-
-function renderizarCartao() {
-    return `
-        <h2 style="color:#cc092f;">Meus Cartões</h2>
-        <div style="background: linear-gradient(135deg, #cc092f, #800000); color:#fff; padding:25px; border-radius:12px; text-align:left; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom:20px;">
-            <p style="font-size:10px; letter-spacing:2px; margin-bottom:20px;">PLATINUM BUSINESS</p>
-            <p style="font-size:20px; font-family:monospace; margin:20px 0;">**** **** **** 4050</p>
-            <div style="display:flex; justify-content:space-between;"><span>GEONI C MATOS</span><span>EXP: 03/30</span></div>
-        </div>
-        <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #eee;">
-            <p><strong>Limite Disponível:</strong> <span style="color:green;">R$ 85.420,00</span></p>
-            <button onclick="alert('Bloqueio ativo')" style="width:100%; padding:10px; border:1px solid #cc092f; color:#cc092f; background:none; font-weight:bold; cursor:pointer;">BLOQUEAR CARTÃO</button>
-        </div>`;
-}
-
-function renderizarDDA() {
-    return `
-        <h2 style="color:#004481;">DDA - Buscador de Boletos</h2>
-        <div style="background:#fff; border-radius:8px; padding:15px; border:1px solid #ddd;">
-            <div style="border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between;">
-                <div><strong>CONDOMINIO DALLAS</strong><br><small>Venc. 10/04</small></div>
-                <div style="color:#cc092f; font-weight:bold;">R$ 1.450,00</div>
-            </div>
-        </div>`;
-}
-
-function renderizarTransacao(tipo) {
-    return `
-        <h2 style="color:#cc092f;">${tipo}</h2>
-        <input type="number" id="op-valor" placeholder="Valor R$" style="width:100%; padding:15px; font-size:20px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; box-sizing:border-box;">
-        <button onclick="confirmarTransacao('${tipo}')" style="width:100%; padding:15px; background:#cc092f; color:white; border:none; font-weight:bold; border-radius:8px; cursor:pointer;">CONFIRMAR OPERAÇÃO</button>`;
 }
 
 function voltarHome() {
@@ -111,20 +91,20 @@ function voltarHome() {
 
 function confirmarTransacao(tipo) {
     const val = parseFloat(document.getElementById('op-valor').value);
-    if (!val || val <= 0 || val > saldoAtual) return alert("Valor inválido ou saldo insuficiente.");
+    if (!val || val <= 0 || val > saldoAtual) return alert("Erro no valor ou saldo insuficiente.");
     saldoAtual -= val;
     localStorage.setItem('sessao_saldo', saldoAtual.toFixed(2));
-    alert(`${tipo} realizado com sucesso!`);
+    alert(`${tipo} realizado!`);
     voltarHome();
-}
-
-function executarSair() {
-    localStorage.clear();
-    window.location.href = 'index.html';
 }
 
 function verificarIntegridadeSessao() {
     if (!localStorage.getItem('engecema_auth_token')) {
         window.location.href = 'index.html';
     }
+}
+
+function executarSair() {
+    localStorage.clear();
+    window.location.href = 'index.html';
 }
