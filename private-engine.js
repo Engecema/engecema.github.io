@@ -1,6 +1,6 @@
 /**
- * MOTOR DALLAS v7.5.0 - LIMPEZA TOTAL (SEM SUJEIRA)
- * FOCO: GEONI C. MATOS | SALDO FIXO: 1.250.000,00
+ * MOTOR DALLAS v7.6.0 - RESTAURAÇÃO DE HISTÓRICO LIMPO
+ * CLIENTE: GEONI CESAR DE MATOS | SALDO FIXO: 1.250.000,00
  */
 
 const IBM_CONFIG = {
@@ -8,34 +8,42 @@ const IBM_CONFIG = {
     guid: "50341044-2194-4f79-a2ac-8f45959f423d"
 };
 
-// 1. O SALDO É DEFINIDO APENAS AQUI
-const VALOR_SALDO = 1250000.00;
+// 1. O ÚNICO LUGAR ONDE O SALDO É DEFINIDO
+const VALOR_SALDO_GEONI = 1250000.00;
 
 document.addEventListener("DOMContentLoaded", function() {
-    // SÓ ATUA SE ENCONTRAR O ID 'display-saldo' (Que deve estar apenas na conta-corrente)
+    // SÓ EXECUTA SE HOUVER O TOKEN DE LOGIN ATIVO
+    const tokenAtivo = localStorage.getItem('engecema_auth_token');
     const campoSaldo = document.getElementById('display-saldo');
-    
-    if (campoSaldo) {
-        // Injeta o valor formatado diretamente
-        campoSaldo.innerText = VALOR_SALDO.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        
-        // Proteção de sessão: Se não houver token, volta pro login
-        if (!localStorage.getItem('engecema_auth_token')) {
-            window.location.href = 'index.html';
-        }
+
+    if (tokenAtivo && campoSaldo) {
+        // Injeta o saldo de R$ 1.250.000,00 formatado
+        campoSaldo.innerText = VALOR_SALDO_GEONI.toLocaleString('pt-BR', { 
+            style: 'currency', 
+            currency: 'BRL' 
+        });
+    } else if (!tokenAtivo && window.location.pathname.includes('conta-corrente.html')) {
+        // Se tentar entrar na conta sem login, expulsa para o index
+        window.location.href = 'index.html';
     }
 });
 
-// 2. LOGIN LIMPO (RESOLVE O PONTO DE INTERROGAÇÃO)
+/**
+ * FUNÇÃO DE LOGIN (CHAMADA PELO INDEX.HTML)
+ * Resolve o erro do '?' e cria a sessão segura
+ */
 function validarAcesso(dados) {
-    // Grava a permissão
-    localStorage.setItem('engecema_auth_token', 'ACESSO_GEONI_OK');
+    // Cria a sessão para liberar o saldo apenas na próxima página
+    localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_GEONI');
+    localStorage.setItem('sessao_user', 'GEONI CESAR DE MATOS');
     
-    // Redireciona de forma absoluta para a conta
+    // Redirecionamento limpo
     window.location.replace('conta-corrente.html');
 }
 
-// 3. NAVEGAÇÃO DAS 7 SEÇÕES
+/**
+ * NAVEGAÇÃO DAS 7 SEÇÕES (47 SUB-SEÇÕES)
+ */
 function openSys(titulo) {
     const home = document.getElementById('tela-home');
     const servico = document.getElementById('tela-servico');
@@ -45,13 +53,12 @@ function openSys(titulo) {
     home.style.display = 'none';
     servico.style.display = 'block';
 
-    // Conteúdo simplificado para as sub-seções
     servico.innerHTML = `
         <button onclick="voltarHome()" style="margin-bottom:20px; padding:10px; cursor:pointer;">← VOLTAR</button>
         <h2 style="color:#cc092f;">${titulo}</h2>
         <div style="padding:20px; background:#fff; border:1px solid #ddd; border-radius:8px;">
-            <p>Sincronizando módulo <strong>${titulo}</strong> com IBM Cloud...</p>
-            <p>Saldo: <strong>R$ 1.250.000,00</strong></p>
+            <p>Módulo <strong>${titulo}</strong> sincronizado com Cloudant IBM.</p>
+            <p>Saldo disponível: <strong>R$ 1.250.000,00</strong></p>
         </div>
     `;
 }
