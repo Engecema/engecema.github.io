@@ -1,35 +1,41 @@
 /**
- * MOTOR DALLAS v7.3.0 - VERSÃO LIMPA (GEONI C. MATOS)
- * REMOVIDO: SCRIPTS DE LOGIN DUPLICADOS E VERIFICAÇÕES DE PATH INSTÁVEIS
+ * MOTOR DALLAS v7.5.0 - LIMPEZA TOTAL (SEM SUJEIRA)
+ * FOCO: GEONI C. MATOS | SALDO FIXO: 1.250.000,00
  */
 
 const IBM_CONFIG = {
     apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt", 
-    guid: "50341044-2194-4f79-a2ac-8f45959f423d",       
-    region: "us-south"
+    guid: "50341044-2194-4f79-a2ac-8f45959f423d"
 };
 
-// 1. CONFIGURAÇÃO ÚNICA DE SALDO (1.250.000,00)
-let saldoAtual = 1250000.00;
+// 1. O SALDO É DEFINIDO APENAS AQUI
+const VALOR_SALDO = 1250000.00;
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Só injeta se o elemento 'display-saldo' existir na página (Proteção Natural)
-    const elSaldo = document.getElementById('display-saldo');
-    if (elSaldo) {
-        elSaldo.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        verificarIntegridadeSessao();
+    // SÓ ATUA SE ENCONTRAR O ID 'display-saldo' (Que deve estar apenas na conta-corrente)
+    const campoSaldo = document.getElementById('display-saldo');
+    
+    if (campoSaldo) {
+        // Injeta o valor formatado diretamente
+        campoSaldo.innerText = VALOR_SALDO.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        
+        // Proteção de sessão: Se não houver token, volta pro login
+        if (!localStorage.getItem('engecema_auth_token')) {
+            window.location.href = 'index.html';
+        }
     }
 });
 
-// 2. FUNÇÃO DE LOGIN DIRETA (SEM '?' NA URL)
+// 2. LOGIN LIMPO (RESOLVE O PONTO DE INTERROGAÇÃO)
 function validarAcesso(dados) {
-    localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
-    localStorage.setItem('sessao_saldo', '1250000.00');
-    // Redirecionamento limpo que resolve o erro do ponto de interrogação
+    // Grava a permissão
+    localStorage.setItem('engecema_auth_token', 'ACESSO_GEONI_OK');
+    
+    // Redireciona de forma absoluta para a conta
     window.location.replace('conta-corrente.html');
 }
 
-// 3. NAVEGAÇÃO DAS 7 SEÇÕES (47 SUB-SEÇÕES)
+// 3. NAVEGAÇÃO DAS 7 SEÇÕES
 function openSys(titulo) {
     const home = document.getElementById('tela-home');
     const servico = document.getElementById('tela-servico');
@@ -39,35 +45,20 @@ function openSys(titulo) {
     home.style.display = 'none';
     servico.style.display = 'block';
 
-    let htmlConteudo = `<button class="btn-voltar" onclick="voltarHome()">← VOLTAR</button>`;
-
-    if (titulo === 'Cartões') {
-        htmlConteudo += `
-            <h2 style="color:#cc092f;">Meus Cartões</h2>
-            <div style="background: linear-gradient(135deg, #cc092f, #800000); color:#fff; padding:25px; border-radius:12px; text-align:left; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom:20px;">
-                <p style="font-size:10px; letter-spacing:2px; margin-bottom:20px;">PLATINUM BUSINESS</p>
-                <p style="font-size:20px; font-family:monospace; margin:20px 0;">**** **** **** 4050</p>
-                <div style="display:flex; justify-content:space-between;"><span>GEONI C MATOS</span><span>EXP: 03/30</span></div>
-            </div>`;
-    } else {
-        htmlConteudo += `
-            <h2 style="color:#004481;">${titulo}</h2>
-            <div style="text-align:center; padding:40px; background:#fff; border-radius:8px; border:1px dashed #ccc;">
-                <p>Módulo <strong>${titulo}</strong> sincronizado com Cloudant IBM.</p>
-            </div>`;
-    }
-    servico.innerHTML = htmlConteudo;
+    // Conteúdo simplificado para as sub-seções
+    servico.innerHTML = `
+        <button onclick="voltarHome()" style="margin-bottom:20px; padding:10px; cursor:pointer;">← VOLTAR</button>
+        <h2 style="color:#cc092f;">${titulo}</h2>
+        <div style="padding:20px; background:#fff; border:1px solid #ddd; border-radius:8px;">
+            <p>Sincronizando módulo <strong>${titulo}</strong> com IBM Cloud...</p>
+            <p>Saldo: <strong>R$ 1.250.000,00</strong></p>
+        </div>
+    `;
 }
 
 function voltarHome() {
     document.getElementById('tela-home').style.display = 'block';
     document.getElementById('tela-servico').style.display = 'none';
-}
-
-function verificarIntegridadeSessao() {
-    if (!localStorage.getItem('engecema_auth_token')) {
-        window.location.href = 'index.html';
-    }
 }
 
 function executarSair() {
