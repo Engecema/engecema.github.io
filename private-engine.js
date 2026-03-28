@@ -1,6 +1,6 @@
 /**
- * MOTOR DALLAS v6.9.7 - FULL ARCHITECTURE (7 SEÇÕES CONCLUÍDAS)
- * CLIENTE: GEONI CESAR DE MATOS | ESTRUTURA COMPLETA 47 SUB-SEÇÕES
+ * MOTOR DALLAS v7.0.0 - VERSÃO FINAL APROVADA
+ * CLIENTE: GEONI CESAR DE MATOS | SALDO: 1.250.000,00
  */
 
 const IBM_CONFIG = {
@@ -9,81 +9,79 @@ const IBM_CONFIG = {
     region: "us-south"
 };
 
-// Gerenciamento de Saldo e Sessão (Persistência Geoni)
+// --- CONFIGURAÇÃO DO SALDO APROVADO ONTEM ---
 let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo') || 1250000.00);
 
 document.addEventListener("DOMContentLoaded", function() {
-    prepararAmbiente();
     if (document.getElementById('display-saldo')) {
         atualizarDisplaySaldo();
         verificarIntegridadeSessao();
     }
 });
 
-function atualizarDisplaySaldo() {
-    const el = document.getElementById('display-saldo');
-    if (el) el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+// --- FUNÇÃO DE LOGIN (RESOLVE O PROBLEMA DO '?') ---
+function validarAcesso(dados) {
+    if (dados.ag && dados.ct) {
+        // Define os dados da sessão aprovada
+        localStorage.setItem('engecema_auth_token', 'TOKEN_PRODUCAO_DALLAS');
+        localStorage.setItem('sessao_saldo', '1250000.00');
+        localStorage.setItem('sessao_user', 'GEONI CESAR DE MATOS');
+        
+        // Redirecionamento limpo para evitar o ponto de interrogação
+        window.location.replace('conta-corrente.html');
+    }
 }
 
-/**
- * MOTOR DE NAVEGAÇÃO PARA AS 7 SEÇÕES E 47 SUB-SEÇÕES
- */
+function atualizarDisplaySaldo() {
+    const el = document.getElementById('display-saldo');
+    if (el) {
+        el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+}
+
+// --- MOTOR DE NAVEGAÇÃO (7 SEÇÕES E 47 SUB-SEÇÕES) ---
 function openSys(titulo) {
     const home = document.getElementById('tela-home');
-    let servico = document.getElementById('tela-servico');
-    
-    // Garante que o container de serviço exista
-    if (!servico) {
-        servico = document.createElement('div');
-        servico.id = 'tela-servico';
-        servico.className = 'container';
-        home.parentNode.appendChild(servico);
-    }
+    const servico = document.getElementById('tela-servico');
+    const conteudo = document.getElementById('conteudo-dinamico') || servico;
+
+    if (!home || !servico) return;
 
     home.style.display = 'none';
     servico.style.display = 'block';
     window.scrollTo(0, 0);
 
-    // Renderização dinâmica conforme o item do menu clicado
-    let htmlBase = `<button class="btn-voltar" onclick="voltarHome()" style="background:#666; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-bottom:20px; font-weight:bold;">← VOLTAR</button>`;
+    let htmlConteudo = `<button onclick="voltarHome()" style="background:#666; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-bottom:20px; font-weight:bold;">← VOLTAR</button>`;
 
-    // LÓGICA POR MÓDULOS ESPECÍFICOS
     if (titulo === 'Cartões') {
-        htmlBase += renderizarCartao();
-    } 
-    else if (titulo === 'Buscador de Boletos') {
-        htmlBase += renderizarDDA();
-    }
-    else if (['Pix', 'Transferência', 'Pagamentos', 'Saque'].includes(titulo)) {
-        htmlBase += renderizarTransacao(titulo);
-    }
-    else {
-        // RENDERIZAÇÃO AUTOMÁTICA PARA AS 47 SUB-SEÇÕES (IBM CLOUD SYNC)
-        htmlBase += `
+        htmlConteudo += renderizarCartao();
+    } else if (titulo === 'Buscador de Boletos') {
+        htmlConteudo += renderizarDDA();
+    } else if (['Pix', 'Transferência', 'Pagamentos', 'Saque'].includes(titulo)) {
+        htmlConteudo += renderizarTransacao(titulo);
+    } else {
+        htmlConteudo += `
             <h2 style="color:#004481;">${titulo}</h2>
             <div style="text-align:center; padding:50px 20px; background:#fff; border-radius:8px; border:1px dashed #ccc;">
                 <span style="font-size:50px;">☁️</span>
-                <p style="color:#666; font-weight:bold;">Acessando Módulo: ${titulo}</p>
-                <p style="color:#999; font-size:12px;">Sincronizando permissões do perfil GEONI C MATOS com Cloudant IBM...</p>
-                <div style="margin-top:20px; color:var(--br-red); font-size:11px;">Módulo em conformidade com as 7 seções estruturadas.</div>
+                <p>Módulo <strong>${titulo}</strong> sincronizado com Cloudant IBM.</p>
+                <small style="color:#999;">Acesso autorizado para Geoni C. Matos.</small>
             </div>`;
     }
-
-    servico.innerHTML = htmlBase;
+    servico.innerHTML = htmlConteudo;
 }
 
-// --- FUNÇÕES DE RENDERIZAÇÃO ESPECÍFICA ---
 function renderizarCartao() {
     return `
         <h2 style="color:#cc092f;">Meus Cartões</h2>
         <div style="background: linear-gradient(135deg, #cc092f, #800000); color:#fff; padding:25px; border-radius:12px; text-align:left; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom:20px;">
             <p style="font-size:10px; letter-spacing:2px; margin-bottom:20px;">PLATINUM BUSINESS</p>
             <p style="font-size:20px; font-family:monospace; margin:20px 0;">**** **** **** 4050</p>
-            <div style="display:flex; justify-content:space-between; align-items:flex-end;"><span>GEONI C MATOS</span><span>EXP: 03/30</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>GEONI C MATOS</span><span>EXP: 03/30</span></div>
         </div>
         <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #eee;">
             <p><strong>Limite Disponível:</strong> <span style="color:green;">R$ 85.420,00</span></p>
-            <button onclick="alert('Bloqueio temporário ativado')" style="width:100%; padding:10px; border:1px solid #cc092f; color:#cc092f; background:none; font-weight:bold; cursor:pointer;">BLOQUEAR CARTÃO</button>
+            <button onclick="alert('Bloqueio ativo')" style="width:100%; padding:10px; border:1px solid #cc092f; color:#cc092f; background:none; font-weight:bold; cursor:pointer;">BLOQUEAR CARTÃO</button>
         </div>`;
 }
 
@@ -105,7 +103,6 @@ function renderizarTransacao(tipo) {
         <button onclick="confirmarTransacao('${tipo}')" style="width:100%; padding:15px; background:#cc092f; color:white; border:none; font-weight:bold; border-radius:8px; cursor:pointer;">CONFIRMAR OPERAÇÃO</button>`;
 }
 
-// --- CONTROLES DE SISTEMA ---
 function voltarHome() {
     document.getElementById('tela-home').style.display = 'block';
     document.getElementById('tela-servico').style.display = 'none';
@@ -129,14 +126,5 @@ function executarSair() {
 function verificarIntegridadeSessao() {
     if (!localStorage.getItem('engecema_auth_token')) {
         window.location.href = 'index.html';
-    }
-}
-
-function prepararAmbiente() {
-    if (!document.getElementById('tela-servico')) {
-        const div = document.createElement('div');
-        div.id = 'tela-servico';
-        div.style.display = 'none';
-        document.body.appendChild(div);
     }
 }
