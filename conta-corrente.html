@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <title>Engecema | Minha Conta</title>
-    <script>
-        (function() {
-            if (!localStorage.getItem('engecema_auth_token')) { window.location.href = 'index.html'; }
-        })();
-    </script>
     <style>
         :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); padding-top: 75px; }
@@ -24,10 +19,8 @@
         .item-servico:hover { border-color: var(--br-red); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
         .item-servico i { font-size: 24px; margin-bottom: 10px; color: #444; }
         .item-servico span { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
-        
-        /* Estilos da nova navegação */
         .btn-voltar { background: #666; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
-        #tela-servico { display: none; } /* Inicia escondida */
+        #tela-servico { display: none; }
     </style>
 </head>
 <body>
@@ -40,107 +33,68 @@
     </header>
 
     <div class="container">
-        <!-- ID NECESSÁRIO: tela-home -->
+        <!-- TELA INICIAL DA CONTA -->
         <div id="tela-home">
             <div class="card-resumo">
-                <div><span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
-                <div class="saldo-valor" id="display-saldo">R$ 1.250.000,00</div></div>
+                <div>
+                    <span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
+                    <!-- O NOVO ID PARA EVITAR O VAZAMENTO NA TELA DE LOGIN -->
+                    <div class="saldo-valor" id="area-restrita-saldo">R$ 0,00</div>
+                </div>
                 <button onclick="openSys('Saldo e Extrato')" style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
             </div>
 
-            <!-- SEÇÃO 1: Transações e Consultas -->
-            <div class="secao-titulo">1. Transações e Consultas (15 itens)</div>
+            <!-- SEÇÕES CONFIGURADAS ONTEM -->
+            <div class="secao-titulo">1. Transações e Consultas</div>
             <div class="grid-servicos">
-                <div class="item-servico" onclick="openSys('Agendamentos')"><i>📅</i><span>Agendamentos</span></div>
                 <div class="item-servico" onclick="openSys('Buscador de Boletos')"><i>🔍</i><span>Buscador de Boletos</span></div>
                 <div class="item-servico" onclick="openSys('Cartões')"><i>💳</i><span>Cartões</span></div>
-                <div class="item-servico" onclick="openSys('Comprovantes')"><i>🧾</i><span>Comprovantes</span></div>
-                <div class="item-servico" onclick="openSys('Debito Automático')"><i>🔄</i><span>Debito Automático</span></div>
-                <div class="item-servico" onclick="openSys('Debito de Veículos')"><i>🚗</i><span>Debito de Veículos</span></div>
-                <div class="item-servico" onclick="openSys('Imposto de Renda')"><i>📋</i><span>Imposto de Renda</span></div>
-                <div class="item-servico" onclick="openSys('Meus Bancos')"><i>🏦</i><span>Meus Bancos</span></div>
-                <div class="item-servico" onclick="openSys('Pagamentos')"><i>📄</i><span>Pagamentos</span></div>
                 <div class="item-servico" onclick="openSys('Pix')"><i>📱</i><span>Pix</span></div>
-                <div class="item-servico" onclick="openSys('Recarga')"><i>📲</i><span>Recarga</span></div>
-                <div class="item-servico" onclick="openSys('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
-                <div class="item-servico" onclick="openSys('Saque')"><i>💵</i><span>Saque</span></div>
                 <div class="item-servico" onclick="openSys('Transferência')"><i>💸</i><span>Transferência</span></div>
-                <div class="item-servico" onclick="openSys('Vender pelo Celular')"><i>🛍️</i><span>Vender pelo Celular</span></div>
+                <div class="item-servico" onclick="openSys('Pagamentos')"><i>📄</i><span>Pagamentos</span></div>
+                <div class="item-servico" onclick="openSys('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
+                <!-- ... outros itens da Seção 1 ... -->
             </div>
 
-            <!-- SEÇÃO 2: Empréstimos -->
             <div class="secao-titulo">2. Empréstimos e Financiamentos</div>
             <div class="grid-servicos">
-                <div class="item-servico" onclick="openSys('Credito Imobiliário')"><i>🏠</i><span>Credito Imobiliário</span></div>
                 <div class="item-servico" onclick="openSys('Empréstimos')"><i>💰</i><span>Empréstimos</span></div>
                 <div class="item-servico" onclick="openSys('Limite de Credito')"><i>📈</i><span>Limite de Credito</span></div>
-                <div class="item-servico" onclick="openSys('Renegociação de Dividas')"><i>🤝</i><span>Renegociação de Dividas</span></div>
             </div>
 
-            <!-- SEÇÃO 3: Investimentos -->
             <div class="secao-titulo">3. Investimentos</div>
             <div class="grid-servicos">
-                <div class="item-servico" onclick="openSys('Agora Home Broker')"><i>📉</i><span>Agora Home Broker</span></div>
                 <div class="item-servico" onclick="openSys('Investimentos')"><i>💎</i><span>Investimentos</span></div>
-                <div class="item-servico" onclick="openSys('Objetivos')"><i>🎯</i><span>Objetivos</span></div>
-                <div class="item-servico" onclick="openSys('Previdência')"><i>💼</i><span>Previdência</span></div>
+                <div class="item-servico" onclick="openSys('Agora Home Broker')"><i>📉</i><span>Agora Home Broker</span></div>
             </div>
 
-            <!-- SEÇÃO 4: Mais Produtos -->
             <div class="secao-titulo">4. Mais Produtos e Contas</div>
             <div class="grid-servicos">
-                <div class="item-servico" onclick="openSys('Cambio')"><i>💱</i><span>Cambio</span></div>
-                <div class="item-servico" onclick="openSys('Captalização')"><i>🎁</i><span>Captalização</span></div>
-                <div class="item-servico" onclick="openSys('Cheques')"><i>📝</i><span>Cheques</span></div>
-                <div class="item-servico" onclick="openSys('Consorcio')"><i>🏢</i><span>Consorcio</span></div>
-                <div class="item-servico" onclick="openSys('Conta Internacional')"><i>🌍</i><span>Conta Internacional</span></div>
-                <div class="item-servico" onclick="openSys('Conta Nextjoy')"><i>🎮</i><span>Conta Nextjoy</span></div>
                 <div class="item-servico" onclick="openSys('Seguros')"><i>🛡️</i><span>Seguros</span></div>
+                <div class="item-servico" onclick="openSys('Consorcio')"><i>🏢</i><span>Consorcio</span></div>
             </div>
 
-            <!-- SEÇÃO 5: Compras -->
             <div class="secao-titulo">5. Compras e Benefícios</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Mimos')"><i>🎁</i><span>Mimos</span></div>
-                <div class="item-servico" onclick="openSys('Mundo Disney')"><i>🏰</i><span>Mundo Disney</span></div>
-                <div class="item-servico" onclick="openSys('Shop')"><i>🛒</i><span>Shop</span></div>
-                <div class="item-servico" onclick="openSys('Tag de Pedágio')"><i>🚗</i><span>Tag de Pedágio</span></div>
             </div>
 
-            <!-- SEÇÃO 6: Perfil e Ajuda -->
             <div class="secao-titulo">6. Perfil e Ajuda</div>
             <div class="grid-servicos">
-                <div class="item-servico" onclick="openSys('Atualização Cadastral')"><i>👤</i><span>Atualização Cadastral</span></div>
-                <div class="item-servico" onclick="openSys('Autorização e Contratos')"><i>📄</i><span>Autorização e Contratos</span></div>
-                <div class="item-servico" onclick="openSys('Tia')"><i>🤖</i><span>Tia</span></div>
-                <div class="item-servico" onclick="openSys('Cesta de Serviço')"><i>🧺</i><span>Cesta de Serviço</span></div>
-                <div class="item-servico" onclick="openSys('Chat')"><i>💬</i><span>Chat</span></div>
-                <div class="item-servico" onclick="openSys('Encerrar Conta')"><i>🛑</i><span>Encerrar Conta</span></div>
-                <div class="item-servico" onclick="openSys('Perfil')"><i>🆔</i><span>Perfil</span></div>
-                <div class="item-servico" onclick="openSys('Portabilidade de Salário')"><i>💼</i><span>Portabilidade de Salário</span></div>
-                <div class="item-servico" onclick="openSys('Segurança')"><i>🔐</i><span>Segurança</span></div>
+                <div class="item-servico" onclick="openSys('Meus Dados')"><i>👤</i><span>Meus Dados</span></div>
             </div>
 
-            <!-- SEÇÃO 7: Permissões -->
             <div class="secao-titulo">7. Permissões</div>
             <div class="grid-servicos">
-                <div class="item-servico" onclick="openSys('Autorização de Parceiros')"><i>🤝</i><span>Autorização de Parceiros</span></div>
-                <div class="item-servico" onclick="openSys('Autorização de Whatsapp')"><i>📱</i><span>Autorização de Whatsapp</span></div>
-                <div class="item-servico" onclick="openSys('Minhas Autorizações')"><i>👁️</i><span>Minhas Autorizações</span></div>
-                <div class="item-servico" onclick="openSys('Open Finance')"><i>⚙️</i><span>Open Finance</span></div>
+                <div class="item-servico" onclick="openSys('Segurança')"><i>🔑</i><span>Segurança</span></div>
             </div>
         </div>
 
-        <!-- ID NECESSÁRIO: tela-servico -->
-        <div id="tela-servico">
-            <button class="btn-voltar" onclick="voltarHome()">⬅ VOLTAR AO MENU</button>
-            <!-- ID NECESSÁRIO: conteudo-dinamico -->
-            <div id="conteudo-dinamico" style="background:#fff; padding:30px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <!-- Conteúdo injetado pelo motor -->
-            </div>
-        </div>
+        <!-- CONTAINER DINÂMICO PARA AS SUB-SEÇÕES -->
+        <div id="tela-servico"></div>
     </div>
 
+    <!-- CARREGAMENTO DO MOTOR PRIVADO -->
     <script src="private-engine.js"></script>
 </body>
 </html>
