@@ -10,7 +10,7 @@ const IBM_PRIVATE_CORE = {
     agencia: "0405",
     conta: "556264-3",
     cluster: "DALLAS-PROD-NODE-01",
-    version: "v31.5.0",
+    version: "v31.6.0",
     protocol: "TLS-1.3-SECURE",
     brand: "BRADESCO-PRIVATE-MIRROR",
     security_level: "MAXIMUM"
@@ -20,13 +20,13 @@ const EngineArchitecture = {
     total_nodes: 47,
     sections_limit: 7,
     schema: [
-        { id: "SEC-01", label: "OPERACIONAL ESTRUTURADO", nodes: 7, tier: "CRITICAL", color: "#004481" },
-        { id: "SEC-02", label: "INVESTIMENTOS PRIVATE", nodes: 7, tier: "ASSET", color: "#cc092f" },
-        { id: "SEC-03", label: "FOMENTO TECNOLÓGICO", nodes: 7, tier: "CORE", color: "#004481" },
-        { id: "SEC-04", label: "RESERVA DE LIQUIDEZ", nodes: 7, tier: "STABLE", color: "#cc092f" },
-        { id: "SEC-05", label: "CUSTÓDIA DE ATIVOS", nodes: 7, tier: "SECURITY", color: "#004481" },
-        { id: "SEC-06", label: "TRANSACIONAL DALLAS", nodes: 6, tier: "DATA", color: "#cc092f" },
-        { id: "SEC-07", label: "BUFFER DE SEGURANÇA", nodes: 6, tier: "SAFETY", color: "#333333" }
+        { id: "S1", label: "OPERACIONAL ESTRUTURADO", nodes: 7, tier: "CORE", color: "#004481" },
+        { id: "S2", label: "INVESTIMENTOS PRIVATE", nodes: 7, tier: "ASSET", color: "#cc092f" },
+        { id: "S3", label: "FOMENTO TECNOLÓGICO", nodes: 7, tier: "CORE", color: "#004481" },
+        { id: "S4", label: "RESERVA DE LIQUIDEZ", nodes: 7, tier: "STABLE", color: "#cc092f" },
+        { id: "S5", label: "CUSTÓDIA DE ATIVOS", nodes: 7, tier: "SECURITY", color: "#004481" },
+        { id: "S6", label: "TRANSACIONAL DALLAS", nodes: 6, tier: "DATA", color: "#cc092f" },
+        { id: "S7", label: "BUFFER DE SEGURANÇA", nodes: 6, tier: "SAFETY", color: "#333333" }
     ]
 };
 
@@ -36,6 +36,9 @@ const TypeValidator = {
     isObject: (v) => typeof v === 'object' && v !== null,
     verifyCore: function(c) {
         return this.isString(c.apikey) && this.isNumber(c.balance) && this.isString(c.guid);
+    },
+    validateNode: function(n) {
+        return this.isNumber(n.id) && this.isString(n.status);
     }
 };
 
@@ -49,11 +52,15 @@ const MathEngine = {
             totalAllocated: s.nodes * unit,
             perNode: unit
         }));
+    },
+    sumNodes: function() {
+        return EngineArchitecture.schema.reduce((acc, curr) => acc + curr.nodes, 0);
     }
 };
 
 const TelemetrySystem = {
     stack: [],
+    max_size: 150,
     push: function(act, st) {
         const entry = {
             ts: new Date().toISOString(),
@@ -63,8 +70,11 @@ const TelemetrySystem = {
             id: Math.random().toString(16).substring(2, 15).toUpperCase()
         };
         this.stack.push(entry);
-        if (this.stack.length > 100) this.stack.shift();
+        if (this.stack.length > this.max_size) this.stack.shift();
         console.log(`[TELEMETRY] ${entry.action} | ${entry.status} | ${entry.id}`);
+    },
+    getLatest: function() {
+        return this.stack[this.stack.length - 1];
     }
 };
 
@@ -72,6 +82,7 @@ const SecurityGate = {
     prefix: "engecema_private_",
     init: function() {
         document.addEventListener('click', this.interceptor.bind(this), true);
+        TelemetrySystem.push("GATE_INITIALIZED", "READY");
     },
     interceptor: function(e) {
         const t = e.target;
@@ -191,7 +202,8 @@ const TemplateFactory = {
                         <p style="font-size:36px;color:#161616;">
                             "Olá <strong>${IBM_PRIVATE_CORE.owner}</strong>, o sistema 
                             <strong>${IBM_PRIVATE_CORE.cluster}</strong> confirma a liquidez de 
-                            <strong>${MathEngine.formatBRL(IBM_PRIVATE_CORE.balance)}</strong> disponível em us-south."
+                            <strong>${MathEngine.formatBRL(IBM_PRIVATE_CORE.balance)}</strong> disponível em us-south. 
+                            Handshake <strong>${IBM_PRIVATE_CORE.protocol}</strong> verificado com sucesso."
                         </p>
                     </div>
                 </div>`,
@@ -269,7 +281,11 @@ const StateManager = {
 
 const NodeRegistry = {
     nodes: Array.from({length: 47}, (_, i) => ({ id: i + 1, status: "ONLINE", load: 0.12 })),
-    checkAll: function() { return this.nodes.every(n => n.status === "ONLINE"); }
+    checkAll: function() { return this.nodes.every(n => n.status === "ONLINE"); },
+    refreshNode: function(id) {
+        const n = this.nodes.find(node => node.id === id);
+        if(n) n.load = Math.random().toFixed(2);
+    }
 };
 
 const NetworkHandshake = {
@@ -306,7 +322,11 @@ const Metadata = {
 const SyncEngine = {
     mirror: IBM_PRIVATE_CORE.brand,
     lastSync: Date.now(),
-    isActive: true
+    isActive: true,
+    performSync: function() {
+        this.lastSync = Date.now();
+        TelemetrySystem.push("MIRROR_SYNC", "OK");
+    }
 };
 
 const ErrorHandler = {
@@ -319,18 +339,28 @@ const ErrorHandler = {
 const CacheManager = {
     store: {},
     get: function(k) { return this.store[k]; },
-    set: function(k, v) { this.store[k] = v; }
+    set: function(k, v) { this.store[k] = v; },
+    clearCache: function() { this.store = {}; }
 };
 
 const InterceptorModule = {
     active: true,
     type: "NETWORK_GATE",
-    level: 7
+    level: 7,
+    toggle: function() { this.active = !this.active; }
 };
 
 const AuditObserver = {
     enabled: true,
-    observe: function() { TelemetrySystem.push("AUDIT_OBSERVER", "RUNNING"); }
+    observe: function() { TelemetrySystem.push("AUDIT_OBSERVER", "RUNNING"); },
+    validateParity: function() { return MathEngine.sumNodes() === 47; }
+};
+
+const OperationalMetrics = {
+    uptime: 0,
+    startClock: function() {
+        setInterval(() => { this.uptime += 1; }, 1000);
+    }
 };
 
 window.renderModule = (id) => EngineController.render(id);
@@ -341,4 +371,5 @@ document.addEventListener('DOMContentLoaded', () => {
     DiagnosticTool.heartbeat();
     DiagnosticTool.runAudit();
     AuditObserver.observe();
+    OperationalMetrics.startClock();
 });
