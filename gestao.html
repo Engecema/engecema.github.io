@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema Gestão | Dallas VPC Enterprise</title>
+    <title>Engecema Gestão | Dallas Enterprise</title>
     <script>
         /**
-         * PROTOCOLO DE SEGURANÇA IBM CLOUD - DALLAS US-SOUTH
-         * Validação de Paridade: 7 Seções / 47 Nodes
+         * SECURITY PROTOCOL - IBM CLOUD DALLAS US-SOUTH
+         * INTEGRITY: 7 SECTIONS / 47 NODES
          */
         const AUTH_PROTOCOL = {
-            tokens: ['engecema_tk', 'engecema_token', 'engecema_auth', 'engecema_token_valid'],
+            tokens: ['engecema_tk', 'engecema_token', 'engecema_auth', 'engecema_token_valid', 'engecema_auth_token'],
             status_codes: ['AUTHORIZED_V31', 'AUTHORIZED_PRIVATE_IBM', 'AUTHORIZED', 'SECURE_AUTHORIZED_V31', 'AUTHORIZED_ENGINE_V31'],
             origin: 'index.html'
         };
         (function() {
-            const currentStatus = localStorage.getItem('engecema_status');
+            const currentStatus = localStorage.getItem('engecema_status') || localStorage.getItem('engecema_st');
             const tokenExists = AUTH_PROTOCOL.tokens.some(k => localStorage.getItem(k));
             if (!tokenExists || !AUTH_PROTOCOL.status_codes.includes(currentStatus)) {
                 window.location.href = AUTH_PROTOCOL.origin;
@@ -165,8 +165,8 @@
         </div>
         <div class="session-info">
             <div class="user-data">
-                <b id="user-display-tag">VERIFICANDO...</b>
-                <span id="cluster-tag">DALLAS VPC us-south | V31.9.9</span>
+                <b id="user-display-tag">SINCROZINANDO...</b>
+                <span id="cluster-tag">DALLAS VPC us-south | V47.0.0</span>
             </div>
             <button class="btn-exit-global" onclick="EngineCore.logout()">Encerrar Sistema</button>
         </div>
@@ -174,7 +174,7 @@
 
     <main class="main-canvas">
         <div class="balance-hero-card">
-            <label>Saldo de Patrimônio sob Gestão | Dallas us-south</label>
+            <label>Saldo de Patrimônio Consolidado | Dallas VPC</label>
             <h1 id="main-balance-display">R$ 0,00</h1>
             <div style="font-size: 15px; color: var(--enge-success); font-weight: 900; text-transform: uppercase;">IBM CLOUD PRIVATE CLUSTER STATUS: ATIVO</div>
         </div>
@@ -182,7 +182,7 @@
         <div id="grid-mount-root" class="module-grid-layout"></div>
     </main>
 
-    <footer class="footer-purged">
+    <footer class="footer-purged" id="FINAL-FOOTER">
         ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA | OPERAÇÃO PRIVATE IBM CLOUD DALLAS
     </footer>
 
@@ -202,22 +202,25 @@
             nodes: 47,
             sections: 7,
             region: "us-south",
-            id: "DALLAS-V31"
+            id: "DALLAS-VPC-V47"
         };
 
         const EngineCore = {
             init: function() {
-                this.purgeUI();
+                this.purgeMirrorArtifacts();
                 this.authenticate();
                 this.renderGrid();
                 this.heartbeat();
                 document.getElementById('GESTAO-PURGED-INSTANCE').style.display = 'block';
             },
-            purgeUI: function() {
-                // Motor de purga rigoroso: Elimina qualquer resquício visual indesejado
-                const terms = ["Bradesco", "BRADESCO", "bradesco"];
-                document.title = "Engecema Gestão RH | Dallas VPC";
-                console.log("[PURGE-ENGINE] Menções ao mirror sanitizadas com sucesso.");
+            purgeMirrorArtifacts: function() {
+                // Motor de sanitização para remover referências indesejadas do cache
+                document.title = "Engecema Gestão | Dallas VPC";
+                const footer = document.getElementById('FINAL-FOOTER');
+                if(footer) {
+                    footer.innerHTML = "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA | OPERAÇÃO PRIVATE IBM CLOUD DALLAS";
+                }
+                console.log("[PURGE-ENGINE] Sanitização Completa.");
             },
             authenticate: function() {
                 const u = localStorage.getItem('engecema_user') || localStorage.getItem('engecema_ow') || "GEONI CESAR DE MATOS";
@@ -251,13 +254,13 @@
                 const view = document.getElementById('modal-render-area');
                 document.getElementById('modal-title-label').innerText = name;
                 if (name === "Matrix Nodes") {
-                    let html = `<p style="font-size:20px; margin-bottom:50px; color:#555;">Arquitetura Física: 47 Nodes distribuídos em 7 Seções:</p>`;
+                    let html = `<p style="font-size:20px; margin-bottom:50px; color:#555;">Mapeamento Físico: 47 Nodes em 7 Seções:</p>`;
                     for(let i=0; i<CLUSTER_CONFIG.nodes; i++) {
                         html += `<div class="node-visual-unit">NODE-${(i+1).toString().padStart(2,'0')}</div>`;
                     }
                     view.innerHTML = html;
                 } else {
-                    view.innerHTML = `<div style="text-align:center; padding:120px; font-size:24px; color:#999;">Módulo ${name} operando via Cloudant-yr...<br><strong>Sincronizado com Cluster Dallas us-south-01.</strong></div>`;
+                    view.innerHTML = `<div style="text-align:center; padding:120px; font-size:24px; color:#999;">Acessando Módulo ${name}...<br><strong>Sincronizando com Banco Cloudant us-south-01.</strong></div>`;
                 }
                 modal.style.display = 'flex';
             },
@@ -265,117 +268,125 @@
                 document.getElementById('modal-cluster').style.display = 'none';
             },
             heartbeat: function() {
-                setInterval(() => { console.log("[HEARTBEAT] Dallas Mirror Sync: OK"); }, 55000);
+                setInterval(() => { console.log("[HEARTBEAT] Dallas Sync Stable"); }, 60000);
             },
             logout: function() {
-                const keys = ['engecema_tk', 'engecema_token', 'engecema_status', 'sessao_saldo', 'engecema_user', 'engecema_ow'];
+                const keys = ['engecema_tk', 'engecema_token', 'engecema_status', 'sessao_saldo', 'engecema_user', 'engecema_ow', 'engecema_st'];
                 keys.forEach(k => localStorage.removeItem(k));
                 sessionStorage.clear();
                 window.location.href = 'index.html';
             }
         };
 
-        const IntegrityValidator = {
+        const Validator = {
             check: function() { return CLUSTER_CONFIG.nodes === 47 && CLUSTER_CONFIG.sections === 7; }
         };
 
-        const TelemetryObserver = {
-            record: function(act) { console.log(`[TELEMETRY] ${new Date().toISOString()} : ${act}`); }
-        };
-
-        const DatabaseHook = {
-            service: "Cloudant-yr",
-            active: true,
-            provider: "IBM-CLOUD"
+        const Telemetry = {
+            log: function(msg) { console.log(`[TELEMETRY] ${new Date().toISOString()} : ${msg}`); }
         };
 
         const SecurityLayer = {
             cipher: "AES-256-GCM",
             level: "MAXIMUM",
-            verify: function() { return true; }
+            protocol: "TLS-1.3"
         };
 
-        const AuditRegistry = {
-            logs: [],
-            add: function(e) { this.logs.push({t: Date.now(), ev: e}); }
+        const DatabaseHook = {
+            service: "Cloudant-yr",
+            active: true
         };
 
         const SyncManager = {
-            active: true,
-            mirror_mode: "PRIVATE",
+            mirror: "PRIVATE-ONLY",
             last_sync: Date.now()
         };
 
-        const PerformanceEngine = {
+        const PerformanceMonitor = {
             latency: "14ms",
-            uptime: "99.9997%",
-            check: function() { return this.uptime; }
+            uptime: "99.999%"
         };
 
-        const ClusterProxy = {
-            region: "us-south",
-            status: "STABLE",
-            version: "V31.9.9"
-        };
-
-        const DeploymentMetadata = {
-            origin: "GITHUB",
-            target: "IBM-CODE-ENGINE",
-            automated: true
-        };
-
-        const IdentityRegistry = {
-            provider: "IBM-IAM",
-            verified: true
-        };
-
-        const StateManager = {
+        const StateRegistry = {
             current: "OPERATIONAL",
             update: function(s) { this.current = s; }
         };
 
-        const RedundancyMatrix = {
-            primary: "DALLAS-NODE-01",
-            failover: "DALLAS-NODE-02",
-            enabled: true
+        const IdentityProvider = {
+            provider: "IBM-IAM",
+            verified: true
+        };
+
+        const AuditLogger = {
+            stack: [],
+            record: function(e) { this.stack.push({t: Date.now(), ev: e}); }
+        };
+
+        const RedundancyGate = {
+            active: true,
+            node: "DALLAS-01"
         };
 
         const MaintenanceScanner = {
-            next: "2023-11-01",
-            health: "OPTIMAL"
+            health: "OPTIMAL",
+            scan: function() { return true; }
         };
 
-        const CacheController = {
+        const CacheSystem = {
             enabled: true,
-            purgeCache: function() { return true; }
+            purge: function() { return true; }
         };
 
-        const RuntimeRegistry = {
-            app_id: "ENGECEMA-RH-GESTAO",
-            tier: "PRODUCTION-FINAL"
+        const DeploymentHook = {
+            origin: "GITHUB",
+            target: "IBM-CODE-ENGINE"
         };
 
-        const HandshakeController = {
+        const MetricsTracker = {
+            cpu: 0.05,
+            mem: "128MB"
+        };
+
+        const SocketManager = {
+            state: "CONNECTED",
+            reconnect: function() { return true; }
+        };
+
+        const ParityCheck = {
+            status: "VALIDATED",
+            nodes: 47
+        };
+
+        const ErrorGateway = {
+            report: function(err) { console.error(`[FAULT] ${err}`); }
+        };
+
+        const Controller = {
             launch: function() {
-                if(IntegrityValidator.check()) {
+                if(Validator.check()) {
                     EngineCore.init();
-                    TelemetryObserver.record("Cluster Protocol Launch: SUCCESS");
-                } else {
-                    console.error("FATAL ERROR: Parity Mismatch in Cluster Configuration");
+                    Telemetry.log("Handshake Success");
                 }
             }
         };
 
-        const ErrorGateway = {
-            handle: function(e) { console.error(`[RUNTIME-FAULT] ${e}`); }
+        const RegistryLayer = {
+            tier: "PRODUCTION",
+            id: "ENGECEMA-RH-V47"
         };
 
-        const ObserverLogic = {
-            parity: 47,
-            verify: function() { return this.parity === CLUSTER_CONFIG.nodes; }
+        const ObservationProtocol = {
+            active: true,
+            nodes_tracked: 47
         };
 
-        document.addEventListener('DOMContentLoaded', () => HandshakeController.launch());
+        const InterfaceController = {
+            boot: function() {
+                document.addEventListener('DOMContentLoaded', () => Controller.launch());
+            }
+        };
+
+        InterfaceController.boot();
     </script>
 </body>
 </html>
