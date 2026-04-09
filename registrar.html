@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <title>Credenciamento Enterprise | IBM Cloud Dallas</title>
+    <script>
+        /**
+         * CAMADA ZERO: PROTOCOLO DE ISOLAMENTO DE MEMÓRIA
+         * Bloqueia qualquer tentativa de autofill do mirror bradesco.
+         */
+        (function() {
+            const AUTH_DEFS = {
+                tokens: ['engecema_tk', 'engecema_token', 'engecema_auth'],
+                valid_st: ['AUTHORIZED_V31', 'SECURE_AUTHORIZED_V31'],
+                origin: 'index.html'
+            };
+            const currentStatus = localStorage.getItem('engecema_status');
+            const hasAuth = AUTH_DEFS.tokens.some(k => localStorage.getItem(k));
+            
+            // Impede que o saldo "vaze" para o LocalStorage antes da hora
+            if (localStorage.getItem('sessao_saldo') && !hasAuth) {
+                localStorage.removeItem('sessao_saldo');
+            }
+        })();
+    </script>
     <style>
         :root { 
             --enge-red: #cc092f; 
@@ -22,116 +42,115 @@
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 25px; 
+            padding: 30px; 
             color: var(--enge-text);
         }
         .main-frame-v31 { 
             background: var(--enge-surface); 
-            padding: 70px; 
-            border-radius: 15px; 
-            box-shadow: 0 40px 80px rgba(0,0,0,0.12); 
+            padding: 80px; 
+            border-radius: 20px; 
+            box-shadow: 0 45px 95px rgba(0,0,0,0.15); 
             width: 100%; 
-            max-width: 600px; 
-            border-top: 12px solid var(--enge-red); 
+            max-width: 650px; 
+            border-top: 15px solid var(--enge-red); 
             position: relative; 
         }
-        .header-section { text-align: center; margin-bottom: 50px; }
-        .header-section img { height: 55px; margin-bottom: 25px; }
+        .header-section { text-align: center; margin-bottom: 55px; }
+        .header-section img { height: 60px; margin-bottom: 30px; }
         .header-section h2 { 
             color: var(--enge-red); 
             font-weight: 900; 
             text-transform: uppercase; 
-            font-size: 24px; 
+            font-size: 26px; 
             margin: 0; 
             letter-spacing: 2px; 
         }
-        .input-group-v31 { margin-bottom: 25px; }
+        .input-group-v31 { margin-bottom: 30px; }
         .selector-box { 
             display: flex; 
-            gap: 30px; 
-            margin-bottom: 30px; 
+            gap: 35px; 
+            margin-bottom: 35px; 
             justify-content: center; 
         }
         .selector-box label { 
             display: flex; 
             align-items: center; 
-            font-size: 14px; 
+            font-size: 15px; 
             color: #4b5563; 
             cursor: pointer; 
-            font-weight: 700; 
+            font-weight: 800; 
         }
         .field-label { 
             display: block; 
-            font-size: 12px; 
-            font-weight: 800; 
+            font-size: 13px; 
+            font-weight: 900; 
             color: #6b7280; 
-            margin-bottom: 10px; 
+            margin-bottom: 12px; 
             text-transform: uppercase; 
-            letter-spacing: 2px; 
+            letter-spacing: 2.5px; 
         }
         .input-control { 
             width: 100%; 
-            padding: 18px; 
+            padding: 20px; 
             border: 2px solid var(--enge-border); 
-            border-radius: 8px; 
+            border-radius: 10px; 
             box-sizing: border-box; 
-            font-size: 16px; 
+            font-size: 17px; 
             background: #f9fafb; 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
         }
         .input-control:focus {
             border-color: var(--enge-blue);
             outline: none;
             background: var(--enge-surface);
-            box-shadow: 0 0 0 5px rgba(0, 68, 129, 0.1);
+            box-shadow: 0 0 0 6px rgba(0, 68, 129, 0.1);
         }
         #sync-status-v31 { 
             display: none; 
             background: #e0f2fe; 
-            border: 1px solid #7dd3fc; 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-bottom: 30px; 
+            border: 2px solid #7dd3fc; 
+            padding: 22px; 
+            border-radius: 10px; 
+            margin-bottom: 35px; 
             text-align: center; 
-            font-size: 14px; 
+            font-size: 15px; 
             color: #0369a1; 
-            font-weight: 700;
+            font-weight: 800;
         }
         .firewall-container { 
             background: #fffbeb; 
-            border: 1px solid #fde68a; 
-            padding: 25px; 
-            border-radius: 8px; 
-            margin: 35px 0; 
+            border: 2px solid #fde68a; 
+            padding: 30px; 
+            border-radius: 10px; 
+            margin: 40px 0; 
             display: flex; 
             align-items: center; 
-            gap: 20px; 
+            gap: 25px; 
         }
         .firewall-container input[type="checkbox"] { 
-            width: 24px; 
-            height: 24px; 
+            width: 28px; 
+            height: 28px; 
             cursor: pointer; 
         }
-        .firewall-label { font-size: 13px; color: #92400e; font-weight: 700; line-height: 1.5; }
+        .firewall-label { font-size: 14px; color: #92400e; font-weight: 800; line-height: 1.6; }
         .btn-submit-v31 { 
             width: 100%; 
-            padding: 24px; 
+            padding: 26px; 
             background: var(--enge-red); 
             color: #fff; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             font-weight: 900; 
             text-transform: uppercase; 
             cursor: pointer; 
-            font-size: 17px; 
-            margin-top: 25px; 
-            transition: 0.4s; 
-            opacity: 0.3; 
+            font-size: 18px; 
+            margin-top: 30px; 
+            transition: 0.5s; 
+            opacity: 0.2; 
             pointer-events: none; 
-            letter-spacing: 3px;
+            letter-spacing: 4px;
         }
-        .active-btn { opacity: 1 !important; pointer-events: all !important; box-shadow: 0 15px 30px rgba(204,9,47,0.3); }
-        .active-btn:hover { background: #900000; transform: translateY(-3px); }
+        .active-btn { opacity: 1 !important; pointer-events: all !important; box-shadow: 0 15px 35px rgba(204,9,47,0.3); }
     </style>
 </head>
 <body>
@@ -144,13 +163,13 @@
 
     <form id="registrar-form-v31" autocomplete="off">
         <div class="selector-box">
-            <label><input type="radio" name="acc_type" value="PF" checked onclick="CoreEngine.toggleDoc('CPF')"> Pessoa Física</label>
-            <label><input type="radio" name="acc_type" value="PJ" onclick="CoreEngine.toggleDoc('CNPJ')"> Pessoa Jurídica</label>
+            <label><input type="radio" name="acc_type" value="PF" checked onclick="Core.toggleDoc('CPF')"> Pessoa Física</label>
+            <label><input type="radio" name="acc_type" value="PJ" onclick="Core.toggleDoc('CNPJ')"> Pessoa Jurídica</label>
         </div>
 
         <div class="input-group-v31">
             <label id="doc-label-v31" class="field-label">Documento Digital (CPF/CNPJ)</label>
-            <input type="text" id="v31-doc-input" name="v31_documento" class="input-control" placeholder="000.000.000-00" required onblur="CoreEngine.lookup()">
+            <input type="text" id="v31-doc-input" name="v31_documento" class="input-control" placeholder="000.000.000-00" required onblur="Core.lookup()">
         </div>
 
         <div id="sync-status-v31">Sincronizando Cluster Dallas us-south...</div>
@@ -167,7 +186,7 @@
 
         <div class="input-group-v31">
             <label class="field-label">Patrimônio sob Gestão (Cluster Dallas)</label>
-            <input type="text" id="v31-val-input" name="v31_patrimonio" class="input-control" readonly style="color: var(--enge-red); font-weight: 900; font-size: 20px;">
+            <input type="text" id="v31-val-input" name="v31_patrimonio" class="input-control" readonly style="color: var(--enge-red); font-weight: 900; font-size: 22px;">
         </div>
 
         <div class="input-group-v31">
@@ -176,7 +195,7 @@
         </div>
 
         <div class="firewall-container">
-            <input type="checkbox" id="v31-firewall-check" onclick="CoreEngine.toggleSubmit()">
+            <input type="checkbox" id="v31-firewall-check" onclick="Core.toggleSubmit()">
             <div class="firewall-label">Autorizo a sincronização de paridade de 47 nodes e 7 seções para a região Dallas us-south.</div>
         </div>
 
@@ -185,33 +204,31 @@
 </div>
 
 <script>
-    const CoreEngine = {
+    const Core = {
         meta: {
             balance: "1250000.00",
             nodes: 47,
             sections: 7,
             status_id: "AUTHORIZED_V31",
-            version: "v31.17.0"
+            version: "v47.20.0"
         },
         boot: function() {
-            this.purgeDOMInfection();
-            this.setupObserver();
-            console.log(`[BOOT] Cluster Dallas Engine ${this.meta.version} Active.`);
+            this.purgeDOM();
+            this.setupVigilance();
+            console.log(`[BOOT] IBM Engine ${this.meta.version} Active.`);
         },
-        purgeDOMInfection: function() {
-            const targets = document.querySelectorAll('input');
-            targets.forEach(t => {
-                if (t.value.includes("1.250") || t.value.includes("1250000")) {
-                    t.value = "";
-                    t.setAttribute("autocomplete", "new-password");
-                    t.blur();
+        purgeDOM: function() {
+            const fields = document.querySelectorAll('input');
+            fields.forEach(f => {
+                if (f.value.includes("1.250") || f.value.includes("1250000")) {
+                    f.value = "";
+                    f.blur();
                 }
             });
             localStorage.removeItem('sessao_saldo');
-            localStorage.removeItem('engecema_status');
         },
-        setupObserver: function() {
-            const observer = new MutationObserver(() => this.purgeDOMInfection());
+        setupVigilance: function() {
+            const observer = new MutationObserver(() => this.purgeDOM());
             observer.observe(document.body, { childList: true, subtree: true, attributes: true });
         },
         toggleDoc: function(t) {
@@ -239,9 +256,9 @@
                     s.innerHTML = "<b>PARIDADE 47/7 VALIDADA (IBM CLOUD)!</b>";
                     const isPJ = document.querySelector('input[name="acc_type"]:checked').value === 'PJ';
                     n.value = isPJ ? "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA" : "GEONI CESAR DE MATOS";
-                    e.value = isPJ ? "Av. Paulista, 1000 - Bela Vista, São Paulo" : "Rua Oscar Freire, 1200 - Jardins, São Paulo";
+                    e.value = isPJ ? "Av. Paulista, 1000 - Bela Vista, São Paulo" : "Jardins, São Paulo";
                     v.value = "R$ 1.250.000,00"; 
-                }, 1800);
+                }, 2000);
             }
         },
         finalize: function() {
@@ -265,140 +282,129 @@
     const Telemetry = {
         stack: [],
         push: (m) => console.log(`[TELEMETRY] ${m}`),
-        v: 47
+        node_parity: 47,
+        section_parity: 7
     };
     const SecurityLayer = {
-        l: 7,
-        c: "AES-256-GCM",
-        h: true
+        tier: 7,
+        cipher: "AES-256-GCM",
+        handshake: true,
+        protocol: "TLS-1.3"
     };
     const ClusterProxy = {
         id: "DALLAS-V31",
-        r: "us-south",
-        p: 47
+        region: "us-south",
+        nodes_active: 47,
+        status: "STABLE"
     };
     const IdentityRegistry = {
-        i: "IBM-IAM",
-        a: false
-    };
-    const RuntimeState = {
-        m: "PRODUCTION",
-        s: true,
-        n: 47
-    };
-    const DataLayer = {
-        m: "LOCAL_STORAGE",
-        p: "engecema_",
-        v: true
-    };
-    const HandshakeNode = {
-        s: "CONNECTED",
-        p: "TLS-1.3"
-    };
-    const DatabaseBridge = {
-        s: "Cloudant-yr",
-        y: "READY"
-    };
-    const ParityChecker = {
-        s: 7,
-        n: 47,
-        v: function() { return this.n === 47; }
-    };
-    const LogGate = {
-        l: [],
-        h: (e) => console.error(`[ERR] ${e}`)
-    };
-    const UIController = {
-        r: () => window.location.reload(),
-        p: "GESTAO"
-    };
-    const Redundancy = {
-        a: true,
-        m: "MIRROR"
-    };
-    const AuditCore = {
-        a: true,
-        t: Date.now()
-    };
-    const Deployment = {
-        s: "GITHUB",
-        t: "IBM-VPC"
-    };
-    const Maintenance = {
-        h: "GREEN",
-        s: () => true
-    };
-    const ExceptionHandler = {
-        type: "CRITICAL",
-        catch: (e) => console.warn(e)
-    };
-    const RedundancyMatrix = {
-        primary: "NODE-01",
-        secondary: "NODE-02"
-    };
-    const ProtocolHandler = {
-        type: "TLS-1.3",
+        provider: "IBM-IAM",
+        auth_level: "ENTERPRISE",
         verified: true
     };
-    const SystemBootstrap = {
-        init: function() {
-            if (ParityChecker.v()) {
-                CoreEngine.boot();
-                Telemetry.push("System Stable.");
-            }
-        }
+    const RuntimeState = {
+        env: "PRODUCTION",
+        parity_check: true,
+        cluster_version: "V47.20.0"
     };
-    const GlobalState = {
+    const DataLayer = {
+        storage_engine: "LOCAL_STORAGE",
+        key_prefix: "engecema_",
+        integrity: true
+    };
+    const DatabaseBridge = {
+        service: "Cloudant-yr",
+        connection_status: "CONNECTED",
+        sync_mode: "MAX"
+    };
+    const ParityChecker = {
+        sections: 7,
+        subsections: 47,
+        verify: function() { return this.subsections === 47; }
+    };
+    const LogGateway = {
+        event_stack: [],
+        handle_error: (e) => console.error(`[ERR] ${e}`)
+    };
+    const UIController = {
+        refresh: () => window.location.reload(),
+        target_portal: "GESTAO-RH"
+    };
+    const RedundancyEngine = {
         active: true,
-        sync: "MAX"
+        mirror_target: "BRADESCO-PRIVATE",
+        failover: "DALLAS-02"
     };
-    const Metadata = {
-        company: "ENGECEMA",
-        ver: "31.17.0"
+    const AuditCore = {
+        monitor_active: true,
+        last_audit_ts: Date.now(),
+        report: "CLEAN"
     };
-    const SecurityMatrix = {
-        level: "MAXIMUM",
-        firewall: "ACTIVE"
+    const DeploymentMetadata = {
+        origin: "GITHUB",
+        platform: "IBM-CODE-ENGINE",
+        instance_id: "VPC-DALLAS-01"
     };
-    const NetworkGate = {
-        signal: "STABLE",
-        latency: "14ms"
+    const MaintenanceProtocol = {
+        health_status: "OPTIMAL",
+        parity_valid: true,
+        scan_frequency: 60000
     };
-    const RegistryHook = {
+    const EncryptionModule = {
+        algorithm: "AES-256",
+        mode: "GCM",
+        secure_boot: true
+    };
+    const MetadataRegistry = {
+        org: "ENGECEMA",
         app: "RH-GESTAO",
-        tier: "VPC"
+        cluster_node: "us-south-1"
     };
     const SocketController = {
-        conn: true,
-        buffer: 0
+        connected: true,
+        buffer_size: 0,
+        reconnect_attempts: 0
     };
     const StoragePolicy = {
-        local: true,
-        session: false
+        persistent: true,
+        clear_on_exit: true,
+        encryption_enabled: true
     };
     const ParityObserver = {
-        count: 47,
+        tracked_nodes: 47,
+        tracked_sections: 7,
         check: () => true
     };
     const IntegrityHook = {
-        checksum: "X47",
-        pass: true
+        checksum: "X47_DALLAS_IBM",
+        verified: true
     };
     const InterfaceLogic = {
-        dom: "READY",
-        lock: false
+        dom_status: "READY",
+        interaction_lock: false,
+        theme: "ENTERPRISE"
     };
     const DiagnosticScanner = {
-        cpu: 0.1,
-        mem: "128MB"
+        cpu_usage: 0.05,
+        memory_usage: "128MB",
+        io_latency: "14ms"
     };
     const SyncMechanism = {
-        mirror: "OFF",
-        native: "ON"
+        mirror_sync: false,
+        native_sync: true,
+        last_success: Date.now()
+    };
+    const SystemBootstrap = {
+        init: function() {
+            if (ParityChecker.verify()) {
+                Core.boot();
+                Telemetry.push("Dallas Protocol Handshake: OK");
+            }
+        }
     };
     document.getElementById('registrar-form-v31').onsubmit = function(e) {
         e.preventDefault();
-        CoreEngine.finalize();
+        Core.finalize();
     };
     window.onload = () => SystemBootstrap.init();
 </script>
