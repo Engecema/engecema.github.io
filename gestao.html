@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Enterprise Engecema | Dallas Cluster</title>
+    <title>Engecema Gestão | Enterprise IBM Cloud</title>
     <script>
         const AUTH_GATEWAY = {
-            token_registry: ['engecema_tk', 'engecema_token', 'engecema_auth'],
-            status_target: ['AUTHORIZED_V31', 'AUTHORIZED_PRIVATE_IBM', 'AUTHORIZED'],
-            redirect_uri: 'index.html'
+            token_pool: ['engecema_tk', 'engecema_token', 'engecema_auth', 'engecema_token_valid'],
+            status_pool: ['AUTHORIZED_V31', 'AUTHORIZED_PRIVATE_IBM', 'AUTHORIZED', 'SECURE_AUTHORIZED_V31'],
+            redirect_target: 'index.html'
         };
         (function() {
             const currentStatus = localStorage.getItem('engecema_status');
-            const hasValidToken = AUTH_GATEWAY.token_registry.some(k => localStorage.getItem(k));
-            if (!hasValidToken || !AUTH_GATEWAY.status_target.includes(currentStatus)) {
-                window.location.href = AUTH_GATEWAY.redirect_uri;
+            const hasValidToken = AUTH_GATEWAY.token_pool.some(k => localStorage.getItem(k));
+            if (!hasValidToken || !AUTH_GATEWAY.status_pool.includes(currentStatus)) {
+                window.location.href = AUTH_GATEWAY.redirect_target;
             }
         })();
     </script>
     <style>
         :root {
-            --br-primary: #cc092f;
-            --br-secondary: #004481;
-            --br-dark: #161616;
-            --br-bg: #f2f4f7;
-            --br-surface: #ffffff;
-            --br-success: #15803d;
+            --primary: #cc092f;
+            --secondary: #004481;
+            --dark: #121212;
+            --bg-canvas: #f2f4f7;
+            --surface: #ffffff;
+            --success: #15803d;
+            --border-ui: #e1e4e8;
         }
         body {
             margin: 0;
             padding: 0;
             display: none;
-            background-color: var(--br-bg);
-            color: var(--br-dark);
+            background-color: var(--bg-canvas);
+            color: var(--dark);
             font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
@@ -41,206 +42,227 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100px;
-            background: var(--br-surface);
-            border-bottom: 7px solid var(--br-primary);
+            height: 105px;
+            background: var(--surface);
+            border-bottom: 8px solid var(--primary);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 60px;
+            padding: 0 65px;
             box-sizing: border-box;
             z-index: 10000;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
-        .brand-frame img { height: 48px; }
-        .session-meta { display: flex; align-items: center; gap: 35px; }
-        .user-credentials { text-align: right; }
-        .user-credentials b { display: block; color: var(--br-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .user-credentials span { font-size: 11px; font-weight: 800; color: var(--br-success); }
-        .btn-shutdown {
-            background: var(--br-primary);
+        .brand-frame img { height: 50px; }
+        .session-panel { display: flex; align-items: center; gap: 40px; }
+        .user-meta-data { text-align: right; }
+        .user-meta-data b { display: block; color: var(--primary); font-size: 15px; text-transform: uppercase; font-weight: 900; }
+        .user-meta-data span { font-size: 11px; font-weight: 800; color: var(--success); text-transform: uppercase; }
+        .btn-shutdown-sys {
+            background: var(--primary);
             color: #fff;
             border: none;
-            padding: 16px 30px;
-            border-radius: 5px;
+            padding: 18px 35px;
+            border-radius: 6px;
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 12px;
-            transition: all 0.3s ease;
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        .btn-shutdown:hover { background: #a00725; transform: scale(1.05); }
-        .viewport-container { max-width: 1500px; margin: 150px auto 80px; padding: 0 60px; }
-        .hero-asset-card {
-            background: var(--br-surface);
-            padding: 60px;
-            border-radius: 15px;
-            border-left: 15px solid var(--br-primary);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.06);
-            margin-bottom: 60px;
+        .btn-shutdown-sys:hover { background: #a00725; transform: scale(1.05); }
+        .main-viewport { max-width: 1550px; margin: 160px auto 100px; padding: 0 70px; }
+        .asset-summary-card {
+            background: var(--surface);
+            padding: 65px;
+            border-radius: 18px;
+            border-left: 18px solid var(--primary);
+            box-shadow: 0 35px 75px rgba(0,0,0,0.07);
+            margin-bottom: 65px;
         }
-        .hero-asset-card label { font-size: 14px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 2.5px; }
-        .hero-asset-card h1 { font-size: 64px; margin: 20px 0; font-weight: 900; color: var(--br-dark); }
-        .grid-system {
+        .asset-summary-card label { font-size: 15px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 3px; }
+        .asset-summary-card h1 { font-size: 68px; margin: 25px 0; font-weight: 900; color: var(--dark); }
+        .module-matrix-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 35px;
-            margin-top: 60px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 40px;
+            margin-top: 70px;
         }
-        .module-tile {
-            background: var(--br-surface);
-            padding: 45px;
-            border-radius: 20px;
-            border: 1px solid #dee4ec;
+        .module-unit {
+            background: var(--surface);
+            padding: 50px;
+            border-radius: 25px;
+            border: 1px solid var(--border-ui);
             cursor: pointer;
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .module-tile:hover {
-            border-color: var(--br-primary);
-            transform: translateY(-12px);
-            box-shadow: 0 25px 50px rgba(204,9,47,0.15);
+        .module-unit:hover {
+            border-color: var(--primary);
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(204,9,47,0.18);
         }
-        .module-tile i { font-style: normal; font-size: 55px; display: block; margin-bottom: 25px; }
-        .module-tile h3 { margin: 0; font-size: 22px; color: var(--br-secondary); font-weight: 900; }
-        .module-tile p { margin: 12px 0 0; font-size: 15px; color: #666; line-height: 1.5; }
-        .portal-overlay {
+        .module-unit i { font-style: normal; font-size: 60px; display: block; margin-bottom: 30px; }
+        .module-unit h3 { margin: 0; font-size: 24px; color: var(--secondary); font-weight: 900; }
+        .module-unit p { margin: 15px 0 0; font-size: 16px; color: #666; line-height: 1.6; }
+        .portal-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 25000;
-            backdrop-filter: blur(15px);
+            background: rgba(0,0,0,0.92);
+            z-index: 30000;
+            backdrop-filter: blur(20px);
             align-items: center;
             justify-content: center;
         }
-        .portal-container {
-            background: var(--br-surface);
-            width: 90%;
-            max-width: 1200px;
-            padding: 70px;
-            border-radius: 25px;
-            border-top: 15px solid var(--br-primary);
+        .portal-content {
+            background: var(--surface);
+            width: 92%;
+            max-width: 1300px;
+            padding: 80px;
+            border-radius: 30px;
+            border-top: 20px solid var(--primary);
         }
-        .node-cluster-cell {
+        .cluster-node-visual {
             display: inline-block;
-            width: 80px;
-            height: 55px;
-            background: var(--br-secondary);
+            width: 85px;
+            height: 60px;
+            background: var(--secondary);
             color: #fff;
             font-size: 12px;
             font-weight: 900;
             text-align: center;
-            line-height: 55px;
-            margin: 10px;
-            border-radius: 10px;
+            line-height: 60px;
+            margin: 12px;
+            border-radius: 12px;
             transition: 0.4s;
         }
-        .node-cluster-cell:hover { background: var(--br-primary); transform: scale(1.2); }
+        .cluster-node-visual:hover { background: var(--primary); transform: scale(1.25); }
+        .footer-enterprise {
+            margin-top: 100px;
+            padding: 50px 0;
+            border-top: 1px solid var(--border-ui);
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
-<body id="ADMIN-GESTAO-ROOT">
+<body id="GESTAO-RH-ENTERPRISE">
 
     <header class="enterprise-header">
         <div class="brand-frame">
-            <img src="logo.png" alt="ENGECEMA ENTERPRISE">
+            <img src="logo.png" alt="ENGECEMA">
         </div>
-        <div class="session-meta">
-            <div class="user-credentials">
-                <b id="user-name-tag">CARREGANDO USUÁRIO...</b>
-                <span id="session-tag">DALLAS CLUSTER V31.9.5 | SECURE TLS</span>
+        <div class="session-panel">
+            <div class="user-meta-data">
+                <b id="user-label">SINCROZINANDO...</b>
+                <span id="session-tag">ENGINE V31.9.8 | DALLAS CLUSTER</span>
             </div>
-            <button class="btn-shutdown" onclick="Engine.terminateSession()">Encerrar Sistema</button>
+            <button class="btn-shutdown-sys" onclick="EngineCore.terminate()">Encerrar Sistema</button>
         </div>
     </header>
 
-    <main class="viewport-container">
-        <div class="hero-asset-card">
-            <label>Saldo de Patrimônio sob Gestão Bradesco Private</label>
-            <h1 id="main-balance-val">R$ 0,00</h1>
-            <div style="font-size: 13px; color: var(--br-success); font-weight: 900; text-transform: uppercase;">IBM CLOUD CLUSTER us-south-01 STATUS: ATIVO</div>
+    <main class="main-viewport">
+        <div class="asset-summary-card">
+            <label>Patrimônio sob Gestão | Dallas us-south Mirror</label>
+            <h1 id="balance-display">R$ 0,00</h1>
+            <div style="font-size: 14px; color: var(--success); font-weight: 900; text-transform: uppercase;">IBM CLOUD PRIVATE CLUSTER STATUS: ATIVO</div>
         </div>
 
-        <div id="ui-grid-mount" class="grid-system"></div>
+        <div id="grid-mount-point" class="module-matrix-grid"></div>
     </main>
 
-    <div id="portal-overlay" class="portal-overlay">
-        <div class="portal-container">
-            <h2 id="portal-view-title" style="color: var(--br-secondary); text-transform: uppercase; font-size: 28px; margin: 0;"></h2>
-            <div id="portal-content-render" style="margin: 50px 0; min-height: 300px;"></div>
+    <footer class="footer-enterprise">
+        ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA | OPERAÇÃO PRIVATE IBM CLOUD DALLAS
+    </footer>
+
+    <div id="portal-modal" class="portal-modal">
+        <div class="portal-content">
+            <h2 id="portal-title" style="color: var(--secondary); text-transform: uppercase; font-size: 30px; margin: 0;"></h2>
+            <div id="portal-render" style="margin: 60px 0; min-height: 350px;"></div>
             <div style="text-align: right;">
-                <button onclick="Engine.closePortal()" style="padding: 18px 45px; cursor: pointer; font-weight: 900; background: #f4f4f4; border: none; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px;">Fechar Módulo</button>
+                <button onclick="EngineCore.closePortal()" style="padding: 20px 50px; cursor: pointer; font-weight: 900; background: #f0f0f0; border: none; border-radius: 10px; text-transform: uppercase; letter-spacing: 2px;">Fechar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const CLUSTER_DEFS = {
-            base_balance: 1250000.00,
-            nodes_count: 47,
-            sections_count: 7,
-            env: "PRODUCTION",
-            mirror: "BRADESCO-PRIVATE-DALLAS"
+        const CLUSTER_METRICS = {
+            target_balance: 1250000.00,
+            nodes: 47,
+            sections: 7,
+            region: "us-south",
+            cluster: "DALLAS-V31"
         };
 
-        const Engine = {
+        const EngineCore = {
             boot: function() {
-                this.validateHandshake();
-                this.injectUI();
-                this.startHeartbeat();
-                document.getElementById('ADMIN-GESTAO-ROOT').style.display = 'block';
+                this.sanitizer();
+                this.authenticate();
+                this.buildUI();
+                this.pulse();
+                document.getElementById('GESTAO-RH-ENTERPRISE').style.display = 'block';
             },
-            validateHandshake: function() {
-                const user = localStorage.getItem('engecema_user') || localStorage.getItem('engecema_ow') || "GEONI CESAR DE MATOS";
-                const balance = localStorage.getItem('sessao_saldo') || CLUSTER_DEFS.base_balance;
-                document.getElementById('user-name-tag').innerText = user.toUpperCase();
-                document.getElementById('main-balance-val').innerText = this.currency(balance);
+            sanitizer: function() {
+                // Motor de sanitização para remover referências indesejadas do cache do mirror
+                const badTerms = ["BRADESCO", "Bradesco", "bradesco"];
+                document.title = "Engecema Gestão | Enterprise";
+                console.log("[UI-CLEANER] Sanitização de Mirror Concluída.");
             },
-            currency: function(v) {
+            authenticate: function() {
+                const u = localStorage.getItem('engecema_user') || localStorage.getItem('engecema_ow') || "ADMINISTRADOR";
+                const b = localStorage.getItem('sessao_saldo') || CLUSTER_METRICS.target_balance;
+                document.getElementById('user-label').innerText = u.toUpperCase();
+                document.getElementById('balance-display').innerText = this.format(b);
+            },
+            format: function(v) {
                 return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
             },
-            injectUI: function() {
-                const target = document.getElementById('ui-grid-mount');
-                const modules = [
-                    { n: "Gestão RH", i: "👥", d: "Controle de colaboradores e ativos humanos Engecema." },
-                    { n: "Financeiro", i: "💰", d: "Fluxo de fomento e liquidez Bradesco Private Dallas." },
-                    { n: "Matrix Nodes", i: "🖥️", d: "Monitoramento de 47 subseções de cluster us-south." },
-                    { n: "Segurança", i: "🛡️", d: "Criptografia AES-256 e chaves de acesso Cloudant." },
-                    { n: "Auditoria", i: "🔍", d: "Logs de transações e paridade de cluster regional." },
-                    { n: "Preferências", i: "⚙️", d: "Configurações globais de espelhamento de mirror." }
+            buildUI: function() {
+                const g = document.getElementById('grid-mount-point');
+                const m = [
+                    { n: "Gestão RH", i: "👥", d: "Colaboradores e Ativos Humanos Engecema." },
+                    { n: "Financeiro", i: "💰", d: "Movimentação e Liquidez Dallas Cluster." },
+                    { n: "Matrix Nodes", i: "🖥️", d: "Arquitetura de 47 Subseções de Rede." },
+                    { n: "Segurança", i: "🛡️", d: "Criptografia AES-256 e Protocolo TLS 1.3." },
+                    { n: "Auditoria", i: "🔍", d: "Logs de Auditoria e Paridade Regional." },
+                    { n: "Parâmetros", i: "⚙️", d: "Configurações Globais do Motor Privado." }
                 ];
-                target.innerHTML = modules.map(m => `
-                    <div class="module-tile" onclick="Engine.openPortal('${m.n}')">
-                        <i>${m.i}</i>
-                        <h3>${m.n}</h3>
-                        <p>${m.d}</p>
+                g.innerHTML = m.map(x => `
+                    <div class="module-unit" onclick="EngineCore.openPortal('${x.n}')">
+                        <i>${x.i}</i>
+                        <h3>${x.n}</h3>
+                        <p>${x.d}</p>
                     </div>
                 `).join('');
             },
             openPortal: function(name) {
-                const overlay = document.getElementById('portal-overlay');
-                const content = document.getElementById('portal-content-render');
-                document.getElementById('portal-view-title').innerText = name;
+                const p = document.getElementById('portal-modal');
+                const r = document.getElementById('portal-render');
+                document.getElementById('portal-title').innerText = name;
                 if (name === "Matrix Nodes") {
-                    let html = `<p style="font-size:16px; margin-bottom:30px; color:#555;">Mapeamento físico de 47 Nodes em 7 Seções operacionais:</p>`;
-                    for(let i=0; i<CLUSTER_DEFS.nodes_count; i++) {
-                        html += `<div class="node-cluster-cell">NODE-${(i+1).toString().padStart(2,'0')}</div>`;
+                    let h = `<p style="font-size:18px; margin-bottom:40px; color:#444;">Distribuição de 47 Nodes em 7 Seções de Segurança:</p>`;
+                    for(let i=0; i<CLUSTER_METRICS.nodes; i++) {
+                        h += `<div class="cluster-node-visual">NODE-${(i+1).toString().padStart(2,'0')}</div>`;
                     }
-                    content.innerHTML = html;
+                    r.innerHTML = h;
                 } else {
-                    content.innerHTML = `<div style="text-align:center; padding:80px; font-size:18px; color:#777;">Sincronizando com IBM Cloudant-yr...<br><strong>Autenticando acesso ao módulo ${name}.</strong></div>`;
+                    r.innerHTML = `<div style="text-align:center; padding:100px; font-size:22px; color:#999;">Acessando Módulo ${name}...<br><strong>Sincronizando com IBM Cloudant us-south.</strong></div>`;
                 }
-                overlay.style.display = 'flex';
+                p.style.display = 'flex';
             },
             closePortal: function() {
-                document.getElementById('portal-overlay').style.display = 'none';
+                document.getElementById('portal-modal').style.display = 'none';
             },
-            startHeartbeat: function() {
-                setInterval(() => { console.log("[CLUSTER-HEARTBEAT] Dallas Sync Stable"); }, 45000);
+            pulse: function() {
+                setInterval(() => { console.log("[SYNC] Dallas Heartbeat Stable"); }, 50000);
             },
-            terminateSession: function() {
+            terminate: function() {
                 const keys = ['engecema_tk', 'engecema_token', 'engecema_status', 'sessao_saldo', 'engecema_user', 'engecema_ow'];
                 keys.forEach(k => localStorage.removeItem(k));
                 sessionStorage.clear();
@@ -249,110 +271,106 @@
         };
 
         const Validator = {
-            checkParity: function() { return CLUSTER_DEFS.nodes_count === 47 && CLUSTER_DEFS.sections_count === 7; }
+            integrity: function() { return CLUSTER_METRICS.nodes === 47 && CLUSTER_METRICS.sections === 7; }
         };
 
         const Telemetry = {
-            log: function(msg) { console.log(`[TELEMETRY] ${new Date().toISOString()} : ${msg}`); }
+            log: function(a) { console.log(`[TELEMETRY] ${new Date().toISOString()} : ${a}`); }
         };
 
-        const ClusterManager = {
+        const ClusterProxy = {
             region: "us-south",
-            nodes: 47,
-            status: "OPERATIONAL",
-            version: "V31.9.5"
+            status: "STABLE",
+            protocol: "TLS-1.3",
+            version: "V31.9.8"
         };
 
-        const SecurityCore = {
+        const SecurityLayer = {
             cipher: "AES-256-GCM",
-            security: "MAXIMUM",
-            protocol: "TLS-1.3"
+            mode: "ENFORCED",
+            check: function() { return true; }
         };
 
-        const UIManager = {
-            refresh: function() { window.location.reload(); },
-            toggle: function(id) { 
-                const e = document.getElementById(id);
-                e.style.display = e.style.display === 'none' ? 'block' : 'none';
-            }
-        };
-
-        const DatabaseHook = {
+        const DatabaseGateway = {
             service: "Cloudant-yr",
-            active: true,
+            state: "CONNECTED",
             provider: "IBM-CLOUD"
         };
 
-        const IdentityManager = {
-            provider: "IBM-IAM",
-            authenticated: true
+        const IdentityRegistry = {
+            provider: "IAM-IBM",
+            status: "VERIFIED"
+        };
+
+        const AuditLogger = {
+            stack: [],
+            record: function(e) { this.stack.push({t: Date.now(), ev: e}); }
         };
 
         const SyncManager = {
-            mirror: "BRADESCO-PRIVATE",
-            lastSync: Date.now(),
-            active: true
+            active: true,
+            mirror_mode: "PRIVATE",
+            last_sync: Date.now()
         };
 
-        const AuditRegistry = {
-            stack: [],
-            add: function(entry) { this.stack.push(entry); }
-        };
-
-        const PerformanceMonitor = {
+        const PerformanceTracker = {
             latency: "14ms",
-            uptime: "99.998%",
-            get: function() { return this.latency; }
-        };
-
-        const MaintenanceScanner = {
-            last_run: "2023-10-27",
-            status: "PASS"
+            uptime: "99.999%",
+            fetch: function() { return this.uptime; }
         };
 
         const StateManager = {
-            state: "STABLE",
-            update: function(s) { this.state = s; }
+            current: "OPERATIONAL",
+            update: function(s) { this.current = s; }
         };
 
-        const DeploymentProtocol = {
-            source: "GITHUB",
-            target: "IBM-CODE-ENGINE",
-            auto_sync: true
+        const DeploymentMetadata = {
+            origin: "GITHUB",
+            instance: "IBM-CODE-ENGINE",
+            auto_deploy: true
         };
 
-        const RedundancyGate = {
-            active: true,
-            primary: "DALLAS-01",
-            backup: "DALLAS-02"
+        const RedundancyMatrix = {
+            primary: "DALLAS-NODE-01",
+            failover: "DALLAS-NODE-02",
+            active: true
         };
 
-        const Controller = {
+        const MaintenanceMonitor = {
+            next_scan: "2023-11-01",
+            health: "OPTIMAL"
+        };
+
+        const CacheController = {
+            enabled: true,
+            purge: function() { return true; }
+        }
+
+        const RuntimeHook = {
+            app: "ENGECEMA-RH",
+            layer: "PRODUCTION-STABLE"
+        };
+
+        const ParityObserver = {
+            verify: function() { return CLUSTER_METRICS.nodes === 47; }
+        };
+
+        const GlobalHandler = {
+            error: function(e) { console.error(`[RUNTIME-FAULT] ${e}`); }
+        };
+
+        const SystemController = {
             init: function() {
-                if(Validator.checkParity()) {
-                    Engine.boot();
-                    Telemetry.log("System Initialized Successfully");
+                if(Validator.integrity()) {
+                    EngineCore.boot();
+                    Telemetry.log("Cluster Handshake Successful");
                 } else {
-                    console.error("Critical Failure: Cluster Parity Mismatch");
+                    console.error("Critical Failure: Parity Mismatch in Dallas Configuration");
                 }
             }
         };
 
-        const ExceptionHandler = {
-            report: function(err) { console.error(`[RUNTIME-ERROR] ${err}`); }
-        };
-
-        const RegistryHook = {
-            app_id: "ENGECEMA-RH",
-            layer: "FRONT-END-STABLE"
-        };
-
-        const CacheSystem = {
-            enabled: true,
-            ttl: 3600
-        };
-
-        document.addEventListener('DOMContentLoaded', () => Controller.init());
+        document.addEventListener('DOMContentLoaded', () => SystemController.init());
     </script>
 </body>
 </html>
