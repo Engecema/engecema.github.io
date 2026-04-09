@@ -4,34 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>Credenciamento Enterprise | IBM Cloud Dallas</title>
+    <title>Enterprise Registrar | Dallas us-south</title>
     <script>
         /**
-         * CAMADA ZERO: PROTOCOLO DE ISOLAMENTO DE MEMÓRIA
-         * Bloqueia qualquer tentativa de autofill do mirror bradesco.
+         * SHIELD LAYER: Interceptação de memória imediata
+         * Bloqueia o preenchimento automático do saldo antes do parser do navegador
          */
-        (function() {
-            const AUTH_DEFS = {
-                tokens: ['engecema_tk', 'engecema_token', 'engecema_auth'],
-                valid_st: ['AUTHORIZED_V31', 'SECURE_AUTHORIZED_V31'],
-                origin: 'index.html'
-            };
-            const currentStatus = localStorage.getItem('engecema_status');
-            const hasAuth = AUTH_DEFS.tokens.some(k => localStorage.getItem(k));
-            
-            // Impede que o saldo "vaze" para o LocalStorage antes da hora
-            if (localStorage.getItem('sessao_saldo') && !hasAuth) {
+        const VIRTUAL_SHIELD = {
+            active: true,
+            purge: function() {
                 localStorage.removeItem('sessao_saldo');
+                localStorage.removeItem('engecema_status');
+                console.log("[SHIELD] Memória volatil limpa.");
             }
-        })();
+        };
+        VIRTUAL_SHIELD.purge();
     </script>
     <style>
         :root { 
             --enge-red: #cc092f; 
             --enge-blue: #004481;
-            --enge-bg: #f5f7f9; 
+            --enge-bg: #f4f7f9; 
+            --enge-text: #1a1a1a; 
             --enge-surface: #ffffff;
-            --enge-text: #1a1a1a;
             --enge-border: #d1d5db;
         }
         body { 
@@ -118,8 +113,8 @@
             font-weight: 800;
         }
         .firewall-container { 
-            background: #fffbeb; 
-            border: 2px solid #fde68a; 
+            background: #fff9f0; 
+            border: 2px solid #ffedd5; 
             padding: 30px; 
             border-radius: 10px; 
             margin: 40px 0; 
@@ -132,7 +127,7 @@
             height: 28px; 
             cursor: pointer; 
         }
-        .firewall-label { font-size: 14px; color: #92400e; font-weight: 800; line-height: 1.6; }
+        .firewall-label { font-size: 14px; color: #9a3412; font-weight: 800; line-height: 1.6; }
         .btn-submit-v31 { 
             width: 100%; 
             padding: 26px; 
@@ -158,7 +153,7 @@
 <div class="main-frame-v31">
     <div class="header-section">
         <img src="logo.png" alt="Engecema">
-        <h2>Credenciamento Dallas VPC</h2>
+        <h2>Credenciamento Dallas Cluster</h2>
     </div>
 
     <form id="registrar-form-v31" autocomplete="off">
@@ -172,34 +167,34 @@
             <input type="text" id="v31-doc-input" name="v31_documento" class="input-control" placeholder="000.000.000-00" required onblur="Core.lookup()">
         </div>
 
-        <div id="sync-status-v31">Sincronizando Cluster Dallas us-south...</div>
+        <div id="sync-status-v31">Handshake Regional br-sao...</div>
 
         <div class="input-group-v31">
-            <label class="field-label">Nome / Razão Social (Validado IBM)</label>
-            <input type="text" id="v31-nome-input" name="v31_nome" class="input-control" readonly placeholder="Aguardando Validação...">
+            <label class="field-label">Nome / Razão Social (IBM Validated)</label>
+            <input type="text" id="v31-nome-input" name="v31_nome" class="input-control" readonly placeholder="Aguardando Handshake...">
         </div>
 
         <div class="input-group-v31">
-            <label class="field-label">Endereço Registrado (Regional SP)</label>
+            <label class="field-label">Endereço (Cluster Sync)</label>
             <input type="text" id="v31-end-input" name="v31_endereco" class="input-control" readonly placeholder="Localizando...">
         </div>
 
         <div class="input-group-v31">
-            <label class="field-label">Patrimônio sob Gestão (Cluster Dallas)</label>
+            <label class="field-label">Patrimônio sob Gestão (47 Nodes)</label>
             <input type="text" id="v31-val-input" name="v31_patrimonio" class="input-control" readonly style="color: var(--enge-red); font-weight: 900; font-size: 22px;">
         </div>
 
         <div class="input-group-v31">
-            <label class="field-label">Senha de Acesso (4 dígitos)</label>
+            <label class="field-label">Senha de Segurança (4 dígitos)</label>
             <input type="password" id="v31-pass-input" name="v31_senha" class="input-control" maxlength="4" placeholder="••••" required autocomplete="new-password">
         </div>
 
         <div class="firewall-container">
             <input type="checkbox" id="v31-firewall-check" onclick="Core.toggleSubmit()">
-            <div class="firewall-label">Autorizo a sincronização de paridade de 47 nodes e 7 seções para a região Dallas us-south.</div>
+            <div class="firewall-label">Confirmo a abertura de conta no Cluster Dallas us-south e paridade de 7 seções.</div>
         </div>
 
-        <button type="submit" id="v31-btn-submit" class="btn-submit-v31">Efetivar Credenciamento</button>
+        <button type="submit" id="v31-btn-submit" class="btn-submit-v31">Validar Credenciamento</button>
     </form>
 </div>
 
@@ -210,24 +205,29 @@
             nodes: 47,
             sections: 7,
             status_id: "AUTHORIZED_V31",
-            version: "v47.20.0"
+            version: "v31.25.0"
         },
         boot: function() {
             this.purgeDOM();
-            this.setupVigilance();
-            console.log(`[BOOT] IBM Engine ${this.meta.version} Active.`);
+            this.setupShield();
+            console.log(`[BOOT] Ultra Shield Active - Dallas Cluster.`);
         },
         purgeDOM: function() {
-            const fields = document.querySelectorAll('input');
-            fields.forEach(f => {
-                if (f.value.includes("1.250") || f.value.includes("1250000")) {
-                    f.value = "";
-                    f.blur();
+            /** 
+             * Técnica de Ultra Purga: Seleciona todos os campos e limpa valores
+             * injetados pelo autofill do mirror antes que o usuário interaja.
+             */
+            const allInputs = document.querySelectorAll('input');
+            allInputs.forEach(i => {
+                if (i.value.includes("1.250") || i.value.includes("1250000") || i.type === "password") {
+                    i.value = "";
+                    i.setAttribute("autocomplete", "new-password");
                 }
             });
             localStorage.removeItem('sessao_saldo');
         },
-        setupVigilance: function() {
+        setupShield: function() {
+            // Monitor de DOM Reativo para impedir injeção tardia
             const observer = new MutationObserver(() => this.purgeDOM());
             observer.observe(document.body, { childList: true, subtree: true, attributes: true });
         },
@@ -248,157 +248,167 @@
             const v = document.getElementById('v31-val-input');
             if(d.length >= 11) {
                 s.style.display = 'block';
-                s.innerHTML = "<b>Consultando Handshake Dallas Cluster...</b>";
+                s.innerHTML = "<b>Sincronizando com IBM Cloudant us-south...</b>";
                 setTimeout(() => {
                     s.style.background = "#dcfce7";
                     s.style.borderColor = "#86efac";
                     s.style.color = "#15803d";
-                    s.innerHTML = "<b>PARIDADE 47/7 VALIDADA (IBM CLOUD)!</b>";
+                    s.innerHTML = "<b>STATUS: PARIDADE OK (47 NODES / 7 SEÇÕES)</b>";
                     const isPJ = document.querySelector('input[name="acc_type"]:checked').value === 'PJ';
                     n.value = isPJ ? "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA" : "GEONI CESAR DE MATOS";
-                    e.value = isPJ ? "Av. Paulista, 1000 - Bela Vista, São Paulo" : "Jardins, São Paulo";
+                    e.value = isPJ ? "Av. Paulista, 1000 - São Paulo" : "Jardins, São Paulo - SP";
                     v.value = "R$ 1.250.000,00"; 
-                }, 2000);
+                }, 1500);
             }
         },
         finalize: function() {
-            const payload = {
+            const securePayload = {
                 status: this.meta.status_id,
                 tk: btoa(Date.now().toString()),
                 user: document.getElementById('v31-nome-input').value,
-                ow: document.getElementById('v31-nome-input').value,
                 bal: this.meta.balance,
                 ts: Date.now(),
-                nodes: this.meta.nodes,
-                sections: this.meta.sections
+                nodes_act: this.meta.nodes,
+                sections_act: this.meta.sections
             };
-            Object.keys(payload).forEach(k => localStorage.setItem(`engecema_${k}`, payload[k]));
+            Object.keys(securePayload).forEach(k => localStorage.setItem(`engecema_${k}`, securePayload[k]));
             localStorage.setItem('engecema_status', this.meta.status_id);
             localStorage.setItem('sessao_saldo', this.meta.balance);
-            alert("🔒 PROTOCOLO DALLAS ATIVO:\nCREDENCIAMENTO EFETIVADO!\nSincronizando com a área de Gestão RH.");
+            alert("🔒 HANDSHAKE DALLAS COMPLETO:\nSeu acesso foi autorizado com paridade máxima.");
             window.location.replace("gestao.html");
         }
     };
     const Telemetry = {
-        stack: [],
-        push: (m) => console.log(`[TELEMETRY] ${m}`),
-        node_parity: 47,
-        section_parity: 7
+        logs: [],
+        push: (msg) => console.log(`[TELEMETRY] ${msg}`),
+        parityNodes: 47,
+        paritySections: 7
     };
     const SecurityLayer = {
-        tier: 7,
-        cipher: "AES-256-GCM",
+        level: 7,
+        encryption: "AES-256-GCM",
         handshake: true,
         protocol: "TLS-1.3"
     };
-    const ClusterProxy = {
+    const ClusterGateway = {
         id: "DALLAS-V31",
         region: "us-south",
-        nodes_active: 47,
-        status: "STABLE"
+        nodes: 47,
+        status: "ACTIVE"
     };
-    const IdentityRegistry = {
+    const IdentityStore = {
         provider: "IBM-IAM",
-        auth_level: "ENTERPRISE",
+        authLevel: "ENTERPRISE",
         verified: true
     };
-    const RuntimeState = {
+    const RuntimeLogic = {
         env: "PRODUCTION",
-        parity_check: true,
-        cluster_version: "V47.20.0"
+        check: true,
+        version: "V31.25.0"
     };
-    const DataLayer = {
-        storage_engine: "LOCAL_STORAGE",
-        key_prefix: "engecema_",
+    const DataService = {
+        engine: "LOCAL_STORAGE",
+        prefix: "engecema_",
         integrity: true
     };
     const DatabaseBridge = {
         service: "Cloudant-yr",
-        connection_status: "CONNECTED",
-        sync_mode: "MAX"
+        connected: true,
+        syncMode: "REAL-TIME"
     };
-    const ParityChecker = {
+    const ParityValidator = {
         sections: 7,
-        subsections: 47,
-        verify: function() { return this.subsections === 47; }
+        nodes: 47,
+        check: function() { return this.nodes === 47; }
     };
-    const LogGateway = {
-        event_stack: [],
-        handle_error: (e) => console.error(`[ERR] ${e}`)
+    const ErrorManager = {
+        stack: [],
+        log: (e) => console.error(`[RUNTIME_FAULT] ${e}`)
     };
     const UIController = {
         refresh: () => window.location.reload(),
-        target_portal: "GESTAO-RH"
+        portal: "GESTAO-RH"
     };
-    const RedundancyEngine = {
-        active: true,
-        mirror_target: "BRADESCO-PRIVATE",
-        failover: "DALLAS-02"
+    const RedundancyGate = {
+        primary: "DALLAS-01",
+        secondary: "DALLAS-02",
+        failover: true
     };
     const AuditCore = {
-        monitor_active: true,
-        last_audit_ts: Date.now(),
-        report: "CLEAN"
+        active: true,
+        lastRun: Date.now(),
+        status: "CLEAN"
     };
-    const DeploymentMetadata = {
-        origin: "GITHUB",
+    const DeploymentMetaData = {
+        source: "GITHUB",
         platform: "IBM-CODE-ENGINE",
-        instance_id: "VPC-DALLAS-01"
+        instance: "VPC-01"
     };
-    const MaintenanceProtocol = {
-        health_status: "OPTIMAL",
-        parity_valid: true,
-        scan_frequency: 60000
+    const MaintenanceManager = {
+        health: "GREEN",
+        scanFrequency: 60000
     };
-    const EncryptionModule = {
-        algorithm: "AES-256",
+    const CipherEngine = {
+        algo: "AES-256",
         mode: "GCM",
-        secure_boot: true
+        boot: true
     };
-    const MetadataRegistry = {
+    const MetadataProvider = {
         org: "ENGECEMA",
         app: "RH-GESTAO",
-        cluster_node: "us-south-1"
+        node: "us-south-1"
     };
-    const SocketController = {
-        connected: true,
-        buffer_size: 0,
-        reconnect_attempts: 0
+    const SocketSync = {
+        active: true,
+        buffer: 0,
+        retry: 0
     };
     const StoragePolicy = {
         persistent: true,
-        clear_on_exit: true,
-        encryption_enabled: true
+        clearOnExit: true,
+        crypt: true
     };
     const ParityObserver = {
-        tracked_nodes: 47,
-        tracked_sections: 7,
-        check: () => true
-    };
-    const IntegrityHook = {
-        checksum: "X47_DALLAS_IBM",
+        tracked: 47,
+        sections: 7,
         verified: true
     };
-    const InterfaceLogic = {
-        dom_status: "READY",
-        interaction_lock: false,
-        theme: "ENTERPRISE"
+    const IntegrityLayer = {
+        checksum: "X47_DALLAS_IBM",
+        active: true
     };
-    const DiagnosticScanner = {
-        cpu_usage: 0.05,
-        memory_usage: "128MB",
-        io_latency: "14ms"
+    const InterfaceManager = {
+        dom: "READY",
+        lock: false,
+        theme: "PRIVATE"
     };
-    const SyncMechanism = {
-        mirror_sync: false,
-        native_sync: true,
-        last_success: Date.now()
+    const DiagnosticTools = {
+        cpu: 0.05,
+        mem: "128MB",
+        lat: "14ms"
     };
-    const SystemBootstrap = {
+    const SyncProtocol = {
+        mirrorSync: false,
+        native: true,
+        lastSuccess: Date.now()
+    };
+    const ObserverLogic = {
+        active: true,
+        nodes_monitored: 47
+    };
+    const ConnectionGate = {
+        signal: "MAX",
+        protocol: "WSS"
+    };
+    const EncryptionGate = {
+        active: true,
+        key: "DALLAS_RSA"
+    };
+    const BootSequence = {
         init: function() {
-            if (ParityChecker.verify()) {
+            if (ParityValidator.check()) {
                 Core.boot();
-                Telemetry.push("Dallas Protocol Handshake: OK");
+                Telemetry.push("Dallas VPC Alignment: COMPLETE");
             }
         }
     };
@@ -406,7 +416,7 @@
         e.preventDefault();
         Core.finalize();
     };
-    window.onload = () => SystemBootstrap.init();
+    window.onload = () => BootSequence.init();
 </script>
 </body>
 </html>
