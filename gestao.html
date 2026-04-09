@@ -3,210 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema | Gestão de Ativos Dallas</title>
+    <title>Gestão Enterprise Engecema | Dallas Cluster</title>
     <script>
-        const AUTH_GATE = {
-            target: "AUTHORIZED_V31",
-            storage: "engecema_",
-            redirect: "index.html"
+        const AUTH_GATEWAY = {
+            token_registry: ['engecema_tk', 'engecema_token', 'engecema_auth'],
+            status_target: ['AUTHORIZED_V31', 'AUTHORIZED_PRIVATE_IBM', 'AUTHORIZED'],
+            redirect_uri: 'index.html'
         };
         (function() {
-            const st = localStorage.getItem(AUTH_GATE.storage + 'status');
-            if (st !== AUTH_GATE.target) {
-                window.location.href = AUTH_GATE.redirect;
+            const currentStatus = localStorage.getItem('engecema_status');
+            const hasValidToken = AUTH_GATEWAY.token_registry.some(k => localStorage.getItem(k));
+            if (!hasValidToken || !AUTH_GATEWAY.status_target.includes(currentStatus)) {
+                window.location.href = AUTH_GATEWAY.redirect_uri;
             }
         })();
     </script>
     <style>
         :root {
-            --br-red: #cc092f;
-            --br-blue: #004481;
-            --bg-canvas: #f4f7f9;
-            --surface: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #666666;
-            --status-ok: #15803d;
+            --br-primary: #cc092f;
+            --br-secondary: #004481;
+            --br-dark: #161616;
+            --br-bg: #f2f4f7;
+            --br-surface: #ffffff;
+            --br-success: #15803d;
         }
         body {
             margin: 0;
             padding: 0;
             display: none;
-            background-color: var(--bg-canvas);
+            background-color: var(--br-bg);
+            color: var(--br-dark);
             font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
-            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
         }
-        .header-enterprise {
+        .enterprise-header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 90px;
-            background: var(--surface);
-            border-bottom: 6px solid var(--br-red);
+            height: 100px;
+            background: var(--br-surface);
+            border-bottom: 7px solid var(--br-primary);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 50px;
+            padding: 0 60px;
             box-sizing: border-box;
             z-index: 10000;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
         }
-        .brand-box img { height: 45px; }
-        .meta-user { text-align: right; margin-right: 25px; }
-        .meta-user strong { display: block; color: var(--br-red); font-size: 14px; text-transform: uppercase; }
-        .meta-user span { font-size: 10px; font-weight: 700; color: var(--status-ok); }
-        .main-viewport { max-width: 1300px; margin: 130px auto 50px; padding: 0 40px; }
-        .asset-card {
-            background: var(--surface);
-            padding: 45px;
-            border-radius: 12px;
-            border-left: 12px solid var(--br-red);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-            margin-bottom: 45px;
-        }
-        .asset-card span { font-size: 13px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .asset-card h1 { font-size: 52px; margin: 15px 0; font-weight: 900; }
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-        .module-card {
-            background: var(--surface);
-            padding: 35px;
-            border-radius: 10px;
-            border: 1px solid #e0e4e8;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .module-card:hover { border-color: var(--br-red); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(204,9,47,0.1); }
-        .module-card i { font-style: normal; font-size: 40px; }
-        .module-card h3 { margin: 0; font-size: 18px; color: var(--br-blue); font-weight: 900; }
-        .module-card p { margin: 0; font-size: 13px; color: var(--text-muted); }
-        .btn-logout {
-            background: var(--br-red);
-            color: var(--surface);
+        .brand-frame img { height: 48px; }
+        .session-meta { display: flex; align-items: center; gap: 35px; }
+        .user-credentials { text-align: right; }
+        .user-credentials b { display: block; color: var(--br-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .user-credentials span { font-size: 11px; font-weight: 800; color: var(--br-success); }
+        .btn-shutdown {
+            background: var(--br-primary);
+            color: #fff;
             border: none;
-            padding: 14px 28px;
+            padding: 16px 30px;
             border-radius: 5px;
-            font-weight: 800;
-            text-transform: uppercase;
+            font-weight: 900;
             cursor: pointer;
+            text-transform: uppercase;
             font-size: 12px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
-        .btn-logout:hover { background: #a00725; }
-        .matrix-modal {
+        .btn-shutdown:hover { background: #a00725; transform: scale(1.05); }
+        .viewport-container { max-width: 1500px; margin: 150px auto 80px; padding: 0 60px; }
+        .hero-asset-card {
+            background: var(--br-surface);
+            padding: 60px;
+            border-radius: 15px;
+            border-left: 15px solid var(--br-primary);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.06);
+            margin-bottom: 60px;
+        }
+        .hero-asset-card label { font-size: 14px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 2.5px; }
+        .hero-asset-card h1 { font-size: 64px; margin: 20px 0; font-weight: 900; color: var(--br-dark); }
+        .grid-system {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 35px;
+            margin-top: 60px;
+        }
+        .module-tile {
+            background: var(--br-surface);
+            padding: 45px;
+            border-radius: 20px;
+            border: 1px solid #dee4ec;
+            cursor: pointer;
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .module-tile:hover {
+            border-color: var(--br-primary);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(204,9,47,0.15);
+        }
+        .module-tile i { font-style: normal; font-size: 55px; display: block; margin-bottom: 25px; }
+        .module-tile h3 { margin: 0; font-size: 22px; color: var(--br-secondary); font-weight: 900; }
+        .module-tile p { margin: 12px 0 0; font-size: 15px; color: #666; line-height: 1.5; }
+        .portal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 20000;
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.9);
+            z-index: 25000;
+            backdrop-filter: blur(15px);
             align-items: center;
             justify-content: center;
         }
-        .matrix-box {
-            background: var(--surface);
+        .portal-container {
+            background: var(--br-surface);
             width: 90%;
-            max-width: 1000px;
-            padding: 50px;
-            border-radius: 15px;
-            border-top: 10px solid var(--br-red);
+            max-width: 1200px;
+            padding: 70px;
+            border-radius: 25px;
+            border-top: 15px solid var(--br-primary);
         }
-        .node-element {
+        .node-cluster-cell {
             display: inline-block;
-            width: 65px;
-            height: 45px;
-            background: var(--br-blue);
+            width: 80px;
+            height: 55px;
+            background: var(--br-secondary);
             color: #fff;
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 900;
             text-align: center;
-            line-height: 45px;
-            margin: 6px;
-            border-radius: 6px;
-            transition: 0.2s;
+            line-height: 55px;
+            margin: 10px;
+            border-radius: 10px;
+            transition: 0.4s;
         }
-        .node-element:hover { background: var(--br-red); transform: scale(1.1); }
+        .node-cluster-cell:hover { background: var(--br-primary); transform: scale(1.2); }
     </style>
 </head>
-<body id="APP-INSTANCE">
+<body id="ADMIN-GESTAO-ROOT">
 
-    <header class="header-enterprise">
-        <div class="brand-box">
-            <img src="logo.png" alt="Engecema">
+    <header class="enterprise-header">
+        <div class="brand-frame">
+            <img src="logo.png" alt="ENGECEMA ENTERPRISE">
         </div>
-        <div style="display: flex; align-items: center;">
-            <div class="meta-user">
-                <strong id="user-display">GEONI CESAR DE MATOS</strong>
-                <span id="sync-label">SESSÃO CRIPTOGRAFADA Dallas us-south</span>
+        <div class="session-meta">
+            <div class="user-credentials">
+                <b id="user-name-tag">CARREGANDO USUÁRIO...</b>
+                <span id="session-tag">DALLAS CLUSTER V31.9.5 | SECURE TLS</span>
             </div>
-            <button class="btn-logout" onclick="Core.exit()">Encerrar Sistema</button>
+            <button class="btn-shutdown" onclick="Engine.terminateSession()">Encerrar Sistema</button>
         </div>
     </header>
 
-    <main class="main-viewport">
-        <div class="asset-card">
-            <span>Patrimônio sob Custódia Mirror Bradesco Private</span>
-            <h1 id="balance-display">R$ 0,00</h1>
-            <div style="font-size: 11px; color: var(--status-ok); font-weight: 800;">STATUS: CLUSTER DALLAS-V31 OPERACIONAL</div>
+    <main class="viewport-container">
+        <div class="hero-asset-card">
+            <label>Saldo de Patrimônio sob Gestão Bradesco Private</label>
+            <h1 id="main-balance-val">R$ 0,00</h1>
+            <div style="font-size: 13px; color: var(--br-success); font-weight: 900; text-transform: uppercase;">IBM CLOUD CLUSTER us-south-01 STATUS: ATIVO</div>
         </div>
 
-        <div id="module-container" class="module-grid"></div>
+        <div id="ui-grid-mount" class="grid-system"></div>
     </main>
 
-    <div id="matrix-portal" class="matrix-modal">
-        <div class="matrix-box">
-            <h2 id="portal-title" style="color: var(--br-blue); text-transform: uppercase;"></h2>
-            <div id="portal-render" style="margin: 30px 0; min-height: 200px;"></div>
+    <div id="portal-overlay" class="portal-overlay">
+        <div class="portal-container">
+            <h2 id="portal-view-title" style="color: var(--br-secondary); text-transform: uppercase; font-size: 28px; margin: 0;"></h2>
+            <div id="portal-content-render" style="margin: 50px 0; min-height: 300px;"></div>
             <div style="text-align: right;">
-                <button onclick="Core.closePortal()" style="padding: 12px 30px; cursor: pointer; font-weight: bold; background: #eee; border: none; border-radius: 4px;">FECHAR JANELA</button>
+                <button onclick="Engine.closePortal()" style="padding: 18px 45px; cursor: pointer; font-weight: 900; background: #f4f4f4; border: none; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px;">Fechar Módulo</button>
             </div>
         </div>
     </div>
 
     <script>
-        const AppState = {
-            balance: 1250000.00,
-            sections: 7,
-            nodes: 47,
-            user: "Engecema Admin",
-            sync: true
+        const CLUSTER_DEFS = {
+            base_balance: 1250000.00,
+            nodes_count: 47,
+            sections_count: 7,
+            env: "PRODUCTION",
+            mirror: "BRADESCO-PRIVATE-DALLAS"
         };
 
-        const Core = {
-            init: function() {
-                this.authenticate();
-                this.drawUI();
-                this.heartbeat();
-                document.getElementById('APP-INSTANCE').style.display = 'block';
+        const Engine = {
+            boot: function() {
+                this.validateHandshake();
+                this.injectUI();
+                this.startHeartbeat();
+                document.getElementById('ADMIN-GESTAO-ROOT').style.display = 'block';
             },
-            authenticate: function() {
-                const u = localStorage.getItem('engecema_user') || "GEONI CESAR DE MATOS";
-                const b = localStorage.getItem('sessao_saldo') || AppState.balance;
-                document.getElementById('user-display').innerText = u.toUpperCase();
-                document.getElementById('balance-display').innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(b);
+            validateHandshake: function() {
+                const user = localStorage.getItem('engecema_user') || localStorage.getItem('engecema_ow') || "GEONI CESAR DE MATOS";
+                const balance = localStorage.getItem('sessao_saldo') || CLUSTER_DEFS.base_balance;
+                document.getElementById('user-name-tag').innerText = user.toUpperCase();
+                document.getElementById('main-balance-val').innerText = this.currency(balance);
             },
-            drawUI: function() {
-                const target = document.getElementById('module-container');
+            currency: function(v) {
+                return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+            },
+            injectUI: function() {
+                const target = document.getElementById('ui-grid-mount');
                 const modules = [
-                    { id: 1, n: "Gestão RH", i: "👥", d: "Controle de folha e colaboradores Engecema." },
-                    { id: 2, n: "Financeiro", i: "💰", d: "Fluxo de caixa e fomento Bradesco Private." },
-                    { id: 3, n: "Infraestrutura", i: "🖥️", d: "Status de 47 Subseções no Cluster Dallas." },
-                    { id: 4, n: "Segurança", i: "🛡️", d: "Protocolos TLS-1.3 e Criptografia AES-256." },
-                    { id: 5, n: "Auditoria", i: "📑", d: "Logs de acesso e sincronização IBM Cloud." },
-                    { id: 6, n: "Configurações", i: "⚙️", d: "Parâmetros de rede e espelhamento." }
+                    { n: "Gestão RH", i: "👥", d: "Controle de colaboradores e ativos humanos Engecema." },
+                    { n: "Financeiro", i: "💰", d: "Fluxo de fomento e liquidez Bradesco Private Dallas." },
+                    { n: "Matrix Nodes", i: "🖥️", d: "Monitoramento de 47 subseções de cluster us-south." },
+                    { n: "Segurança", i: "🛡️", d: "Criptografia AES-256 e chaves de acesso Cloudant." },
+                    { n: "Auditoria", i: "🔍", d: "Logs de transações e paridade de cluster regional." },
+                    { n: "Preferências", i: "⚙️", d: "Configurações globais de espelhamento de mirror." }
                 ];
                 target.innerHTML = modules.map(m => `
-                    <div class="module-card" onclick="Core.openPortal('${m.n}')">
+                    <div class="module-tile" onclick="Engine.openPortal('${m.n}')">
                         <i>${m.i}</i>
                         <h3>${m.n}</h3>
                         <p>${m.d}</p>
@@ -214,133 +220,139 @@
                 `).join('');
             },
             openPortal: function(name) {
-                const modal = document.getElementById('matrix-portal');
-                const render = document.getElementById('portal-render');
-                document.getElementById('portal-title').innerText = name;
-                
-                if (name === "Infraestrutura") {
-                    let h = `<p style="font-size:14px; margin-bottom:20px;">Mapeamento de 47 Nodes em 7 Seções de Segurança:</p>`;
-                    for(let i=0; i<AppState.nodes; i++) {
-                        h += `<div class="node-element">N-${(i+1).toString().padStart(2,'0')}</div>`;
+                const overlay = document.getElementById('portal-overlay');
+                const content = document.getElementById('portal-content-render');
+                document.getElementById('portal-view-title').innerText = name;
+                if (name === "Matrix Nodes") {
+                    let html = `<p style="font-size:16px; margin-bottom:30px; color:#555;">Mapeamento físico de 47 Nodes em 7 Seções operacionais:</p>`;
+                    for(let i=0; i<CLUSTER_DEFS.nodes_count; i++) {
+                        html += `<div class="node-cluster-cell">NODE-${(i+1).toString().padStart(2,'0')}</div>`;
                     }
-                    render.innerHTML = h;
+                    content.innerHTML = html;
                 } else {
-                    render.innerHTML = `<div style="text-align:center; padding:50px;">Acessando Banco Cloudant-yr...<br><strong>Sincronizando dados com regional São Paulo.</strong></div>`;
+                    content.innerHTML = `<div style="text-align:center; padding:80px; font-size:18px; color:#777;">Sincronizando com IBM Cloudant-yr...<br><strong>Autenticando acesso ao módulo ${name}.</strong></div>`;
                 }
-                modal.style.display = 'flex';
+                overlay.style.display = 'flex';
             },
             closePortal: function() {
-                document.getElementById('matrix-portal').style.display = 'none';
+                document.getElementById('portal-overlay').style.display = 'none';
             },
-            heartbeat: function() {
-                setInterval(() => {
-                    console.log("[HEARTBEAT] Sincronização Dallas us-south ativa.");
-                }, 60000);
+            startHeartbeat: function() {
+                setInterval(() => { console.log("[CLUSTER-HEARTBEAT] Dallas Sync Stable"); }, 45000);
             },
-            exit: function() {
-                localStorage.clear();
+            terminateSession: function() {
+                const keys = ['engecema_tk', 'engecema_token', 'engecema_status', 'sessao_saldo', 'engecema_user', 'engecema_ow'];
+                keys.forEach(k => localStorage.removeItem(k));
                 sessionStorage.clear();
                 window.location.href = 'index.html';
             }
         };
 
         const Validator = {
-            checkNodes: function() { return AppState.nodes === 47; },
-            checkSections: function() { return AppState.sections === 7; }
+            checkParity: function() { return CLUSTER_DEFS.nodes_count === 47 && CLUSTER_DEFS.sections_count === 7; }
         };
 
-        const DataProvider = {
-            get: function(key) { return localStorage.getItem(key); },
-            set: function(key, val) { localStorage.setItem(key, val); }
-        };
-
-        const LogicInterceptor = {
-            active: true,
-            protocol: "TLS-1.3",
-            verify: function() { return this.active; }
+        const Telemetry = {
+            log: function(msg) { console.log(`[TELEMETRY] ${new Date().toISOString()} : ${msg}`); }
         };
 
         const ClusterManager = {
             region: "us-south",
+            nodes: 47,
             status: "OPERATIONAL",
-            version: "v31.8.0"
+            version: "V31.9.5"
         };
 
-        const SecurityAudit = {
-            level: "MAXIMUM",
-            cipher: "AES-256-GCM"
+        const SecurityCore = {
+            cipher: "AES-256-GCM",
+            security: "MAXIMUM",
+            protocol: "TLS-1.3"
         };
 
-        const UI_Manager = {
+        const UIManager = {
             refresh: function() { window.location.reload(); },
             toggle: function(id) { 
-                const el = document.getElementById(id);
-                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                const e = document.getElementById(id);
+                e.style.display = e.style.display === 'none' ? 'block' : 'none';
             }
         };
 
-        const StorageSync = {
-            lastSync: Date.now(),
-            mirror: "BRADESCO-PRIVATE"
+        const DatabaseHook = {
+            service: "Cloudant-yr",
+            active: true,
+            provider: "IBM-CLOUD"
         };
 
-        const MetricsEngine = {
-            cpu: 0.12,
-            latency: "14ms",
-            report: function() { return `Latency: ${this.latency}`; }
-        };
-
-        const MaintenanceNode = {
-            lastCheck: "2023-10-27",
-            status: "PASS"
-        };
-
-        const EventRouter = {
-            route: "GESTAO",
-            secure: true
-        };
-
-        const ParityCheck = {
-            v: 1.0,
-            status: "VALID"
-        };
-
-        const IdentityProvider = {
+        const IdentityManager = {
             provider: "IBM-IAM",
+            authenticated: true
+        };
+
+        const SyncManager = {
+            mirror: "BRADESCO-PRIVATE",
+            lastSync: Date.now(),
             active: true
         };
 
-        const DatabaseGateway = {
-            service: "Cloudant-yr",
-            connected: true
+        const AuditRegistry = {
+            stack: [],
+            add: function(entry) { this.stack.push(entry); }
         };
 
-        const RedundancyProtocol = {
-            enabled: true,
-            type: "MIRROR-DALLAS"
+        const PerformanceMonitor = {
+            latency: "14ms",
+            uptime: "99.998%",
+            get: function() { return this.latency; }
         };
 
-        const RuntimeEnvironment = {
-            env: "PRODUCTION",
-            node: "NODE-01"
+        const MaintenanceScanner = {
+            last_run: "2023-10-27",
+            status: "PASS"
         };
 
-        const AssetIntegrity = {
-            balance: 1250000.00,
-            validate: function() { return true; }
+        const StateManager = {
+            state: "STABLE",
+            update: function(s) { this.state = s; }
         };
 
-        const InterfaceController = {
+        const DeploymentProtocol = {
+            source: "GITHUB",
+            target: "IBM-CODE-ENGINE",
+            auto_sync: true
+        };
+
+        const RedundancyGate = {
+            active: true,
+            primary: "DALLAS-01",
+            backup: "DALLAS-02"
+        };
+
+        const Controller = {
             init: function() {
-                if(Validator.checkNodes() && Validator.checkSections()) {
-                    Core.init();
+                if(Validator.checkParity()) {
+                    Engine.boot();
+                    Telemetry.log("System Initialized Successfully");
                 } else {
-                    console.error("FALHA DE PARIDADE NO CLUSTER");
+                    console.error("Critical Failure: Cluster Parity Mismatch");
                 }
             }
         };
 
-        document.addEventListener('DOMContentLoaded', () => InterfaceController.init());
+        const ExceptionHandler = {
+            report: function(err) { console.error(`[RUNTIME-ERROR] ${err}`); }
+        };
+
+        const RegistryHook = {
+            app_id: "ENGECEMA-RH",
+            layer: "FRONT-END-STABLE"
+        };
+
+        const CacheSystem = {
+            enabled: true,
+            ttl: 3600
+        };
+
+        document.addEventListener('DOMContentLoaded', () => Controller.init());
     </script>
 </body>
 </html>
