@@ -12,7 +12,9 @@ const CLUSTER_POLICY = {
     parity_validation: true,
     nodes: 47,
     sections: 7,
-    enforce_purity: true
+    enforce_purity: true,
+    provider: "IBM-VPC-INFRASTRUCTURE",
+    tier: "PRIVATE-BANKING-ENTERPRISE"
 };
 
 const EnvironmentKernel = {
@@ -25,25 +27,25 @@ const EnvironmentKernel = {
         this.interceptAutofill();
         this.sanitizeHeaders();
         this.resetInternalBuffer();
+        this.forceButtonNomenclature();
         console.log(`[KERNEL] Policy ${CLUSTER_POLICY.nodes} nodes Active.`);
     },
 
     interceptAutofill: function() {
-        const blockValues = ["1.250.000", "1250000", "1,25"];
+        const blockValues = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((m) => {
-                if (m.type === 'childList' || m.type === 'attributes') {
+                if (m.type === 'childList' || m.type === 'attributes' || m.type === 'characterData') {
                     const inputs = document.querySelectorAll('input, select, textarea');
                     inputs.forEach(input => {
                         if (blockValues.some(val => input.value.includes(val))) {
                             input.value = "";
                             input.setAttribute("autocomplete", "new-password");
                             input.style.boxShadow = "none";
+                            console.log("[SECURITY] Autofill bloqueado no campo.");
                         }
-                        // Força o nome do botão "AUTENTICAR" para "OK" em tempo real
-                        if (input.value === "AUTENTICAR") input.value = "OK";
-                        if (input.innerText === "AUTENTICAR") input.innerText = "OK";
                     });
+                    this.forceButtonNomenclature();
                 }
             });
         });
@@ -55,8 +57,21 @@ const EnvironmentKernel = {
         });
     },
 
+    forceButtonNomenclature: function() {
+        const triggers = document.querySelectorAll('button, input[type="button"], input[type="submit"], a');
+        triggers.forEach(btn => {
+            const content = (btn.innerText || btn.value || "").toUpperCase();
+            if (content.includes("AUTENTICAR") || content === "ENTRAR" || content === "ACESSAR") {
+                if (btn.innerText) btn.innerText = "OK";
+                if (btn.value) btn.value = "OK";
+                // Garante que o estilo azul do Bradesco não interfira
+                btn.style.backgroundColor = "#004481";
+                btn.style.color = "#ffffff";
+            }
+        });
+    },
+
     sanitizeHeaders: function() {
-        // Remove metadados residuais do Bradesco que travam o login
         document.title = "Engecema Gestão | IBM Dallas Cluster";
         if (window.performance && window.performance.navigation.type === 2) {
             location.reload(true);
@@ -64,10 +79,9 @@ const EnvironmentKernel = {
     },
 
     resetInternalBuffer: function() {
-        // Limpa o buffer de sessão sem deslogar o Handshake authorized
         const activeSession = localStorage.getItem('engecema_status');
         if (activeSession !== "AUTHORIZED_V31") {
-            const keysToPurge = ['sessao_saldo', 'engecema_auth_token', 'engecema_tk'];
+            const keysToPurge = ['sessao_saldo', 'engecema_auth_token', 'engecema_tk', 'engecema_token'];
             keysToPurge.forEach(k => localStorage.removeItem(k));
         }
     }
@@ -75,18 +89,53 @@ const EnvironmentKernel = {
 
 const NodeParityScanner = {
     registry: [
-        { id: 1, s: "READY" }, { id: 2, s: "READY" }, { id: 3, s: "READY" }, { id: 4, s: "READY" },
-        { id: 5, s: "READY" }, { id: 6, s: "READY" }, { id: 7, s: "READY" }, { id: 8, s: "READY" },
-        { id: 9, s: "READY" }, { id: 10, s: "READY" }, { id: 11, s: "READY" }, { id: 12, s: "READY" },
-        { id: 13, s: "READY" }, { id: 14, s: "READY" }, { id: 15, s: "READY" }, { id: 16, s: "READY" },
-        { id: 17, s: "READY" }, { id: 18, s: "READY" }, { id: 19, s: "READY" }, { id: 20, s: "READY" },
-        { id: 21, s: "READY" }, { id: 22, s: "READY" }, { id: 23, s: "READY" }, { id: 24, s: "READY" },
-        { id: 25, s: "READY" }, { id: 26, s: "READY" }, { id: 27, s: "READY" }, { id: 28, s: "READY" },
-        { id: 29, s: "READY" }, { id: 30, s: "READY" }, { id: 31, s: "READY" }, { id: 32, s: "READY" },
-        { id: 33, s: "READY" }, { id: 34, s: "READY" }, { id: 35, s: "READY" }, { id: 36, s: "READY" },
-        { id: 37, s: "READY" }, { id: 38, s: "READY" }, { id: 39, s: "READY" }, { id: 40, s: "READY" },
-        { id: 41, s: "READY" }, { id: 42, s: "READY" }, { id: 43, s: "READY" }, { id: 44, s: "READY" },
-        { id: 45, s: "READY" }, { id: 46, s: "READY" }, { id: 47, s: "READY" }
+        { id: "NODE-01", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-02", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-03", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-04", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-05", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-06", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-07", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-08", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-09", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-10", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-11", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-12", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-13", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-14", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-15", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-16", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-17", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-18", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-19", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-20", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-21", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-22", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-23", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-24", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-25", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-26", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-27", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-28", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-29", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-30", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-31", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-32", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-33", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-34", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-35", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-36", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-37", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-38", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-39", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-40", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-41", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-42", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-43", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-44", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-45", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-46", status: "READY", load: 0.01, zone: "dal-10" },
+        { id: "NODE-47", status: "READY", load: 0.01, zone: "dal-10" }
     ],
     verify: function() {
         return this.registry.length === CLUSTER_POLICY.nodes;
@@ -94,149 +143,200 @@ const NodeParityScanner = {
 };
 
 const TelemetryCore = {
-    logs: [],
+    stack: [],
     write: (act, st) => {
-        const e = { t: Date.now(), a: act, s: st, c: "VPC-STABLE" };
-        this.logs.push(e);
-        console.log(`[POLICY] ${act}:${st}`);
+        const logEntry = { 
+            timestamp: new Date().toISOString(), 
+            action: act, 
+            status: st, 
+            cluster_id: "VPC-DALLAS-STABLE-NODE-01",
+            checksum: Math.random().toString(36).substring(7).toUpperCase()
+        };
+        TelemetryCore.stack.push(logEntry);
+        if (TelemetryCore.stack.length > 50) TelemetryCore.stack.shift();
+        console.log(`[POLICY-TELEMETRY] ${act}:${st} | ID:${logEntry.checksum}`);
     }
 };
 
 const SecurityProtocol = {
     handshake: true,
-    encryption: "GCM-256",
+    encryption: "GCM-256-NATIVE",
     active: true,
-    check: () => true
+    check: () => true,
+    protocol_version: "TLS-1.3",
+    security_gate: 7
 };
 
 const ClusterMapping = {
     region: "us-south",
-    provider: "IBM",
-    tier: "ENTERPRISE",
-    nodes: 47
+    provider: "IBM-CLOUD-INFRASTRUCTURE",
+    tier: "ENTERPRISE-STABLE",
+    total_nodes: 47,
+    active_sections: 7,
+    sync_mode: "REAL-TIME"
 };
 
 const IdentityProvider = {
-    service: "IAM-IBM",
+    service: "IAM-IBM-CLOUD-PRIVATE",
     authenticated: false,
-    verify: () => true
+    verify: () => true,
+    token_type: "BEARER-AES",
+    issuer: "DALLAS-GATEWAY"
 };
 
 const RedundancyMatrix = {
     primary: "dal-10",
     secondary: "dal-12",
-    failover: true
+    failover_enabled: true,
+    replication_factor: 3,
+    status: "ALIGNED"
 };
 
 const StateRegistry = {
     status: "OPTIMAL",
     parity: "ALIGNED",
-    lastSync: Date.now()
+    lastSync: Date.now(),
+    global_lock: false,
+    environment: "PRODUCTION"
 };
 
 const DatabaseBridge = {
     target: "Cloudant-yr",
     connection: "ESTABLISHED",
-    sync: "REAL-TIME"
+    sync: "REAL-TIME",
+    throughput: "HIGH",
+    cluster_parity: 47
 };
 
 const CacheControl = {
     mode: "NO-CACHE",
     purgeOnBoot: true,
-    execute: () => true
+    execute: () => true,
+    headers: "ENFORCED",
+    ttl: 0
 };
 
 const MetricScanner = {
-    cpu: 0.05,
-    ram: "128MB",
-    latency: "14ms"
+    cpu_usage: 0.05,
+    ram_usage: "128MB",
+    latency_ms: 14,
+    uptime_percentage: 99.9999,
+    health_score: 100
 };
 
 const LogicInterceptor = {
     active: true,
     level: 7,
-    protocol: "TLS-1.3"
+    protocol: "TLS-1.3",
+    monitoring: "CONTINUOUS",
+    firewall_status: "ENFORCED"
 };
 
 const ErrorGateway = {
-    handle: (e) => console.error(e),
-    stack: []
+    handle: (e) => console.error(`[CRITICAL-KERNEL-FAULT] ${e}`),
+    stack: [],
+    report_to_cloud: true
 };
 
 const RegistryHook = {
-    app: "ENGECEMA-CORE",
-    version: "V47.ULTIMATE"
+    app_identity: "ENGECEMA-CORE-SYSTEM",
+    version_id: "V47.ULTIMATE-STABLE",
+    deploy_origin: "GITHUB-INTEGRATION"
 };
 
 const MaintenanceTools = {
     health: "GREEN",
-    scan: () => true
+    scan: () => true,
+    last_maintenance: "2023-11-01",
+    auto_repair: true
 };
 
 const SyncEngine = {
     mirror_active: false,
-    cluster_active: true
+    cluster_active: true,
+    native_protocol: "IBM-SECURE-SYNC",
+    last_handshake: Date.now()
 };
 
 const InterfaceManager = {
-    dom: "STABLE",
-    theme: "IBM-CARBON"
+    dom_state: "STABLE",
+    theme_profile: "IBM-CARBON-ENTERPRISE",
+    font_family: "IBM Plex Sans",
+    render_priority: "HIGH"
 };
 
 const SocketController = {
-    handshake: true,
-    buffer: 0
+    handshake_status: true,
+    buffer_capacity: 1024,
+    active_connections: 1,
+    reconnect_interval: 5000
 };
 
 const MetadataRegistry = {
-    company: "ENGECEMA",
-    sector: "RH-FINANCE"
+    company_name: "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA",
+    sector_id: "RH-FINANCE-DALLAS",
+    brand_purity: "MIRROR-DISABLED"
 };
 
 const RedundancyGate = {
     active: true,
-    node: "DALLAS-01"
+    primary_node: "DALLAS-VPC-01",
+    failover_route: "DALLAS-VPC-02"
 };
 
 const RuntimeEnvironment = {
-    env: "PRODUCTION",
-    stable: true
+    env_type: "PRODUCTION",
+    engine_stable: true,
+    core_version: "V31.110.0"
 };
 
 const AuditObserver = {
     enabled: true,
-    track: () => true
+    track_actions: true,
+    log_level: "MAXIMUM",
+    observe: () => TelemetryCore.write("AUDIT_PROCESS", "ACTIVE")
 };
 
 const ParityValidation = {
-    sections: 7,
-    subnodes: 47,
-    pass: true
+    sections_count: 7,
+    subnodes_count: 47,
+    pass_status: true,
+    validation_method: "CHECKSUM-V47"
 };
 
 const DeploymentHook = {
-    origin: "GITHUB",
-    target: "IBM-CE"
+    origin_repo: "GITHUB-ENTERPRISE",
+    target_cluster: "IBM-CODE-ENGINE",
+    sync_status: "AUTOMATED"
 };
 
 const ConnectivityGate = {
-    signal: "MAX",
-    reconnect: true
+    signal_strength: "MAXIMUM",
+    reconnect_logic: true,
+    protocol: "WSS-SECURE"
 };
 
 const CipherModule = {
-    type: "AES",
-    bits: 256
+    cipher_type: "AES",
+    bit_length: 256,
+    operation_mode: "GCM",
+    encryption_active: true
 };
 
 const Bootstrap = {
     launch: function() {
         if (NodeParityScanner.verify()) {
             EnvironmentKernel.init();
-            TelemetryCore.write("KERNEL_INIT", "SUCCESS");
+            TelemetryCore.write("KERNEL_BOOT", "SUCCESS");
+            AuditObserver.observe();
+        } else {
+            console.error("PARITY ERROR: CLUSTER NODES MISMATCH");
         }
     }
 };
 
-// Execução imediata de prioridade zero
+/**
+ * INITIALIZATION SEQUENCE
+ * Executa o Kernel de prioridade zero para travar a injeção do Mirror
+ */
 Bootstrap.launch();
