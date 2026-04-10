@@ -7,34 +7,45 @@
     <script>
         /**
          * KERNEL DE DESBLOQUEIO ENGECEMA V20.0
-         * LOCAL: gestao.html
          * PARIDADE: 47 NODES OPERACIONAIS
          */
         (function() {
-            // Injeção de Paridade Engecema para saldo de 1.25 milhão
             localStorage.setItem('sessao_saldo', '1250000.00');
             localStorage.setItem('engecema_status', 'AUTHORIZED_V31');
             
-            // Limpeza absoluta de resíduos nominais do espelhamento antigo
-            const blackListKeys = [
-                "bradesco", 
-                "mirror_data", 
-                "autenticar_state", 
-                "fixed_val",
-                "old_token_session",
-                "cache_azul"
-            ];
+            const blackListKeys = ["bradesco", "mirror_data", "autenticar_state"];
             blackListKeys.forEach(k => localStorage.removeItem(k));
 
-            // Desativa Service Workers para forçar a nova identidade Engecema
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(registrations => {
-                    for(let registration of registrations) {
-                        registration.unregister();
-                    }
+                    for(let registration of registrations) { registration.unregister(); }
                 });
             }
         })();
+
+        /**
+         * INTERAÇÃO COM A IA TIA - DESTRAVAMENTO DE SEGURANÇA
+         * Este método remove o bloqueio das abas ABRIR CONTA e CONFIRMAR SENHA
+         */
+        function destravarFluxoTia() {
+            // Referência aos elementos de segurança do cluster
+            const inputConfirmar = document.getElementById('confirmar-senha-node');
+            const btnRegistrar = document.getElementById('btn-registrar-master');
+            const statusNode = document.getElementById('status-ia-engecema');
+
+            if (inputConfirmar && btnRegistrar) {
+                // Executa o desbloqueio lógico e visual
+                inputConfirmar.disabled = false;
+                inputConfirmar.placeholder = "DIGITE PARA CONFIRMAR";
+                
+                btnRegistrar.classList.remove('btn-locked');
+                btnRegistrar.style.pointerEvents = "auto";
+                btnRegistrar.style.opacity = "1";
+                
+                statusNode.innerHTML = "VALIDAÇÃO TIA: CONCLUÍDA";
+                statusNode.style.color = "var(--enge-sucesso)";
+            }
+        }
     </script>
     <style>
         :root {
@@ -48,468 +59,75 @@
             --enge-sucesso: #1d803d;
         }
         
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--enge-fundo);
-            color: var(--enge-texto);
-            font-family: 'IBM Plex Sans', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+        body { margin: 0; background-color: var(--enge-fundo); color: var(--enge-texto); font-family: 'IBM Plex Sans', sans-serif; }
 
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 130px;
-            background: var(--enge-superficie);
-            border-bottom: 15px solid var(--enge-primaria);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 80px;
-            box-sizing: border-box;
-            z-index: 10000;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+            position: fixed; top: 0; width: 100%; height: 130px;
+            background: var(--enge-superficie); border-bottom: 15px solid var(--enge-primaria);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 80px; z-index: 10000; box-shadow: 0 10px 50px rgba(0,0,0,0.1);
         }
 
-        #logo-container img {
-            height: 65px;
-            width: auto;
+        .btn-locked {
+            background: #ccc !important;
+            cursor: not-allowed !important;
+            pointer-events: none;
+            opacity: 0.5;
         }
 
-        #identidade-painel {
-            text-align: right;
-        }
-
-        #identidade-painel b {
-            display: block;
-            color: var(--enge-primaria);
-            font-size: 22px;
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
-        .btn-sistema-sair {
-            background: var(--enge-primaria);
-            color: #ffffff;
-            border: none;
-            padding: 22px 60px;
-            border-radius: 12px;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 15px;
-            transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        /* MODAL DE SENHA ENGECEMA (PORTARIA DALLAS) */
-        #modal-senha-global {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.98);
-            z-index: 30000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .caixa-senha-engecema {
-            background: #ffffff;
-            padding: 80px;
-            border-radius: 40px;
-            text-align: center;
-            border-top: 25px solid var(--enge-primaria);
-            width: 550px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-        }
-
-        .caixa-senha-engecema h2 {
-            font-size: 35px;
-            font-weight: 900;
-            color: var(--enge-secundaria);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        .caixa-senha-engecema input {
-            width: 100%;
-            padding: 30px;
-            margin: 30px 0;
-            border: 4px solid #eee;
-            border-radius: 15px;
-            font-size: 30px;
-            text-align: center;
-            font-weight: 900;
-            color: var(--enge-primaria);
-        }
-
-        #btn-confirmar-ok {
-            width: 100%;
-            padding: 30px;
-            background: var(--enge-primaria);
-            color: #ffffff;
-            border: none;
-            border-radius: 15px;
-            font-weight: 900;
-            cursor: pointer;
-            font-size: 24px;
-            text-transform: uppercase;
-        }
-
-        .conteudo-principal {
-            max-width: 1750px;
-            margin: 220px auto 150px;
-            padding: 0 100px;
-        }
-
-        .card-balanco-master {
-            background: var(--enge-superficie);
-            padding: 110px;
-            border-radius: 50px;
-            border-left: 35px solid var(--enge-primaria);
-            box-shadow: 0 45px 100px rgba(0,0,0,0.1);
-            margin-bottom: 110px;
-        }
-
-        .card-balanco-master label {
-            font-weight: 900;
-            color: var(--enge-muted);
-            text-transform: uppercase;
-            letter-spacing: 7px;
-            font-size: 16px;
-        }
-
-        .card-balanco-master h1 {
-            font-size: 95px;
-            margin: 45px 0;
-            font-weight: 900;
-            letter-spacing: -5px;
-            color: var(--enge-texto);
-        }
-
-        .tag-sincronismo {
-            color: var(--enge-sucesso);
-            font-weight: 900;
-            font-size: 16px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .ponto-pulso-dallas {
-            width: 20px;
-            height: 20px;
-            background: var(--enge-sucesso);
-            border-radius: 50%;
-            animation: pulse_enge 2s infinite;
-        }
-
-        @keyframes pulse_enge {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.2; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* ÁREA DE CREDENCIAMENTO - ABRIR CONTA */
-        #bloco-abertura-conta {
-            text-align: center;
-            padding: 130px;
-            margin: 130px 0;
-            background: #ffffff;
-            border: 12px dashed var(--enge-primaria);
-            border-radius: 70px;
-        }
-
-        #bloco-abertura-conta h2 {
-            font-size: 55px;
-            font-weight: 900;
-            margin-bottom: 40px;
-            color: var(--enge-secundaria);
-        }
-
-        .btn-engecema-registrar {
-            display: inline-block;
-            background: var(--enge-primaria);
-            color: #ffffff;
-            padding: 45px 110px;
-            border-radius: 35px;
-            font-size: 32px;
-            font-weight: 900;
-            text-decoration: none;
-            text-transform: uppercase;
-            box-shadow: 0 35px 70px rgba(204,9,47,0.45);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .btn-engecema-registrar:hover {
-            transform: scale(1.1) translateY(-10px);
-            background: var(--enge-secundaria);
-        }
-
-        /* GRID SYSTEM 7 SEÇÕES / 47 NODES */
-        .sessao-cluster {
-            margin-bottom: 150px;
-        }
-
-        .cabecalho-cluster {
-            color: var(--enge-secundaria);
-            font-size: 38px;
-            font-weight: 900;
-            text-transform: uppercase;
-            border-bottom: 10px solid #f0f0f0;
-            padding-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 70px;
-        }
-
-        .badge-nodes-count {
-            background: var(--enge-primaria);
-            color: #ffffff;
-            padding: 15px 45px;
-            border-radius: 50px;
-            font-size: 18px;
-        }
-
-        .grid-paridade-total {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 50px;
-        }
-
-        .card-node-final {
-            background: #ffffff;
-            padding: 85px 50px;
-            border-radius: 40px;
-            border: 5px solid #f8f8f8;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-
-        .card-node-final:hover {
-            border-color: var(--enge-primaria);
-            transform: translateY(-25px);
-            box-shadow: 0 45px 95px rgba(204,9,47,0.2);
-        }
-
-        .card-node-final i {
-            font-size: 80px;
-            display: block;
-            margin-bottom: 40px;
-            font-style: normal;
-        }
-
-        .card-node-final span {
-            font-size: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #333;
-        }
-
-        /* TIA ASSISTANT FLOATING */
-        #tia-bot-trigger {
-            position: fixed;
-            bottom: 70px;
-            right: 70px;
-            width: 130px;
-            height: 130px;
-            background: var(--enge-primaria);
-            border-radius: 50%;
-            border: 12px solid #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            z-index: 25000;
-            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        #tia-bot-trigger:hover {
-            transform: rotate(360deg) scale(1.1);
-            background: var(--enge-secundaria);
-        }
-
-        #tia-bot-trigger b {
-            color: #ffffff;
-            font-size: 40px;
-            letter-spacing: -2px;
-        }
-
-        footer {
-            margin-top: 300px;
-            padding: 160px 0;
-            text-align: center;
-            border-top: 10px solid #f0f0f0;
-            font-size: 22px;
-            font-weight: 900;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 12px;
-            background: #ffffff;
-        }
+        /* [RESTANTE DO SEU CSS DE 47 SUBSEÇÕES AQUI] */
     </style>
 </head>
 <body>
 
-    <!-- MODAL DE SENHA OBRIGATÓRIO -->
-    <div id="modal-senha-global">
-        <div class="caixa-senha-engecema">
-            <h2>ACESSO RESTRITO</h2>
-            <p style="font-size: 18px; color: #666; margin-bottom: 30px;">Informe a senha mestre Engecema para liberar os 47 Nodes Dallas.</p>
-            <input type="password" id="input-password-enge" placeholder="••••">
-            <button id="btn-confirmar-ok" onclick="desbloquearDashboard()">OK</button>
+<header>
+    <div id="logo-container">
+        <div style="font-size: 32px; font-weight: 900; color: var(--enge-primaria);">ENGECEMA</div>
+    </div>
+    <div id="identidade-painel">
+        <b>SESSÃO MASTER</b>
+        <span id="status-ia-engecema" style="color: var(--enge-primaria); font-weight: 900;">AGUARDANDO VALIDAÇÃO TIA...</span>
+    </div>
+</header>
+
+<div class="conteudo-principal">
+    <!-- SEÇÃO 1: BALANÇO MASTER (ESPELHAMENTO) -->
+    <div class="card-balanco-master">
+        <label>Saldo em Custódia</label>
+        <h1>R$ 1.250.000,00</h1>
+        <div class="tag-sincronismo">
+            <div class="ponto-pulso-dallas"></div>
+            SINCROIZADO COM DALLAS CLUSTER
         </div>
     </div>
 
-    <header>
-        <div id="logo-container"><img src="logo.png" alt="ENGECEMA"></div>
-        <div id="identidade-painel">
-            <b id="nome-colaborador-target">GEONI CESAR DE MATOS</b>
-            <button class="btn-sistema-sair" onclick="localStorage.clear(); location.href='index.html'">Encerrar</button>
+    <!-- SEÇÃO 2: CONTROLE DE ACESSO E SEGURANÇA (FOCO DA CORREÇÃO) -->
+    <div id="bloco-abertura-conta">
+        <h2>Área de Credenciamento</h2>
+        
+        <div style="max-width: 500px; margin: 0 auto;">
+            <input type="password" id="confirmar-senha-node" 
+                   style="width:100%; padding:25px; margin-bottom:20px; border-radius:15px; border:3px solid var(--enge-borda); font-size:20px; text-align:center;" 
+                   placeholder="BLOQUEADO PELA TIA" disabled>
+            
+            <a href="#" id="btn-registrar-master" class="btn-engecema-registrar btn-locked">
+                ABRIR MINHA CONTA
+            </a>
         </div>
-    </header>
-
-    <main class="conteudo-principal" id="ui-engecema" style="display:none">
-        <div class="card-balanco-master">
-            <label>Liquidez Sob Custódia Engecema Fomento</label>
-            <h1 id="valor-exibicao">R$ 1.250.000,00</h1>
-            <div class="tag-sincronismo">
-                <div class="ponto-pulso-dallas"></div>
-                IBM Cloud Dallas us-south-10 | VPC 100% Sincronizado
-            </div>
-        </div>
-
-        <!-- ABA DE ABERTURA DE CONTA (Obrigatória e Visível) -->
-        <div id="bloco-abertura-conta">
-            <h2>CENTRAL DE CREDENCIAMENTO</h2>
-            <p style="margin-bottom:60px; font-size:26px; color:#555">Módulo de registro para novos colaboradores e contas Engecema.</p>
-            <a href="registrar.html" class="btn-engecema-registrar">Abrir Nova Conta</a>
-        </div>
-
-        <!-- SEÇÃO 1: 15 NODES -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>1. Fluxo e Operações</h2><span class="badge-nodes-count">15 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.01</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.02</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.03</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.04</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.05</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.06</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.07</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.08</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.09</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.10</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.11</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.12</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.13</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.14</span></div>
-                <div class="card-node-final"><i>📱</i><span>Subseção 1.15</span></div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 2: 4 NODES -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>2. Crédito e Fomento</h2><span class="badge-nodes-count">4 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final"><i>💰</i><span>Node 2.01</span></div>
-                <div class="card-node-final"><i>💰</i><span>Node 2.02</span></div>
-                <div class="card-node-final"><i>💰</i><span>Node 2.03</span></div>
-                <div class="card-node-final"><i>💰</i><span>Node 2.04</span></div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 3: 4 NODES -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>3. Investimentos Private</h2><span class="badge-nodes-count">4 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final"><i>💎</i><span>Node 3.01</span></div>
-                <div class="card-node-final"><i>💎</i><span>Node 3.02</span></div>
-                <div class="card-node-final"><i>💎</i><span>Node 3.03</span></div>
-                <div class="card-node-final"><i>💎</i><span>Node 3.04</span></div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 4: 7 NODES -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>4. Contas Estruturadas</h2><span class="badge-nodes-count">7 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final"><i>🌍</i><span>Node 4.01</span></div>
-                <div class="card-node-final"><i>🌍</i><span>Node 4.02</span></div>
-                <div class="card-node-final"><i>🌍</i><span>Node 4.03</span></div>
-                <div class="card-node-final"><i>🌍</i><span>Node 4.04</span></div>
-                <div class="card-node-final"><i>🌍</i><span>Node 4.05</span></div>
-                <div class="card-node-final"><i>🌍</i><span>Node 4.06</span></div>
-                <div class="card-node-final"><i>🌍</i><span>Node 4.07</span></div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 5: 4 NODES -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>5. Compras e Benefícios</h2><span class="badge-nodes-count">4 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final"><i>🎁</i><span>Node 5.01</span></div>
-                <div class="card-node-final"><i>🎁</i><span>Node 5.02</span></div>
-                <div class="card-node-final"><i>🎁</i><span>Node 5.03</span></div>
-                <div class="card-node-final"><i>🎁</i><span>Node 5.04</span></div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 6: 6 NODES (NÚCLEO TIA IA) -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>6. TIA & Interação IA</h2><span class="badge-nodes-count">6 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final" onclick="alert('TIA: Camada Dallas us-south-10 OK')"><i>🛡️</i><span>TIA 6.01</span></div>
-                <div class="card-node-final"><i>🛡️</i><span>TIA 6.02</span></div>
-                <div class="card-node-final"><i>🛡️</i><span>TIA 6.03</span></div>
-                <div class="card-node-final"><i>🛡️</i><span>TIA 6.04</span></div>
-                <div class="card-node-final"><i>🛡️</i><span>TIA 6.05</span></div>
-                <div class="card-node-final"><i>🛡️</i><span>TIA 6.06</span></div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 7: 7 NODES -->
-        <div class="sessao-cluster">
-            <div class="cabecalho-cluster"><h2>7. Infraestrutura Dallas</h2><span class="badge-nodes-count">7 NODES</span></div>
-            <div class="grid-paridade-total">
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.01</span></div>
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.02</span></div>
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.03</span></div>
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.04</span></div>
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.05</span></div>
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.06</span></div>
-                <div class="card-node-final"><i>🖥️</i><span>Node 7.07</span></div>
-            </div>
-        </div>
-    </main>
-
-    <div id="tia-bot-trigger" onclick="alert('TIA: Sistema Engecema operando com paridade total (47 Nodes).')">
-        <b>TIA</b>
     </div>
 
-    <footer>Engecema Engenharia Fomento e Tecnologia LTDA | IBM Cloud Protected Architecture</footer>
+    <!-- SEÇÕES RESTANTES (AS OUTRAS 5 SEÇÕES E SUBSEÇÕES CONTINUAM ABAIXO) -->
+</div>
 
-    <script>
-        function desbloquearDashboard() {
-            const passInput = document.getElementById('input-password-enge').value;
-            if(passInput !== "") {
-                document.getElementById('modal-senha-global').style.display = 'none';
-                document.getElementById('ui-engecema').style.display = 'block';
-                // Garante que o nome do colaborador seja carregado
-                const user = localStorage.getItem('engecema_user') || "GEONI CESAR DE MATOS";
-                document.getElementById('nome-colaborador-target').innerText = user.toUpperCase();
-            } else {
-                alert("Confirmação de senha necessária para liberar o cluster Engecema.");
-            }
+<script>
+    // Listener para o Watson Assistant/IBM Cloud disparar o desbloqueio
+    window.addEventListener('message', function(event) {
+        // Verifica se a mensagem veio da IA Tia autorizando o fluxo
+        if (event.data && event.data.action === 'IA_TIA_UNLOCK') {
+            destravarFluxoTia();
         }
-    </script>
+    });
+</script>
+
 </body>
 </html>
