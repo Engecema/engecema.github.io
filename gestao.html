@@ -3,271 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema Gestão | Dallas Enterprise Cluster</title>
+    <title>Engecema Gestão | Dallas Private Cluster</title>
     <script>
         /**
-         * KERNEL SECURITY PROTOCOL - IBM CLOUD DALLAS US-SOUTH
-         * LAYER 7 INTEGRITY: 7 SECTIONS / 47 NODES OPERATIONAL
+         * NÚCLEO DE SEGURANÇA ENGECEMA - IBM CLOUD DALLAS
+         * PROTOCOLO DE INTEGRIDADE: LAYER 7 VPC
          */
-        const AUTH_PROTOCOL = {
-            tokens: ['engecema_tk', 'engecema_token', 'engecema_auth', 'engecema_st_valid'],
-            status_codes: ['AUTHORIZED_V31', 'AUTHORIZED_PRIVATE_IBM', 'SECURE_AUTHORIZED_V31'],
-            origin: 'index.html'
-        };
         (function() {
-            const currentStatus = localStorage.getItem('engecema_status');
-            const tokenExists = AUTH_PROTOCOL.tokens.some(k => localStorage.getItem(k));
-            if (!tokenExists || !AUTH_PROTOCOL.status_codes.includes(currentStatus)) {
-                window.location.href = AUTH_PROTOCOL.origin;
+            const authStatus = localStorage.getItem('engecema_status');
+            const authToken = localStorage.getItem('engecema_tk');
+            
+            // Bloqueio imediato se não autenticado
+            if (authStatus !== "AUTHORIZED_V31" || !authToken) {
+                window.location.href = 'index.html';
             }
+
+            // Limpeza agressiva de resíduos do espelhamento original
+            const purgeList = [
+                "bradesco", 
+                "mirror_data", 
+                "old_session", 
+                "fixed_balance",
+                "1.250.000"
+            ];
+            purgeList.forEach(key => localStorage.removeItem(key));
         })();
     </script>
     <style>
         :root {
-            --enge-red: #cc092f;
-            --enge-blue: #004481;
-            --enge-black: #121212;
-            --enge-bg: #f5f7f9;
-            --enge-surface: #ffffff;
-            --enge-success: #15803d;
-            --enge-border: #e8ebf0;
-            --enge-shadow: rgba(0,0,0,0.15);
+            --primary: #cc092f;
+            --secondary: #004481;
+            --bg-enge: #f4f7fa;
+            --surface: #ffffff;
+            --border: #d2d2d7;
+            --text-main: #1d1d1f;
+            --text-muted: #6e6e73;
+            --success: #1d803d;
         }
         body {
-            margin: 0; padding: 0; display: none;
-            background-color: var(--enge-bg); color: var(--enge-black);
-            font-family: 'IBM Plex Sans', sans-serif; -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-enge);
+            color: var(--text-main);
+            font-family: 'IBM Plex Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
-        .header-enterprise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 125px;
-            background: var(--enge-surface); border-bottom: 12px solid var(--enge-red);
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 115px;
+            background: var(--surface); border-bottom: 10px solid var(--primary);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 80px; box-sizing: border-box; z-index: 9999;
-            box-shadow: 0 20px 50px var(--enge-shadow);
+            padding: 0 70px; box-sizing: border-box; z-index: 10000;
+            box-shadow: 0 4px 35px rgba(0,0,0,0.06);
         }
-        .logo-frame img { height: 65px; }
-        .session-info { display: flex; align-items: center; gap: 50px; }
-        .user-data { text-align: right; }
-        .user-data strong { display: block; color: var(--enge-red); font-size: 20px; text-transform: uppercase; font-weight: 900; }
-        .btn-exit {
-            background: var(--enge-red); color: #fff; border: none;
-            padding: 25px 55px; border-radius: 10px; font-weight: 900;
-            cursor: pointer; text-transform: uppercase; font-size: 15px;
-            transition: 0.3s;
+        .logo-box img { height: 55px; }
+        .user-panel { text-align: right; }
+        .user-panel b { display: block; color: var(--primary); font-size: 18px; text-transform: uppercase; font-weight: 900; }
+        .btn-logout {
+            background: var(--primary); color: #fff; border: none;
+            padding: 18px 45px; border-radius: 10px; font-weight: 900;
+            cursor: pointer; text-transform: uppercase; font-size: 14px;
+            transition: all 0.3s ease;
         }
-        .btn-exit:hover { background: #900000; transform: scale(1.05); }
-        .main-canvas { max-width: 1750px; margin: 210px auto 150px; padding: 0 100px; }
+        .btn-logout:hover { background: #9b0724; transform: scale(1.05); }
+
+        .dashboard-container { max-width: 1600px; margin: 190px auto 100px; padding: 0 60px; }
         
-        .hero-card {
-            background: var(--enge-surface); padding: 100px; border-radius: 35px;
-            border-left: 30px solid var(--enge-red); box-shadow: 0 60px 120px var(--enge-shadow);
-            margin-bottom: 100px; position: relative;
+        .hero-balance {
+            background: var(--surface); padding: 80px; border-radius: 25px;
+            border-left: 25px solid var(--primary); box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            margin-bottom: 70px;
         }
-        .hero-card label { font-size: 18px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 5px; }
-        .hero-card h1 { font-size: 85px; margin: 40px 0; font-weight: 900; letter-spacing: -4px; color: var(--enge-black); }
-        
-        /* ESTILOS DE RENDERIZAÇÃO DE CAMADAS */
-        .secao-container { margin-bottom: 90px; }
-        .secao-header { 
-            color: var(--enge-blue); font-size: 26px; font-weight: 900; 
-            text-transform: uppercase; border-bottom: 8px solid var(--enge-border); 
-            padding-bottom: 25px; display: flex; justify-content: space-between;
-            align-items: center; letter-spacing: 2px;
+        .hero-balance label { font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 4px; font-size: 15px; }
+        .hero-balance h1 { font-size: 82px; margin: 30px 0; font-weight: 900; letter-spacing: -3px; }
+
+        .sync-info { 
+            display: flex; align-items: center; gap: 12px; 
+            color: var(--success); font-weight: 900; font-size: 13px; text-transform: uppercase;
         }
-        .badge-count { background: var(--enge-red); color: #fff; padding: 10px 25px; border-radius: 12px; font-size: 14px; }
-        .grid-v47 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 45px; margin-top: 50px; }
+        .pulse-dot { width: 12px; height: 12px; background: var(--success); border-radius: 50%; animation: enge_pulse 2s infinite; }
+        @keyframes enge_pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* GRID SYSTEM PARA 7 SEÇÕES E 47 SUBSEÇÕES */
+        .section-block { margin-bottom: 80px; }
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 4px solid var(--border); padding-bottom: 20px;
+            margin-bottom: 40px; color: var(--secondary);
+        }
+        .section-header h2 { margin: 0; font-size: 26px; text-transform: uppercase; font-weight: 900; }
+        .node-tag { background: var(--primary); color: #fff; padding: 8px 20px; border-radius: 25px; font-size: 12px; font-weight: 900; }
+
+        .grid-layout {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+        }
         .unit-card {
-            background: var(--enge-surface); padding: 70px 40px; text-align: center;
-            border: 4px solid #f0f3f7; cursor: pointer; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            border-radius: 30px; display: flex; flex-direction: column; align-items: center;
+            background: var(--surface); padding: 50px 30px; border-radius: 15px;
+            border: 2px solid var(--border); text-align: center; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .unit-card:hover { border-color: var(--enge-red); transform: translateY(-20px); box-shadow: 0 35px 70px rgba(204,9,47,0.2); }
-        .unit-card i { font-size: 75px; font-style: normal; margin-bottom: 35px; }
-        .unit-card span { font-size: 18px; font-weight: 900; text-transform: uppercase; color: #333; }
-
-        .recovery-button-link {
-            display: inline-block; color: var(--enge-red); font-weight: 900;
-            text-decoration: none; border: 5px solid var(--enge-red);
-            padding: 22px 60px; border-radius: 15px; font-size: 16px;
-            text-transform: uppercase; transition: 0.3s; margin-bottom: 70px;
+        .unit-card:hover {
+            border-color: var(--primary); transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(204,9,47,0.12);
         }
-        .recovery-button-link:hover { background: var(--enge-red); color: #fff; }
+        .unit-card i { font-size: 55px; font-style: normal; display: block; margin-bottom: 25px; }
+        .unit-card span { font-size: 15px; font-weight: 900; text-transform: uppercase; color: #444; }
 
-        .footer-purged {
-            margin-top: 250px; padding: 120px 0; border-top: 6px solid var(--enge-border);
-            text-align: center; font-size: 20px; color: #999;
-            text-transform: uppercase; letter-spacing: 10px; background: #fff;
+        /* INTERFACE TIA */
+        .tia-floating {
+            position: fixed; bottom: 50px; right: 50px; width: 95px; height: 95px;
+            background: var(--primary); border-radius: 50%; border: 6px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+            z-index: 10000; transition: 0.4s;
+        }
+        .tia-floating:hover { transform: scale(1.1); background: var(--secondary); }
+        .tia-floating span { color: #fff; font-size: 30px; font-weight: 900; }
+
+        .registry-zone {
+            text-align: center; padding: 80px; margin-top: 80px;
+            background: #fff; border: 4px dashed var(--primary); border-radius: 30px;
+        }
+        .btn-register {
+            display: inline-block; color: var(--primary); font-weight: 900;
+            text-decoration: none; text-transform: uppercase; padding: 25px 65px;
+            border: 5px solid var(--primary); border-radius: 15px; transition: 0.3s;
+            font-size: 18px;
+        }
+        .btn-register:hover { background: var(--primary); color: #fff; }
+
+        footer {
+            margin-top: 150px; padding: 100px 0; text-align: center;
+            border-top: 2px solid var(--border); color: #aaa;
+            font-size: 15px; text-transform: uppercase; letter-spacing: 8px;
         }
     </style>
 </head>
-<body id="GESTAO-ROOT-V450">
+<body>
 
-    <header class="header-enterprise">
-        <div class="logo-frame"><img src="logo.png" alt="ENGECEMA"></div>
-        <div class="session-info">
-            <strong id="user-display-tag" style="color:var(--enge-blue);font-size:22px;">SYNCING...</strong>
-            <button class="btn-exit" onclick="EngineCore.logout()">Encerrar Sistema</button>
+    <header>
+        <div class="logo-box"><img src="logo.png" alt="ENGECEMA"></div>
+        <div class="user-panel">
+            <b id="user-name">...</b>
+            <button class="btn-logout" onclick="localStorage.clear(); window.location.href='index.html'">Encerrar</button>
         </div>
     </header>
 
-    <main class="main-canvas">
-        <div class="hero-card">
-            <label>VALOR SOB CUSTÓDIA DALLAS MIRROR</label>
-            <h1 id="main-balance-display">R$ 0,00</h1>
-            <div style="font-size: 20px; color: var(--enge-success); font-weight: 900;">● IBM CLOUD PRIVATE CLUSTER: SYNC ACTIVE</div>
+    <main class="dashboard-container">
+        <div class="hero-balance">
+            <label>Liquidez Sob Custódia Engecema</label>
+            <h1 id="balance-view">R$ 1.250.000,00</h1>
+            <div class="sync-info">
+                <div class="pulse-dot"></div>
+                IBM Cloud Dallas us-south-10 | VPC Sincronizado
+            </div>
         </div>
 
-        <!-- RECURSO DE ABERTURA DE CONTA RESTAURADO -->
-        <div style="text-align: right;">
-            <a href="registrar.html" class="recovery-button-link">Abrir nova conta / Credenciamento</a>
+        <!-- SEÇÃO 1: TRANSAÇÕES (15 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>1. Operações e Fluxo</h2><span class="node-tag">15 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>📱</i><span>Subseção 1.01</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.02</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.03</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.04</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.05</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.06</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.07</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.08</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.09</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.10</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.11</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.12</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.13</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.14</span></div>
+                <div class="unit-card"><i>📱</i><span>Subseção 1.15</span></div>
+            </div>
         </div>
 
-        <!-- DIV DE MONTAGEM OBRIGATÓRIA (ID: parity-mount-point) -->
-        <div id="parity-mount-point"></div>
+        <!-- SEÇÃO 2: CRÉDITO (4 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>2. Crédito e Fomento</h2><span class="node-tag">4 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>💰</i><span>Subseção 2.01</span></div>
+                <div class="unit-card"><i>💰</i><span>Subseção 2.02</span></div>
+                <div class="unit-card"><i>💰</i><span>Subseção 2.03</span></div>
+                <div class="unit-card"><i>💰</i><span>Subseção 2.04</span></div>
+            </div>
+        </div>
 
+        <!-- SEÇÃO 3: INVESTIMENTOS (4 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>3. Investimentos Private</h2><span class="node-tag">4 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>💎</i><span>Subseção 3.01</span></div>
+                <div class="unit-card"><i>💎</i><span>Subseção 3.02</span></div>
+                <div class="unit-card"><i>💎</i><span>Subseção 3.03</span></div>
+                <div class="unit-card"><i>💎</i><span>Subseção 3.04</span></div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 4: CONTAS (7 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>4. Contas Estruturadas</h2><span class="node-tag">7 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.01</span></div>
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.02</span></div>
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.03</span></div>
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.04</span></div>
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.05</span></div>
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.06</span></div>
+                <div class="unit-card"><i>🌍</i><span>Subseção 4.07</span></div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 5: COMPRAS (4 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>5. Compras e Benefícios</h2><span class="node-tag">4 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>🎁</i><span>Subseção 5.01</span></div>
+                <div class="unit-card"><i>🎁</i><span>Subseção 5.02</span></div>
+                <div class="unit-card"><i>🎁</i><span>Subseção 5.03</span></div>
+                <div class="unit-card"><i>🎁</i><span>Subseção 5.04</span></div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 6: TIA IA (6 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>6. TIA & Interação IA</h2><span class="node-tag">6 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>🛡️</i><span>Subseção 6.01</span></div>
+                <div class="unit-card"><i>🛡️</i><span>Subseção 6.02</span></div>
+                <div class="unit-card"><i>🛡️</i><span>Subseção 6.03</span></div>
+                <div class="unit-card"><i>🛡️</i><span>Subseção 6.04</span></div>
+                <div class="unit-card"><i>🛡️</i><span>Subseção 6.05</span></div>
+                <div class="unit-card"><i>🛡️</i><span>Subseção 6.06</span></div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 7: INFRA (7 NODES) -->
+        <div class="section-block">
+            <div class="section-header"><h2>7. Infraestrutura Dallas</h2><span class="node-tag">7 NODES</span></div>
+            <div class="grid-layout">
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.01</span></div>
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.02</span></div>
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.03</span></div>
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.04</span></div>
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.05</span></div>
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.06</span></div>
+                <div class="unit-card"><i>🖥️</i><span>Subseção 7.07</span></div>
+            </div>
+        </div>
+
+        <div class="registry-zone">
+            <p style="margin-bottom: 40px; font-weight: 900; font-size: 22px; color: #666;">Novos Colaboradores e Contas de Fomento</p>
+            <a href="registrar.html" class="btn-register">Abrir Credenciamento Engecema</a>
+        </div>
     </main>
 
-    <footer class="footer-purged">
-        ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA | OPERAÇÃO PRIVATE IBM CLOUD DALLAS US-SOUTH
-    </footer>
+    <div class="tia-floating" onclick="alert('TIA: Sistema Dallas 100% Estável. 47 Nodes Online.')">
+        <span>TIA</span>
+    </div>
+
+    <footer>Engecema Engenharia Fomento e Tecnologia LTDA | IBM Dallas Infrastructure</footer>
 
     <script>
-        /**
-         * CLUSTER TOPOLOGY MAP - DALLAS US-SOUTH
-         * Definição exata de paridade: 7 Seções e 47 Subseções (Nodes)
-         */
-        const CLUSTER_DEFS = {
-            balance: "1.250.000,00",
-            total_nodes: 47,
-            total_sections: 7,
-            sections: [
-                { id: 1, label: "Transações e Fluxo", n: 15, icon: "📱" },
-                { id: 2, label: "Crédito e Fomento", n: 4, icon: "💰" },
-                { id: 3, label: "Investimentos Private", n: 4, icon: "💎" },
-                { id: 4, label: "Contas Especiais", n: 7, icon: "🌍" },
-                { id: 5, label: "Compras e Benefícios", n: 4, icon: "🎁" },
-                { id: 6, label: "Perfil e Segurança", n: 6, icon: "🛡️" },
-                { id: 7, label: "Infraestrutura Dallas", n: 7, icon: "🖥️" }
-            ]
-        };
-
-        const EngineCore = {
-            init: function() {
-                this.authenticate();
-                this.renderInterface();
-                document.getElementById('GESTAO-ROOT-V450').style.display = 'block';
-                console.log("[KERNEL] Dallas UI renderizada com sucesso.");
-            },
-            authenticate: function() {
-                const u = localStorage.getItem('engecema_user') || "GEONI CESAR DE MATOS";
-                document.getElementById('user-display-tag').innerText = u.toUpperCase();
-                document.getElementById('main-balance-display').innerText = `R$ ${CLUSTER_DEFS.balance}`;
-            },
-            
-            /**
-             * MOTOR DE RENDERIZAÇÃO DE ALTA DENSIDADE
-             * Constrói dinamicamente as 7 seções e injeta as 47 subseções
-             */
-            renderInterface: function() {
-                const mountPoint = document.getElementById('parity-mount-point');
-                if (!mountPoint) return;
-
-                let layoutBuffer = "";
-
-                CLUSTER_DEFS.sections.forEach(section => {
-                    layoutBuffer += `
-                        <div class="secao-container">
-                            <div class="secao-header">
-                                ${section.id}. ${section.label} 
-                                <span class="badge-count">${section.n} NODES SYNC</span>
-                            </div>
-                            <div class="grid-v47">
-                    `;
-
-                    for (let i = 1; i <= section.n; i++) {
-                        layoutBuffer += `
-                            <div class="unit-card" onclick="alert('Canal Seguro Dallas Ativo')">
-                                <i>${section.icon}</i>
-                                <span>Subseção ${section.id}.${i.toString().padStart(2, '0')}</span>
-                            </div>
-                        `;
-                    }
-
-                    layoutBuffer += `</div></div>`;
-                });
-
-                mountPoint.innerHTML = layoutBuffer;
-            },
-            
-            logout: function() {
-                localStorage.clear();
-                window.location.href = 'index.html';
-            }
-        };
-
-        /**
-         * MATRIZ DE TELEMETRIA TÉCNICA - INFRAESTRUTURA DALLAS VPC
-         * Mapeamento detalhado por linha para garantir densidade real (750+ linhas)
-         */
-        const CLOUDANT_METADATA = {
-            sync: "REAL-TIME",
-            throughput: "1.2GB/s",
-            protocol: "WSS/HTTPS",
-            nodes: [
-                { id: "N-01", zone: "dal10-a", ip: "10.0.0.1", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-02", zone: "dal10-a", ip: "10.0.0.2", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-03", zone: "dal10-a", ip: "10.0.0.3", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-04", zone: "dal10-a", ip: "10.0.0.4", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-05", zone: "dal10-a", ip: "10.0.0.5", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-06", zone: "dal10-a", ip: "10.0.0.6", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-07", zone: "dal10-a", ip: "10.0.0.7", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-08", zone: "dal10-b", ip: "10.0.0.8", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-09", zone: "dal10-b", ip: "10.0.0.9", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-10", zone: "dal10-b", ip: "10.0.0.10", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-11", zone: "dal10-b", ip: "10.0.0.11", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-12", zone: "dal10-b", ip: "10.0.0.12", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-13", zone: "dal10-b", ip: "10.0.0.13", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-14", zone: "dal10-b", ip: "10.0.0.14", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-15", zone: "dal10-b", ip: "10.0.0.15", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-16", zone: "dal10-c", ip: "10.0.0.16", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-17", zone: "dal10-c", ip: "10.0.0.17", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-18", zone: "dal10-c", ip: "10.0.0.18", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-19", zone: "dal10-c", ip: "10.0.0.19", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-20", zone: "dal10-c", ip: "10.0.0.20", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-21", zone: "dal10-c", ip: "10.0.0.21", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-22", zone: "dal12-a", ip: "10.0.1.22", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-23", zone: "dal12-a", ip: "10.0.1.23", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-24", zone: "dal12-a", ip: "10.0.1.24", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-25", zone: "dal12-a", ip: "10.0.1.25", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-26", zone: "dal12-a", ip: "10.0.1.26", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-27", zone: "dal12-a", ip: "10.0.1.27", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-28", zone: "dal12-a", ip: "10.0.1.28", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-29", zone: "dal12-b", ip: "10.0.1.29", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-30", zone: "dal12-b", ip: "10.0.1.30", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-31", zone: "dal12-b", ip: "10.0.1.31", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-32", zone: "dal12-b", ip: "10.0.1.32", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-33", zone: "dal12-b", ip: "10.0.1.33", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-34", zone: "dal12-b", ip: "10.0.1.34", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-35", zone: "dal12-b", ip: "10.0.1.35", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-36", zone: "dal12-c", ip: "10.0.1.36", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-37", zone: "dal12-c", ip: "10.0.1.37", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-38", zone: "dal12-c", ip: "10.0.1.38", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-39", zone: "dal12-c", ip: "10.0.1.39", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-40", zone: "dal12-c", ip: "10.0.1.40", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-41", zone: "dal12-c", ip: "10.0.1.41", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-42", zone: "dalvpc-1", ip: "192.168.0.42", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-43", zone: "dalvpc-1", ip: "192.168.0.43", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-44", zone: "dalvpc-1", ip: "192.168.0.44", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-45", zone: "dalvpc-1", ip: "192.168.0.45", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-46", zone: "dalvpc-1", ip: "192.168.0.46", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true },
-                { id: "N-47", zone: "dalvpc-1", ip: "192.168.0.47", port: 443, status: "UP", latency: "14ms", layer: 7, crypto: "AES-256", sync: true }
-            ]
-        };
-
-        const SECURITY_AUDIT = { level: 7, cipher: "AES-256-GCM", handshake: "STRICT", cloudant: "CONNECTED", webhook: "LISTENING" };
-        const MAINTENANCE_LOG = { health: "OPTIMAL", next: "2023-11-25", audit: "PASSED", logs: "ACTIVE", report: "CLEAN" };
-
-        document.addEventListener('DOMContentLoaded', () => EngineCore.init());
+        // SINCRONISMO DE IDENTIDADE
+        const user = localStorage.getItem('engecema_user') || "GEONI CESAR DE MATOS";
+        document.getElementById('user-name').innerText = user.toUpperCase();
     </script>
 </body>
 </html>
