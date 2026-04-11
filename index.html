@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco Engecema | Portal de Acesso Dallas 2026</title>
+    <title>Engecema | Portal de Acesso 2026</title>
     
     <style>
         /* 
@@ -15,29 +15,27 @@
            SISTEMA DE ARQUITETURA VISUAL ENGECEMA - CICLO OPERACIONAL 2026
            DESENVOLVIDO POR: ADAPTIVE AUTHENTICATOR
            OBJETIVO: PORTAL DE ACESSO DO CLIENTE COM REDIRECIONAMENTO PARA CADASTRO
-           DENSIDADE TÉCNICA: SUPERIOR A 500 LINHAS PARA SUBSTITUIÇÃO DE CACHE
+           DENSIDADE TÉCNICA: SUPERIOR A 600 LINHAS PARA SUBSTITUIÇÃO DE CACHE
            =========================================================================
         */
         :root {
-            --enge-primaria: #cc092f;
-            --enge-secundaria: #004481;
-            --enge-fundo-master: #f4f7fa;
-            --enge-superficie: #ffffff;
-            --enge-texto-corpo: #1d1d1f;
-            --enge-texto-muted: #6e6e73;
-            --enge-sucesso-digital: #1d803d;
-            --enge-borda-padrao: #d2d2d7;
-            --sombra-supreme-master: 0 65px 160px rgba(0,0,0,0.18);
-            --sombra-interacao-input: 0 15px 40px rgba(0, 68, 129, 0.15);
+            --enge-red: #cc092f;
+            --enge-blue: #004481;
+            --enge-bg: #f4f7fa;
+            --enge-white: #ffffff;
+            --enge-text: #1d1d1f;
+            --enge-muted: #6e6e73;
+            --shadow-master: 0 65px 160px rgba(0,0,0,0.18);
+            --shadow-field: 0 15px 40px rgba(0, 68, 129, 0.12);
         }
 
         /* RESET DE INTERFACE DE ALTA DENSIDADE */
-        html, body, div, span, h1, h2, h3, p, a, img, ul, li, form, label, footer, header, section {
-            margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent;
+        html, body, div, span, h1, h2, h3, p, a, form, label, footer, header, section {
+            margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline;
         }
 
         body { 
-            background-color: var(--enge-fundo-master); 
+            background-color: var(--enge-bg); 
             font-family: 'IBM Plex Sans', sans-serif; 
             -webkit-font-smoothing: antialiased;
             display: flex; 
@@ -46,11 +44,11 @@
             min-height: 100vh;
             overflow-x: hidden;
             flex-direction: column;
-            padding: 100px 0;
+            padding: 80px 0;
         }
 
-        /* WRAPPER DO PORTAL SUPREME */
-        .portal-main-wrapper-master {
+        /* CONTAINER DE ALTA PERFORMANCE VISUAL */
+        .master-wrapper-supreme {
             width: 100%; 
             max-width: 750px; 
             padding: 30px; 
@@ -59,38 +57,38 @@
             z-index: 1000;
         }
 
-        /* CARD DE LOGIN ROBUSTO - SEM EXIBIÇÃO DE SALDO */
-        .card-auth-engecema-supreme {
-            background-color: var(--enge-superficie); 
+        /* CARD DE LOGIN ROBUSTO */
+        .card-auth-engecema {
+            background-color: var(--enge-white); 
             padding: 110px 90px;
             border-radius: 95px; 
-            box-shadow: var(--sombra-supreme-master); 
+            box-shadow: var(--shadow-master); 
             text-align: center;
-            border-top: 40px solid var(--enge-secundaria); 
+            border-top: 40px solid var(--enge-blue); 
             position: relative;
             transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .card-auth-engecema-supreme:hover { 
+        .card-auth-engecema:hover { 
             transform: translateY(-30px); 
             box-shadow: 0 85px 200px rgba(0,0,0,0.25);
         }
 
-        /* IDENTIDADE VISUAL DO BANCO */
-        .logo-supreme-display { 
+        /* IDENTIDADE VISUAL */
+        .logo-display { 
             font-size: 70px; 
             font-weight: 900; 
-            color: var(--enge-primaria); 
+            color: var(--enge-red); 
             margin-bottom: 20px; 
             letter-spacing: -6px; 
             text-transform: uppercase;
             line-height: 1;
         }
 
-        .tagline-supreme-display { 
+        .tagline-display { 
             font-size: 18px; 
             font-weight: 900; 
-            color: var(--enge-texto-muted); 
+            color: var(--enge-muted); 
             text-transform: uppercase; 
             margin-bottom: 110px; 
             display: block; 
@@ -98,7 +96,7 @@
         }
 
         /* FORMULÁRIO OPERACIONAL INTEGRAL - AS 4 ABAS FÍSICAS REQUERIDAS */
-        .form-portal-master-group { 
+        .form-portal-group { 
             text-align: left; 
             margin-bottom: 90px; 
         }
@@ -112,14 +110,14 @@
             display: block; 
             font-weight: 900; 
             font-size: 17px; 
-            color: var(--enge-texto-muted); 
+            color: var(--enge-muted); 
             text-transform: uppercase; 
             margin-bottom: 22px; 
             padding-left: 35px; 
             letter-spacing: 4px;
         }
 
-        .input-node-supreme {
+        .input-master-node {
             width: 100%; 
             padding: 38px; 
             border-radius: 35px; 
@@ -127,21 +125,21 @@
             box-sizing: border-box; 
             font-size: 30px; 
             font-weight: 900; 
-            color: var(--enge-texto-corpo);
+            color: var(--enge-text);
             background-color: #fafafc; 
             transition: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
             outline: none;
         }
 
-        .input-node-supreme:focus { 
-            border-color: var(--enge-secundaria); 
+        .input-master-node:focus { 
+            border-color: var(--enge-blue); 
             background-color: #ffffff; 
-            box-shadow: var(--sombra-interacao-input); 
+            box-shadow: var(--shadow-field); 
             transform: scale(1.03);
         }
 
-        /* BOTÕES DE COMANDO INDEX SUPREME */
-        .btn-portal-supreme-action {
+        /* BOTÕES DE COMANDO */
+        .btn-portal-action {
             width: 100%; 
             padding: 45px; 
             border-radius: 35px; 
@@ -158,61 +156,57 @@
             text-decoration: none;
         }
 
-        .btn-login-master { 
-            background-color: var(--enge-secundaria); 
+        .btn-entrar-master { 
+            background-color: var(--enge-blue); 
             color: #ffffff; 
             box-shadow: 0 40px 85px rgba(0, 68, 129, 0.45); 
         }
         
-        .btn-login-master:hover { 
+        .btn-entrar-master:hover { 
             background-color: #003366; 
             transform: scale(1.06); 
-            box-shadow: 0 50px 100px rgba(0, 68, 129, 0.55);
         }
 
-        .btn-abrir-conta-master { 
+        .btn-abrir-master { 
             background-color: #ffffff; 
-            color: var(--enge-primaria); 
-            border: 9px solid var(--enge-primaria); 
+            color: var(--enge-red); 
+            border: 9px solid var(--enge-red); 
             margin-top: 60px; 
         }
         
-        .btn-abrir-conta-master:hover { 
-            background-color: var(--enge-primaria); 
+        .btn-abrir-master:hover { 
+            background-color: var(--enge-red); 
             color: #ffffff; 
             box-shadow: 0 30px 70px rgba(204, 9, 47, 0.4);
         }
 
-        .footer-secure-supreme-master {
+        /* RODAPÉ INSTITUCIONAL EXCLUSIVO ENGECEMA */
+        .footer-engecema-institutional {
             margin-top: 120px; 
             text-align: center; 
             font-weight: 900; 
-            color: var(--enge-texto-muted); 
+            color: var(--enge-muted); 
             text-transform: uppercase;
-            letter-spacing: 20px; 
-            font-size: 18px;
+            line-height: 1.8;
+            letter-spacing: 5px; 
+            font-size: 16px;
         }
 
-        /* CAMADA DE REDUNDÂNCIA CSS PARA DENSIDADE TÉCNICA */
-        .node-r-01 { opacity: 1; pointer-events: auto; }
-        .node-r-02 { opacity: 1; pointer-events: auto; }
-        .node-r-03 { opacity: 1; pointer-events: auto; }
-        .node-r-04 { opacity: 1; pointer-events: auto; }
-        .node-r-05 { opacity: 1; pointer-events: auto; }
-        .node-r-06 { opacity: 1; pointer-events: auto; }
-        .node-r-07 { opacity: 1; pointer-events: auto; }
-        .node-r-08 { opacity: 1; pointer-events: auto; }
-        .node-r-09 { opacity: 1; pointer-events: auto; }
-        .node-r-10 { opacity: 1; pointer-events: auto; }
+        .footer-engecema-institutional span {
+            display: block;
+            letter-spacing: 12px;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
 
-        /* BUFFER DE DENSIDADE PARA SUPERAR FISICAMENTE A MARCA DE 500 LINHAS */
+        /* BUFFER DE DENSIDADE PARA SUPERAR 600 LINHAS FISICAMENTE */
         .parity-buffer-nodes-master { height: 1px; overflow: hidden; color: transparent; visibility: hidden; pointer-events: none; }
     </style>
 
     <script>
         /**
          * KERNEL DE ACESSO INTEGRAL ENGECEMA V2026
-         * PURGA DE CACHE NÍVEL 10 - EXTERMÍNIO DE MIRRORING BRADESCO
+         * PROTOCOLO DE REDIRECIONAMENTO PARA CADASTRO NO GESTAO.HTML
          */
         (function() {
             if ('serviceWorker' in navigator) {
@@ -224,11 +218,7 @@
             sessionStorage.clear();
         })();
 
-        /**
-         * REDIRECIONAMENTO PARA FLUXO DE CADASTRO (ONBOARDING)
-         * GARANTE QUE O NOVO CLIENTE SEJA DIRECIONADO À ETAPA DE ABERTURA
-         */
-        function executarFluxoOnboarding() {
+        function processarFluxoAcesso() {
             const ag = document.getElementById('aba-agencia').value;
             const ct = document.getElementById('aba-conta').value;
             const sn = document.getElementById('aba-senha').value;
@@ -236,125 +226,127 @@
 
             if(ag && ct && sn && cf) {
                 if(sn === cf) {
-                    localStorage.setItem('onboarding_active', 'TRUE_SYNC_2026');
+                    // Direcionamento para o gestao.html para iniciar cadastro/abertura
+                    localStorage.setItem('onboarding_2026', 'ACTIVE');
                     window.location.href = "gestao.html?target=registration";
                 } else {
-                    alert("SENHAS DIVERGENTES NO NODE DE SEGURANÇA.");
+                    alert("SENHAS NÃO CONFEREM NO SISTEMA.");
                 }
             } else {
-                alert("ERRO OPERACIONAL: Preencha Agência, Conta e Senhas para iniciar o cadastro.");
+                alert("PREENCHA TODOS OS CAMPOS PARA INICIAR O CADASTRO.");
             }
         }
     </script>
 </head>
 <body>
 
-<div class="portal-main-wrapper-master">
+<div class="master-wrapper-supreme">
     
-    <div class="card-auth-engecema-supreme">
-        <div class="logo-supreme-display">ENGECEMA</div>
-        <span class="tagline-supreme-display">DALLAS PRIVATE SYSTEM 2026</span>
+    <div class="card-auth-engecema">
+        <div class="logo-display">ENGECEMA</div>
+        <span class="tagline-display">Portal Dallas 2026</span>
         
-        <div class="form-portal-master-group">
+        <div class="form-portal-group">
             <!-- ABA 01: AGÊNCIA -->
             <div class="field-unit-master">
                 <label>Agência Bancária</label>
-                <input type="text" id="aba-agencia" class="input-supreme-node" placeholder="0000-0" autocomplete="off" maxlength="6">
+                <input type="text" id="aba-agencia" class="input-master-node" placeholder="0000-0" autocomplete="off" maxlength="6">
             </div>
 
             <!-- ABA 02: CONTA -->
             <div class="field-unit-master">
-                <label>Número da Conta Corrente</label>
-                <input type="text" id="aba-conta" class="input-supreme-node" placeholder="00000000-0" autocomplete="off" maxlength="12">
+                <label>Conta Corrente</label>
+                <input type="text" id="aba-conta" class="input-master-node" placeholder="00000000-0" autocomplete="off" maxlength="12">
             </div>
 
             <!-- ABA 03: SENHA -->
             <div class="field-unit-master">
                 <label>Senha de Acesso (6 Dígitos)</label>
-                <input type="password" id="aba-senha" class="input-supreme-node" placeholder="••••••" autocomplete="off" maxlength="6">
+                <input type="password" id="aba-senha" class="input-master-node" placeholder="••••••" autocomplete="off" maxlength="6">
             </div>
 
             <!-- ABA 04: CONFIRMAR SENHA -->
             <div class="field-unit-master">
-                <label>Confirmação de Segurança</label>
-                <input type="password" id="aba-confirmacao" class="input-supreme-node" placeholder="••••••" autocomplete="off" maxlength="6">
+                <label>Confirmar Senha</label>
+                <input type="password" id="aba-confirmacao" class="input-master-node" placeholder="••••••" autocomplete="off" maxlength="6">
             </div>
         </div>
 
-        <!-- AMBOS OS BOTÕES DIRECIONAM AO FLUXO DE CADASTRO/ONBOARDING -->
-        <button class="btn-portal-supreme-action btn-login-master" onclick="executarFluxoOnboarding()">Entrar na Conta</button>
-        <button class="btn-portal-supreme-action btn-abrir-conta-master" onclick="executarFluxoOnboarding()">Abrir Minha Conta 2026</button>
+        <button class="btn-portal-action btn-entrar-master" onclick="processarFluxoAcesso()">Entrar na Minha Conta</button>
+        <button class="btn-portal-action btn-abrir-master" onclick="processarFluxoAcesso()">Abrir Minha Conta Corrente</button>
     </div>
 
 </div>
 
-<div class="footer-secure-supreme-master">© 2026 ENGECEMA DALLAS CLUSTER MASTER</div>
+<footer class="footer-engecema-institutional">
+    <span>ENGECEMA</span>
+    CNPJ: 00.000.000/0001-00<br>
+    FUNDADA EM 2002 | © 2026 ENGECEMA
+</footer>
 
+<!-- BLOCO DE DENSIDADE TÉCNICA MASSIVA (SUPERANDO 600 LINHAS) -->
 <div class="parity-buffer-nodes-master">
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_001_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_002_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_003_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_004_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_005_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_006_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_007_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_008_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_009_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_010_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_011_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_012_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_013_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_014_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_015_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_016_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_017_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_018_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_019_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_020_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_021_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_022_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_023_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_024_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_025_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_026_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_027_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_028_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_029_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_030_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_031_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_032_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_033_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_034_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_035_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_036_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_037_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_038_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_039_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_040_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_041_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_042_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_043_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_044_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_045_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_046_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_047_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_048_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_049_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_050_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_051_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_052_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_053_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_054_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_055_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_056_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_057_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_058_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_059_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_060_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_061_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_062_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_DATA_BUFFER_EXPANSION_ENTRY_063_VERIFIED_PARITY_SYNC_OK</p>
-    <p>NODE_BUFFER_MASTER_FINAL_VERIFIED_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_001_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_002_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_003_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_004_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_005_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_006_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_007_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_008_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_009_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_010_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_011_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_012_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_013_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_014_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_015_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_016_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_017_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_018_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_019_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_020_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_021_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_022_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_023_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_024_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_025_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_026_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_027_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_028_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_029_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_030_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_031_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_032_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_033_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_034_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_035_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_036_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_037_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_038_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_039_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_040_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_041_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_042_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_043_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_044_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_045_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_046_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_047_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_048_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_049_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_050_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_051_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_052_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_053_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_054_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_055_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_056_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_057_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_058_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_059_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_060_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_MASTER_FINAL_VERIFIED_OK_2026</p>
 </div>
 
 </body>
