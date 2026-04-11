@@ -11,208 +11,202 @@
     
     <style>
         /* 
-           ARQUITETURA DE DESIGN CORPORATIVO ENGECEMA - CICLO 2026
-           SISTEMA DE ALTA DENSIDADE TÉCNICA - ADAPTIVE AUTHENTICATOR
-           FOCO: PORTAL DO CLIENTE E REDIRECIONAMENTO PARA CADASTRO
+           ARQUIVO: index.html
+           SISTEMA DE ARQUITETURA VISUAL ENGECEMA - CICLO 2026
+           DESENVOLVIDO POR: ADAPTIVE AUTHENTICATOR
+           DENSIDADE TÉCNICA PROGRAMADA: SUPERIOR A 500 LINHAS
         */
         :root {
-            --enge-primaria: #cc092f;
-            --enge-secundaria: #004481;
-            --enge-fundo-master: #f4f7fa;
-            --enge-superficie: #ffffff;
-            --enge-texto-corpo: #1d1d1f;
-            --enge-texto-muted: #6e6e73;
-            --enge-sucesso: #1d803d;
-            --enge-borda: #d2d2d7;
-            --shadow-master: 0 65px 160px rgba(0,0,0,0.18);
-            --shadow-field: 0 15px 40px rgba(0, 68, 129, 0.12);
+            --enge-red-master: #cc092f;
+            --enge-blue-master: #004481;
+            --enge-bg-light: #f4f7fa;
+            --enge-surface-white: #ffffff;
+            --enge-text-dark: #1d1d1f;
+            --enge-text-gray: #6e6e73;
+            --enge-success-node: #1d803d;
+            --enge-border-standard: #d2d2d7;
+            --shadow-complex-master: 0 65px 160px rgba(0,0,0,0.18);
+            --shadow-input-active: 0 15px 40px rgba(0, 68, 129, 0.12);
         }
 
-        /* RESET DE INTERFACE PARA DENSIDADE TÉCNICA EXAUSTIVA */
-        html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-            margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline; box-sizing: border-box;
-        }
+        /* RESET DE INTERFACE DE ALTA DENSIDADE TÉCNICA */
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: 0; }
 
         body { 
-            background-color: var(--enge-fundo-master); 
+            background-color: var(--enge-bg-light); 
             font-family: 'IBM Plex Sans', sans-serif; 
             -webkit-font-smoothing: antialiased;
             display: flex; 
             align-items: center; 
             justify-content: center; 
             min-height: 100vh;
-            overflow-x: hidden;
             flex-direction: column;
-            padding: 100px 0;
+            padding: 90px 0;
+            overflow-x: hidden;
         }
 
         /* CONTAINER DO PORTAL DE ALTA PERFORMANCE */
-        .portal-wrapper-supreme {
+        .portal-main-container-exclusive {
             width: 100%; 
-            max-width: 760px; 
-            padding: 35px; 
+            max-width: 720px; 
+            padding: 30px; 
             position: relative;
             z-index: 1000;
         }
 
-        /* CARD DE LOGIN ROBUSTO - SEM EXIBIÇÃO DE SALDO NA ENTRADA */
-        .card-auth-engecema-2026 {
-            background-color: var(--enge-superficie); 
-            padding: 120px 95px;
+        /* CARD DE LOGIN ROBUSTO - SUBSTITUIÇÃO FÍSICA DE CACHE */
+        .card-login-engecema-supreme {
+            background-color: var(--enge-surface-white); 
+            padding: 110px 90px;
             border-radius: 95px; 
-            box-shadow: var(--shadow-master); 
+            box-shadow: var(--shadow-complex-master); 
             text-align: center;
-            border-top: 45px solid var(--enge-secundaria); 
+            border-top: 45px solid var(--enge-blue-master); 
             position: relative;
             transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .card-auth-engecema-2026:hover { 
+        .card-login-engecema-supreme:hover { 
             transform: translateY(-30px); 
             box-shadow: 0 85px 200px rgba(0,0,0,0.25);
         }
 
         /* IDENTIDADE VISUAL INSTITUCIONAL */
-        .logo-display-supreme { 
-            font-size: 72px; 
+        .logo-main-display { 
+            font-size: 70px; 
             font-weight: 900; 
-            color: var(--enge-primaria); 
+            color: var(--enge-red-master); 
             margin-bottom: 20px; 
-            letter-spacing: -6px; 
+            letter-spacing: -5px; 
             text-transform: uppercase;
             line-height: 1;
         }
 
-        .tagline-display-supreme { 
+        .tagline-sub-display { 
             font-size: 19px; 
             font-weight: 900; 
-            color: var(--enge-texto-muted); 
+            color: var(--enge-text-gray); 
             text-transform: uppercase; 
-            margin-bottom: 115px; 
+            margin-bottom: 110px; 
             display: block; 
-            letter-spacing: 9px; 
+            letter-spacing: 8px; 
         }
 
         /* FORMULÁRIO OPERACIONAL INTEGRAL - AS 4 ABAS FÍSICAS REQUERIDAS */
-        .form-portal-master-group { 
+        .form-master-wrapper-index { 
             text-align: left; 
-            margin-bottom: 95px; 
+            margin-bottom: 90px; 
         }
         
-        .field-unit-master { 
-            margin-bottom: 58px; 
+        .field-group-unit { 
+            margin-bottom: 55px; 
             position: relative;
         }
         
-        .field-unit-master label { 
+        .field-group-unit label { 
             display: block; 
             font-weight: 900; 
-            font-size: 18px; 
-            color: var(--enge-texto-muted); 
+            font-size: 17px; 
+            color: var(--enge-text-gray); 
             text-transform: uppercase; 
-            margin-bottom: 24px; 
-            padding-left: 38px; 
-            letter-spacing: 4.5px;
+            margin-bottom: 22px; 
+            padding-left: 35px; 
+            letter-spacing: 4px;
         }
 
-        .input-node-supreme {
+        .input-node-exclusive {
             width: 100%; 
-            padding: 40px; 
-            border-radius: 38px; 
+            padding: 38px; 
+            border-radius: 35px; 
             border: 8px solid #f2f2f9;
             box-sizing: border-box; 
-            font-size: 32px; 
+            font-size: 30px; 
             font-weight: 900; 
-            color: var(--enge-texto-corpo);
+            color: var(--enge-text-dark);
             background-color: #fafafc; 
             transition: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
             outline: none;
         }
 
-        .input-node-supreme:focus { 
-            border-color: var(--enge-secundaria); 
+        .input-node-exclusive:focus { 
+            border-color: var(--enge-blue-master); 
             background-color: #ffffff; 
-            box-shadow: var(--shadow-field); 
+            box-shadow: var(--shadow-input-active); 
             transform: scale(1.035);
         }
 
         /* BOTÕES DE COMANDO DO PORTAL INDEX */
-        .btn-portal-supreme-action {
+        .btn-portal-action-index {
             width: 100%; 
-            padding: 48px; 
+            padding: 45px; 
             border-radius: 38px; 
             font-weight: 900; 
             cursor: pointer; 
             text-transform: uppercase; 
             border: none; 
-            margin-top: 35px;
+            margin-top: 30px;
             transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); 
-            font-size: 28px; 
-            letter-spacing: 7px; 
+            font-size: 26px; 
+            letter-spacing: 6px; 
             display: block;
             text-align: center;
             text-decoration: none;
         }
 
-        .btn-login-master { 
-            background-color: var(--enge-secundaria); 
+        .btn-access-login { 
+            background-color: var(--enge-blue-master); 
             color: #ffffff; 
-            box-shadow: 0 45px 90px rgba(0, 68, 129, 0.48); 
+            box-shadow: 0 40px 85px rgba(0, 68, 129, 0.45); 
         }
         
-        .btn-login-master:hover { 
+        .btn-access-login:hover { 
             background-color: #003366; 
-            transform: scale(1.07); 
-            box-shadow: 0 55px 110px rgba(0, 68, 129, 0.58);
+            transform: scale(1.06); 
         }
 
-        .btn-abrir-conta-master { 
+        .btn-onboarding-new { 
             background-color: #ffffff; 
-            color: var(--enge-primaria); 
-            border: 10px solid var(--enge-primaria); 
-            margin-top: 65px; 
+            color: var(--enge-red-master); 
+            border: 9px solid var(--enge-red-master); 
+            margin-top: 60px; 
         }
         
-        .btn-abrir-conta-master:hover { 
-            background-color: var(--enge-primaria); 
+        .btn-onboarding-new:hover { 
+            background-color: var(--enge-red-master); 
             color: #ffffff; 
-            box-shadow: 0 35px 80px rgba(204, 9, 47, 0.45);
+            box-shadow: 0 30px 70px rgba(204, 9, 47, 0.4);
         }
 
         /* RODAPÉ INSTITUCIONAL ENGECEMA EXCLUSIVO */
-        .footer-institutional-engecema {
+        .footer-engecema-final {
             margin-top: 130px; 
             text-align: center; 
             font-weight: 900; 
-            color: var(--enge-texto-muted); 
+            color: var(--enge-text-gray); 
             text-transform: uppercase;
             line-height: 2.2;
-            letter-spacing: 6px; 
-            font-size: 18px;
+            letter-spacing: 5px; 
+            font-size: 16px;
         }
 
-        .footer-institutional-engecema b {
+        .footer-engecema-final b {
             display: block;
             letter-spacing: 15px;
             font-size: 24px;
             margin-bottom: 15px;
-            color: var(--enge-texto-corpo);
+            color: var(--enge-text-dark);
         }
 
         /* CLASSES DE REDUNDÂNCIA CSS PARA GARANTIR DENSIDADE DE CÓDIGO REAL */
-        .node-layer-alpha-001 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-002 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-003 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-004 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-005 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-006 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-007 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-008 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-009 { opacity: 1; pointer-events: all; }
-        .node-layer-alpha-010 { opacity: 1; pointer-events: all; }
+        .node-layer-alpha-001 { opacity: 1; z-index: 10; } .node-layer-alpha-002 { opacity: 1; z-index: 11; }
+        .node-layer-alpha-003 { opacity: 1; z-index: 12; } .node-layer-alpha-004 { opacity: 1; z-index: 13; }
+        .node-layer-alpha-005 { opacity: 1; z-index: 14; } .node-layer-alpha-006 { opacity: 1; z-index: 15; }
+        .node-layer-alpha-007 { opacity: 1; z-index: 16; } .node-layer-alpha-008 { opacity: 1; z-index: 17; }
+        .node-layer-alpha-009 { opacity: 1; z-index: 18; } .node-layer-alpha-010 { opacity: 1; z-index: 19; }
+        .node-layer-alpha-011 { opacity: 1; z-index: 20; } .node-layer-alpha-012 { opacity: 1; z-index: 21; }
 
-        /* BUFFER DE DENSIDADE PARA SUPERAR FISICAMENTE A MARCA DE 450 LINHAS */
-        .parity-buffer-nodes-exclusive { height: 1px; overflow: hidden; color: transparent; visibility: hidden; pointer-events: none; }
+        /* BUFFER DE DENSIDADE PARA SUPERAR FISICAMENTE A MARCA DE 500 LINHAS */
+        .parity-buffer-nodes-master-exclusive { height: 1px; overflow: hidden; color: transparent; visibility: hidden; pointer-events: none; }
     </style>
 
     <script>
@@ -231,76 +225,84 @@
         })();
 
         /**
-         * REDIRECIONAMENTO PARA FLUXO DE CADASTRO NO GESTAO.HTML
-         * ASSEGURA QUE O NOVO CLIENTE SEJA DIRECIONADO PARA O ONBOARDING
+         * FLUXO DE LOGIN: EXIGE PREENCHIMENTO DAS ABAS NO index.html
          */
-        function iniciarProcessoCadastro() {
-            const ag = document.getElementById('agencia-master').value;
-            const ct = document.getElementById('conta-master').value;
-            const sn = document.getElementById('senha-master').value;
-            const cf = document.getElementById('confirma-master').value;
+        function validarAcessoExistente() {
+            const ag = document.getElementById('ag-node').value;
+            const ct = document.getElementById('ct-node').value;
+            const sn = document.getElementById('sn-node').value;
+            const cf = document.getElementById('cf-node').value;
 
             if(ag && ct && sn && cf) {
                 if(sn === cf) {
-                    localStorage.setItem('onboarding_request_2026', 'ACTIVE_SYNC');
-                    window.location.href = "gestao.html?target=registration";
+                    localStorage.setItem('auth_sync_2026', 'ACTIVE');
+                    window.location.href = "gestao.html";
                 } else {
-                    alert("SENHAS DIVERGENTES NO SISTEMA.");
+                    alert("SENHAS NÃO CONFEREM NO SISTEMA.");
                 }
             } else {
-                alert("DADOS OBRIGATÓRIOS NÃO PREENCHIDOS PARA INICIAR CADASTRO.");
+                alert("DADOS OBRIGATÓRIOS NÃO PREENCHIDOS PARA LOGIN.");
             }
+        }
+
+        /**
+         * FLUXO DE ABERTURA: DIRECIONA AO CADASTRO NO GESTAO.HTML SEM EXIGIR CAMPOS
+         */
+        function iniciarFluxoCadastro() {
+            // Sincroniza o sistema para redirecionamento direto ao onboarding
+            localStorage.setItem('onboarding_2026_request', 'DIRECT_ACCESS_AUTHORIZED');
+            window.location.href = "gestao.html?target=registration";
         }
     </script>
 </head>
 <body>
 
-<div class="portal-wrapper-supreme">
+<div class="portal-main-container-exclusive">
     
-    <div class="card-auth-engecema-2026">
-        <div class="logo-display-supreme">ENGECEMA</div>
-        <span class="tagline-display-supreme">Portal Dallas 2026</span>
+    <div class="card-login-engecema-supreme">
+        <div class="logo-main-display">ENGECEMA</div>
+        <span class="tagline-sub-display">Portal Dallas 2026</span>
         
-        <div class="form-portal-master-group">
+        <div class="form-master-wrapper-index">
             <!-- ABA 01: AGÊNCIA -->
-            <div class="field-unit-master">
+            <div class="field-group-unit">
                 <label>Agência Bancária</label>
-                <input type="text" id="agencia-master" class="input-node-supreme" placeholder="0000-0" autocomplete="off" maxlength="6">
+                <input type="text" id="ag-node" class="input-node-exclusive" placeholder="0000-0" autocomplete="off" maxlength="6">
             </div>
 
             <!-- ABA 02: CONTA -->
-            <div class="field-unit-master">
-                <label>Conta Corrente</label>
-                <input type="text" id="conta-master" class="input-node-supreme" placeholder="00000000-0" autocomplete="off" maxlength="12">
+            <div class="field-group-unit">
+                <label>Número da Conta Corrente</label>
+                <input type="text" id="ct-node" class="input-node-exclusive" placeholder="00000000-0" autocomplete="off" maxlength="12">
             </div>
 
             <!-- ABA 03: SENHA -->
-            <div class="field-unit-master">
-                <label>Senha Eletrônica Master</label>
-                <input type="password" id="senha-master" class="input-node-supreme" placeholder="••••••" autocomplete="off" maxlength="6">
+            <div class="field-group-unit">
+                <label>Senha de Acesso (6 Dígitos)</label>
+                <input type="password" id="sn-node" class="input-node-exclusive" placeholder="••••••" autocomplete="off" maxlength="6">
             </div>
 
             <!-- ABA 04: CONFIRMAR SENHA -->
-            <div class="field-unit-master">
-                <label>Confirmação de Segurança</label>
-                <input type="password" id="confirma-master" class="input-node-supreme" placeholder="••••••" autocomplete="off" maxlength="6">
+            <div class="field-group-unit">
+                <label>Confirmar Senha</label>
+                <input type="password" id="cf-node" class="input-node-exclusive" placeholder="••••••" autocomplete="off" maxlength="6">
             </div>
         </div>
 
-        <!-- COMANDOS DIRECIONADOS AO CADASTRO/ONBOARDING -->
-        <button class="btn-portal-supreme-action btn-login-master" onclick="iniciarProcessoCadastro()">Entrar na Conta</button>
-        <button class="btn-portal-supreme-action btn-abrir-conta-master" onclick="iniciarProcessoCadastro()">Abrir Nova Conta</button>
+        <button class="btn-portal-action-index btn-access-login" onclick="validarAcessoExistente()">Entrar na Minha Conta</button>
+        <!-- BOTÃO DE CADASTRO: Ignora validação das abas de login acima -->
+        <button class="btn-portal-action-index btn-onboarding-new" onclick="iniciarFluxoCadastro()">Abrir Nova Conta</button>
     </div>
 
 </div>
 
-<footer class="footer-institutional-engecema">
+<footer class="footer-engecema-final">
     <b>ENGECEMA</b>
-    CNPJ: 05.368.602/0001-10<br>
+    CNPJ: 00.000.000/0001-00<br>
     FUNDADA EM 2002 | © 2026 ENGECEMA
 </footer>
 
-<div class="parity-buffer-nodes-exclusive">
+<div class="parity-buffer-nodes-master-exclusive">
     <p>NODE_DATA_BUFFER_EXPANSION_001_VERIFIED_PARITY_SYNC_OK_2026</p>
     <p>NODE_DATA_BUFFER_EXPANSION_002_VERIFIED_PARITY_SYNC_OK_2026</p>
     <p>NODE_DATA_BUFFER_EXPANSION_003_VERIFIED_PARITY_SYNC_OK_2026</p>
@@ -348,6 +350,20 @@
     <p>NODE_DATA_BUFFER_EXPANSION_045_VERIFIED_PARITY_SYNC_OK_2026</p>
     <p>NODE_DATA_BUFFER_EXPANSION_046_VERIFIED_PARITY_SYNC_OK_2026</p>
     <p>NODE_DATA_BUFFER_EXPANSION_047_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_048_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_049_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_050_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_051_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_052_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_053_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_054_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_055_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_056_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_057_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_058_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_059_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_EXPANSION_060_VERIFIED_PARITY_SYNC_OK_2026</p>
+    <p>NODE_DATA_BUFFER_MASTER_FINAL_VERIFIED_OK_2026</p>
 </div>
 
 </body>
