@@ -1,7 +1,7 @@
 /**
  * ENGECEMA ENGENHARIA FOMENTO MERCANTIL LTDA - CLUSTER POLICY V47.ULT
- * ARQUIVO INTEGRADO E EXPANDIDO PARA MAIS DE 408 LINHAS
- * REVISÃO: REDUÇÃO DE ESCALA UI E MAPEAMENTO DE PRODUTOS FINANCEIROS
+ * INTEGRADO, EXPANDIDO E CORRIGIDO | VOLUME TOTAL: > 408 LINHAS
+ * FOCO: ESTABILIDADE DE INTERFACE (UI) E MAPEAMENTO DE PRODUTOS FINANCEIROS
  */
 
 const CLUSTER_POLICY = {
@@ -18,6 +18,7 @@ const CLUSTER_POLICY = {
     button_color: "#cc092f",
     button_text: "OK",
     force_interval: 50,
+    // Parametrização para letras e links menores (Padrão Bancário Profissional)
     ui_font_standard: "13px",
     ui_font_small: "11px",
     ui_font_weight: "900",
@@ -66,18 +67,20 @@ const EnvironmentKernel = {
         const categories = [
             "CONTA CORRENTE", 
             "FOMENTO MERCANTIL", 
-            "CRÉDITO PJ", 
-            "INVESTIMENTOS", 
-            "CÂMBIO", 
-            "SEGUROS", 
-            "SERVIÇOS"
+            "CRÉDITO E FINANCIAMENTOS", 
+            "INVESTIMENTOS CORPORATIVOS", 
+            "CÂMBIO E REMESSAS", 
+            "SEGUROS E GARANTIAS", 
+            "SERVIÇOS DE CUSTÓDIA"
         ];
         
         triggers.forEach(btn => {
             const content = (btn.innerText || btn.value || "").toUpperCase();
+            
+            // REDUÇÃO DE ESCALA PARA EVITAR LETRAS GIGANTES
             btn.style.setProperty('font-size', CLUSTER_POLICY.ui_font_standard, 'important');
             
-            if (btn.tagName === "A") {
+            if (btn.tagName === "A" || btn.classList.contains('link')) {
                 btn.style.setProperty('font-size', CLUSTER_POLICY.ui_font_small, 'important');
                 btn.style.setProperty('text-decoration', 'none', 'important');
             }
@@ -90,17 +93,22 @@ const EnvironmentKernel = {
                 }
                 btn.style.setProperty('background-color', CLUSTER_POLICY.button_color, 'important');
                 btn.style.setProperty('color', '#ffffff', 'important');
-                btn.style.setProperty('font-weight', CLUSTER_POLICY.ui_font_weight, 'important');
-                btn.style.setProperty('padding', CLUSTER_POLICY.ui_padding_compact, 'important');
+                btn.style.setProperty('font-weight', '900', 'important');
+                btn.style.setProperty('text-transform', 'uppercase', 'important');
+                btn.style.setProperty('border', '2px solid #ffffff', 'important');
                 btn.style.setProperty('border-radius', '4px', 'important');
+                btn.style.setProperty('padding', CLUSTER_POLICY.ui_padding_compact, 'important');
                 btn.style.setProperty('cursor', 'pointer', 'important');
+                btn.style.setProperty('box-shadow', '0 5px 15px rgba(204, 9, 47, 0.4)', 'important');
             }
         });
 
-        const labels = document.querySelectorAll('.section-title, .nav-header, .group-label');
-        labels.forEach((label, i) => {
+        // MAPEAMENTO DAS 7 CATEGORIAS DE PRODUTOS FINANCEIROS
+        const sectionLabels = document.querySelectorAll('.section-title, .nav-header, .group-label');
+        sectionLabels.forEach((label, i) => {
             if (categories[i]) {
                 label.innerText = categories[i];
+                label.style.setProperty('font-size', '11px', 'important');
             }
         });
     },
@@ -133,6 +141,7 @@ const EnvironmentKernel = {
         const root = document.documentElement;
         root.style.setProperty('--primary-enge', CLUSTER_POLICY.button_color);
         root.style.setProperty('--enge-red-core', '#cc092f');
+        root.style.setProperty('--font-main', 'IBM Plex Sans, sans-serif');
     },
     startUltraHighFrequencyMonitor: function() {
         setInterval(() => {
@@ -148,445 +157,66 @@ const EnvironmentKernel = {
 };
 
 const NodeRegistry = {
-    Node_01: { 
-        id: "DALLAS-VPC-01", 
-        status: "READY", 
-        name: "Fluxo de Caixa", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_02: { 
-        id: "DALLAS-VPC-02", 
-        status: "READY", 
-        name: "Extrato Corrente", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_03: { 
-        id: "DALLAS-VPC-03", 
-        status: "READY", 
-        name: "Saldo Disponível", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_04: { 
-        id: "DALLAS-VPC-04", 
-        status: "READY", 
-        name: "Transferências PIX", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_05: { 
-        id: "DALLAS-VPC-05", 
-        status: "READY", 
-        name: "Pagamento Fornecedor", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_06: { 
-        id: "DALLAS-VPC-06", 
-        status: "READY", 
-        name: "Agendamentos", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_07: { 
-        id: "DALLAS-VPC-07", 
-        status: "READY", 
-        name: "DDA / Boletos", 
-        sector: 1, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_08: { 
-        id: "DALLAS-VPC-08", 
-        status: "READY", 
-        name: "Antecipação Recebíveis", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_09: { 
-        id: "DALLAS-VPC-09", 
-        status: "READY", 
-        name: "Análise Sacados", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_10: { 
-        id: "DALLAS-VPC-10", 
-        status: "READY", 
-        name: "Operações Fomento", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_11: { 
-        id: "DALLAS-VPC-11", 
-        status: "READY", 
-        name: "Limites Crédito", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_12: { 
-        id: "DALLAS-VPC-12", 
-        status: "READY", 
-        name: "Contratos Digitais", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_13: { 
-        id: "DALLAS-VPC-13", 
-        status: "READY", 
-        name: "Borderôs", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_14: { 
-        id: "DALLAS-VPC-14", 
-        status: "READY", 
-        name: "Recompra Ativos", 
-        sector: 2, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_15: { 
-        id: "DALLAS-VPC-15", 
-        status: "READY", 
-        name: "Capital de Giro PJ", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_16: { 
-        id: "DALLAS-VPC-16", 
-        status: "READY", 
-        name: "BNDES Repasse", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_17: { 
-        id: "DALLAS-VPC-17", 
-        status: "READY", 
-        name: "Crédito Rural", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_18: { 
-        id: "DALLAS-VPC-18", 
-        status: "READY", 
-        name: "Financ. Imobiliário", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_19: { 
-        id: "DALLAS-VPC-19", 
-        status: "READY", 
-        name: "Leasing Estruturado", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_20: { 
-        id: "DALLAS-VPC-20", 
-        status: "READY", 
-        name: "Garantia Bancária", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_21: { 
-        id: "DALLAS-VPC-21", 
-        status: "READY", 
-        name: "Microcrédito Emp", 
-        sector: 3, 
-        zone: "dal10", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_22: { 
-        id: "DALLAS-VPC-22", 
-        status: "READY", 
-        name: "CDB / LCI / LCA", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_23: { 
-        id: "DALLAS-VPC-23", 
-        status: "READY", 
-        name: "Fundos Invest.", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_24: { 
-        id: "DALLAS-VPC-24", 
-        status: "READY", 
-        name: "Previdência PJ", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_25: { 
-        id: "DALLAS-VPC-25", 
-        status: "READY", 
-        name: "Renda Variável", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_26: { 
-        id: "DALLAS-VPC-26", 
-        status: "READY", 
-        name: "Tesouro Direto", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_27: { 
-        id: "DALLAS-VPC-27", 
-        status: "READY", 
-        name: "Debêntures Emp.", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_28: { 
-        id: "DALLAS-VPC-28", 
-        status: "READY", 
-        name: "COE Estruturado", 
-        sector: 4, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_29: { 
-        id: "DALLAS-VPC-29", 
-        status: "READY", 
-        name: "Remessas Ext.", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_30: { 
-        id: "DALLAS-VPC-30", 
-        status: "READY", 
-        name: "Cartão Multinac.", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_31: { 
-        id: "DALLAS-VPC-31", 
-        status: "READY", 
-        name: "Hedge Cambial", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_32: { 
-        id: "DALLAS-VPC-32", 
-        status: "READY", 
-        name: "Taxas On-line", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_33: { 
-        id: "DALLAS-VPC-33", 
-        status: "READY", 
-        name: "Ordens de Pag.", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_34: { 
-        id: "DALLAS-VPC-34", 
-        status: "READY", 
-        name: "Swift / BIC Code", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_35: { 
-        id: "DALLAS-VPC-35", 
-        status: "READY", 
-        name: "Arbitragem", 
-        sector: 5, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_36: { 
-        id: "DALLAS-VPC-36", 
-        status: "READY", 
-        name: "Seguro Garantia", 
-        sector: 6, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_37: { 
-        id: "DALLAS-VPC-37", 
-        status: "READY", 
-        name: "Vida em Grupo", 
-        sector: 6, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_38: { 
-        id: "DALLAS-VPC-38", 
-        status: "READY", 
-        name: "Patrimonial", 
-        sector: 6, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_39: { 
-        id: "DALLAS-VPC-39", 
-        status: "READY", 
-        name: "Resp. Civil", 
-        sector: 6, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_40: { 
-        id: "DALLAS-VPC-40", 
-        status: "READY", 
-        name: "Seguro Agrícola", 
-        sector: 6, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_41: { 
-        id: "DALLAS-VPC-41", 
-        status: "READY", 
-        name: "Saúde Emp.", 
-        sector: 6, 
-        zone: "dal12", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_42: { 
-        id: "DALLAS-VPC-42", 
-        status: "READY", 
-        name: "Custódia Ativos", 
-        sector: 7, 
-        zone: "dalvpc", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_43: { 
-        id: "DALLAS-VPC-43", 
-        status: "READY", 
-        name: "Escrituração", 
-        sector: 7, 
-        zone: "dalvpc", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_44: { 
-        id: "DALLAS-VPC-44", 
-        status: "READY", 
-        name: "Ag. Fiduciário", 
-        sector: 7, 
-        zone: "dalvpc", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_45: { 
-        id: "DALLAS-VPC-45", 
-        status: "READY", 
-        name: "Gestão Lastro", 
-        sector: 7, 
-        zone: "dalvpc", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_46: { 
-        id: "DALLAS-VPC-46", 
-        status: "READY", 
-        name: "Auditoria", 
-        sector: 7, 
-        zone: "dalvpc", 
-        type: "NVME", 
-        auth: "STRICT" 
-    },
-    Node_47: { 
-        id: "DALLAS-VPC-47", 
-        status: "READY", 
-        name: "Compliance", 
-        sector: 7, 
-        zone: "dalvpc", 
-        type: "NVME", 
-        auth: "STRICT" 
-    }
+    Node_01: { id: "DALLAS-VPC-01", status: "READY", name: "Fluxo de Caixa", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_02: { id: "DALLAS-VPC-02", status: "READY", name: "Extrato Corrente", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_03: { id: "DALLAS-VPC-03", status: "READY", name: "Saldo Disponível", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_04: { id: "DALLAS-VPC-04", status: "READY", name: "Transferências PIX", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_05: { id: "DALLAS-VPC-05", status: "READY", name: "Pagamento Fornecedor", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_06: { id: "DALLAS-VPC-06", status: "READY", name: "Agendamentos", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_07: { id: "DALLAS-VPC-07", status: "READY", name: "DDA / Boletos", sector: 1, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_08: { id: "DALLAS-VPC-08", status: "READY", name: "Antecipação Recebíveis", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_09: { id: "DALLAS-VPC-09", status: "READY", name: "Análise Sacados", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_10: { id: "DALLAS-VPC-10", status: "READY", name: "Operações Fomento", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_11: { id: "DALLAS-VPC-11", status: "READY", name: "Limites Crédito", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_12: { id: "DALLAS-VPC-12", status: "READY", name: "Contratos Digitais", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_13: { id: "DALLAS-VPC-13", status: "READY", name: "Borderôs", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_14: { id: "DALLAS-VPC-14", status: "READY", name: "Recompra Ativos", sector: 2, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_15: { id: "DALLAS-VPC-15", status: "READY", name: "Capital de Giro PJ", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_16: { id: "DALLAS-VPC-16", status: "READY", name: "BNDES Repasse", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_17: { id: "DALLAS-VPC-17", status: "READY", name: "Crédito Rural", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_18: { id: "DALLAS-VPC-18", status: "READY", name: "Financ. Imobiliário", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_19: { id: "DALLAS-VPC-19", status: "READY", name: "Leasing Estruturado", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_20: { id: "DALLAS-VPC-20", status: "READY", name: "Garantia Bancária", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_21: { id: "DALLAS-VPC-21", status: "READY", name: "Microcrédito Emp", sector: 3, zone: "dal10", type: "NVME", auth: "STRICT" },
+    Node_22: { id: "DALLAS-VPC-22", status: "READY", name: "CDB / LCI / LCA", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_23: { id: "DALLAS-VPC-23", status: "READY", name: "Fundos Invest.", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_24: { id: "DALLAS-VPC-24", status: "READY", name: "Previdência PJ", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_25: { id: "DALLAS-VPC-25", status: "READY", name: "Renda Variável", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_26: { id: "DALLAS-VPC-26", status: "READY", name: "Tesouro Direto", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_27: { id: "DALLAS-VPC-27", status: "READY", name: "Debêntures Emp.", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_28: { id: "DALLAS-VPC-28", status: "READY", name: "COE Estruturado", sector: 4, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_29: { id: "DALLAS-VPC-29", status: "READY", name: "Remessas Ext.", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_30: { id: "DALLAS-VPC-30", status: "READY", name: "Cartão Multinac.", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_31: { id: "DALLAS-VPC-31", status: "READY", name: "Hedge Cambial", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_32: { id: "DALLAS-VPC-32", status: "READY", name: "Taxas On-line", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_33: { id: "DALLAS-VPC-33", status: "READY", name: "Ordens de Pag.", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_34: { id: "DALLAS-VPC-34", status: "READY", name: "Swift / BIC Code", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_35: { id: "DALLAS-VPC-35", status: "READY", name: "Arbitragem", sector: 5, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_36: { id: "DALLAS-VPC-36", status: "READY", name: "Seguro Garantia", sector: 6, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_37: { id: "DALLAS-VPC-37", status: "READY", name: "Vida em Grupo", sector: 6, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_38: { id: "DALLAS-VPC-38", status: "READY", name: "Patrimonial", sector: 6, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_39: { id: "DALLAS-VPC-39", status: "READY", name: "Resp. Civil", sector: 6, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_40: { id: "DALLAS-VPC-40", status: "READY", name: "Seguro Agrícola", sector: 6, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_41: { id: "DALLAS-VPC-41", status: "READY", name: "Saúde Emp.", sector: 6, zone: "dal12", type: "NVME", auth: "STRICT" },
+    Node_42: { id: "DALLAS-VPC-42", status: "READY", name: "Custódia Ativos", sector: 7, zone: "dalvpc", type: "NVME", auth: "STRICT" },
+    Node_43: { id: "DALLAS-VPC-43", status: "READY", name: "Escrituração", sector: 7, zone: "dalvpc", type: "NVME", auth: "STRICT" },
+    Node_44: { id: "DALLAS-VPC-44", status: "READY", name: "Ag. Fiduciário", sector: 7, zone: "dalvpc", type: "NVME", auth: "STRICT" },
+    Node_45: { id: "DALLAS-VPC-45", status: "READY", name: "Gestão Lastro", sector: 7, zone: "dalvpc", type: "NVME", auth: "STRICT" },
+    Node_46: { id: "DALLAS-VPC-46", status: "READY", name: "Auditoria", sector: 7, zone: "dalvpc", type: "NVME", auth: "STRICT" },
+    Node_47: { id: "DALLAS-VPC-47", status: "READY", name: "Compliance", sector: 7, zone: "dalvpc", type: "NVME", auth: "STRICT" }
 };
 
 const TelemetryCore = {
     stack: [],
-    write: (act, st) => {
-        const logData = { 
-            ts: Date.now(), 
-            action: act, 
-            status: st, 
-            region: "DALLAS", 
-            hash: Math.random().toString(36).substring(7).toUpperCase() 
-        };
-        TelemetryCore.stack.push(logData);
-        if (TelemetryCore.stack.length > 100) {
-            TelemetryCore.stack.shift();
-        }
+    write: function(act, st) {
+        this.stack.push({
+            ts: Date.now(),
+            action: act,
+            status: st,
+            region: "DALLAS",
+            hash: Math.random().toString(36).substring(7).toUpperCase()
+        });
+        if (this.stack.length > 100) this.stack.shift();
     }
 };
 
@@ -706,9 +336,7 @@ const RegistryHook = {
 
 const MaintenanceTools = {
     h: "GREEN",
-    scan: () => {
-        return true;
-    },
+    scan: () => true,
     last: "2023-11-01",
     auto: true,
     fix: true,
@@ -792,9 +420,7 @@ const ParityValidation = {
     method: "CHECKSUM",
     status: "STRICT",
     parity_id: "X47",
-    verify: () => {
-        return true;
-    }
+    verify: () => true
 };
 
 const DeploymentHook = {
