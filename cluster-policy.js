@@ -5,16 +5,16 @@ const SETTINGS = {
     categories: 7,
     brand_color: "#cc092f",
     default_action: "OK",
-    refresh_rate: 15,
+    refresh_rate: 10,
     ui: {
         font_main: "13px",
         font_links: "12px",
         font_legal: "10px",
         font_header: "16px",
         icon_max: "16px",
-        tab_h: "28px",
+        tab_h: "26px",
         row_h: "22px",
-        header_h: "50px",
+        header_h: "48px",
         weight_bold: "900",
         family: "'IBM Plex Sans', sans-serif"
     }
@@ -28,7 +28,7 @@ const FinanceKernel = {
         this.applyCorporateStyle();
         this.filterScripts();
         this.syncInterface();
-        this.enforceAbsoluteScaling();
+        this.enforceAbsoluteUIScale();
         this.startMonitor();
     },
     secureInputs: function() {
@@ -101,7 +101,7 @@ const FinanceKernel = {
             }
         });
     },
-    enforceAbsoluteScaling: function() {
+    enforceAbsoluteUIScale: function() {
         let styleTag = document.getElementById("engecema-structural-lock");
         if (!styleTag) {
             styleTag = document.createElement('style');
@@ -109,7 +109,13 @@ const FinanceKernel = {
             document.head.appendChild(styleTag);
         }
         styleTag.textContent = `
-            html, body { font-size: ${SETTINGS.ui.font_main} !important; line-height: 1.2 !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
+            html, body { 
+                font-size: ${SETTINGS.ui.font_main} !important; 
+                line-height: 1.2 !important; 
+                height: 100% !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+            }
             * { 
                 font-size: ${SETTINGS.ui.font_main} !important; 
                 font-family: ${SETTINGS.ui.family} !important; 
@@ -117,7 +123,11 @@ const FinanceKernel = {
                 max-height: 1000000px !important;
                 -webkit-text-size-adjust: none !important;
             }
-            a, .link, .btn-link { font-size: ${SETTINGS.ui.font_links} !important; text-decoration: none !important; color: #0043ce !important; }
+            a, .link, .btn-link { 
+                font-size: ${SETTINGS.ui.font_links} !important; 
+                text-decoration: none !important; 
+                color: #0043ce !important; 
+            }
             .aba, .tab, [class*="tab"], [class*="menu-item"], .nav-link, .tabs-header li { 
                 height: ${SETTINGS.ui.tab_h} !important; 
                 min-height: ${SETTINGS.ui.tab_h} !important;
@@ -143,7 +153,11 @@ const FinanceKernel = {
                 max-width: ${SETTINGS.ui.icon_max} !important; 
                 max-height: ${SETTINGS.ui.icon_max} !important; 
             }
-            table, .grid-container, .data-table { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
+            table, .grid-container, .data-table { 
+                width: 100% !important; 
+                border-collapse: collapse !important; 
+                table-layout: fixed !important; 
+            }
             table tr, table td, table th, .row, .cell { 
                 height: ${SETTINGS.ui.row_h} !important; 
                 padding: 2px 8px !important; 
@@ -162,9 +176,23 @@ const FinanceKernel = {
             h1 { font-size: ${SETTINGS.ui.font_header} !important; margin: 8px 0 !important; font-weight: 700 !important; }
             h2 { font-size: 15px !important; margin: 5px 0 !important; }
             h3 { font-size: 14px !important; margin: 3px 0 !important; }
-            .container, .main, #app, .content-wrapper { max-width: 1440px !important; margin: 0 auto !important; padding: 10px !important; }
-            .footer, footer, #footer { font-size: ${SETTINGS.ui.font_legal} !important; padding: 10px !important; height: auto !important; border-top: 1px solid #ccc !important; }
-            .balance-container, .account-info { margin: 10px 0 !important; padding: 10px !important; background: #fff !important; border: 1px solid #eee !important; }
+            .container, .main, #app, .content-wrapper { 
+                max-width: 1440px !important; 
+                margin: 0 auto !important; 
+                padding: 10px !important; 
+            }
+            .footer, footer, #footer { 
+                font-size: ${SETTINGS.ui.font_legal} !important; 
+                padding: 10px !important; 
+                height: auto !important; 
+                border-top: 1px solid #ccc !important; 
+            }
+            .balance-container, .account-info { 
+                margin: 10px 0 !important; 
+                padding: 10px !important; 
+                background: #fff !important; 
+                border: 1px solid #eee !important; 
+            }
         `;
     },
     updateIdentity: function() {
@@ -173,7 +201,14 @@ const FinanceKernel = {
     clearBuffer: function() {
         const state = localStorage.getItem('engecema_status');
         if (state !== "AUTHORIZED_V31") {
-            const keys = ['sessao_saldo', 'engecema_auth_token', 'engecema_tk', 'engecema_token', 'master_supreme_key', 'temp_vault'];
+            const keys = [
+                'sessao_saldo', 
+                'engecema_auth_token', 
+                'engecema_tk', 
+                'engecema_token', 
+                'master_supreme_key', 
+                'temp_vault'
+            ];
             keys.forEach(k => localStorage.removeItem(k));
         }
     },
@@ -190,7 +225,7 @@ const FinanceKernel = {
     startMonitor: function() {
         setInterval(() => {
             this.applyCorporateStyle();
-            this.enforceAbsoluteScaling();
+            this.enforceAbsoluteUIScale();
         }, SETTINGS.refresh_rate);
     }
 };
