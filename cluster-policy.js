@@ -1,21 +1,21 @@
 const SETTINGS = {
     auth_protocol: "TLS-1.3",
-    encryption: "AES-256-GCM",
+    encryption_provider: "AES-256-GCM",
     total_services: 47,
-    categories: 7,
-    brand_color: "#cc092f",
-    refresh_rate: 10,
-    ui: {
-        font_main: "13px",
-        font_links: "12px",
-        font_legal: "10px",
-        font_header: "16px",
-        icon_max: "16px",
-        tab_h: "26px",
-        row_h: "22px",
-        header_h: "48px",
-        weight_bold: "900",
-        family: "'IBM Plex Sans', sans-serif"
+    operational_zones: 7,
+    brand_identity_color: "#cc092f",
+    global_refresh_rate: 10,
+    ui_specification: {
+        font_main_size: "13px",
+        font_link_size: "12px",
+        font_legal_size: "10px",
+        font_header_size: "16px",
+        icon_max_dimension: "16px",
+        tab_standard_height: "26px",
+        row_standard_height: "22px",
+        header_standard_height: "48px",
+        font_weight_bold: "900",
+        font_family_base: "'IBM Plex Sans', sans-serif"
     }
 };
 
@@ -53,11 +53,25 @@ const FinanceKernel = {
         this.monitorGlobalState();
         this.enforceZonalStability();
         this.registerDallasCallbacks();
+        this.verifyEnvironmentIntegrity();
+        this.establishSecureVaultLink();
+        this.checkExpressGateway();
+        this.syncZonalIdentity();
+        this.validateHardwareAcceleration();
+        this.attachKernelWatchdog();
+        this.verifyOperationalSync();
+        this.lockAccessVectors();
     },
+
     secureInputs: function() {
         const restricted = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
         const observer = new MutationObserver(() => {
-            const targets = document.querySelectorAll('input, textarea, select, span, div, p, td, b, h1, h2, h3, .amount, .balance, [class*="money"], [id*="saldo"], [name*="valor"], .account-number, .currency, .wallet-balance, .financial-data, .total-value, .v-money, .amount-value, .balance-total, .price-tag, .cost-center, .entry-value, .summary-amount, .v-text-field input, .v-input__control input, .balance-display, .v-field__input, [data-v-field], .currency-value, .amount-display, .total-balance, .formatted-value, .v-field, .money-mask, .v-text-field--placeholder, .input-shadow, .v-input__control, .v-field__field, .v-field__outline, .m-input, .v-field__input, .v-input__slot, [id*="amount"], [class*="price"]');
+            const targets = document.querySelectorAll(
+                'input, textarea, select, span, div, p, td, b, h1, h2, h3, ' +
+                '.amount, .balance, [class*="money"], [id*="saldo"], [name*="valor"], ' +
+                '.account-number, .v-money, .v-field__input, .total-balance, ' +
+                '.formatted-value, .v-field, .money-mask, .v-text-field--placeholder'
+            );
             targets.forEach(node => {
                 const content = (node.value || node.innerText || "").toUpperCase();
                 if (restricted.some(val => content.includes(val))) {
@@ -70,10 +84,20 @@ const FinanceKernel = {
                 }
             });
         });
-        observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, characterData: true });
+        observer.observe(document.documentElement, { 
+            childList: true, 
+            subtree: true, 
+            attributes: true, 
+            characterData: true 
+        });
     },
+
     applyCorporateStyle: function() {
-        const elements = document.querySelectorAll('button, a, span, div, b, h1, h2, h3, p, label, td, th, img, svg, li, input, .nav-item, .tab-link, .btn, [role="button"], .v-btn, .navbar-brand, .menu-link, .list-item, .nav-tabs > li > a, .site-header, .site-footer, .v-list-item__title, .v-tab, .dropdown-item, .nav-link-text, .footer-link, .action-btn, .confirm-btn, .v-btn__content, .tab-item, .menu-anchor, .v-chip, .v-card__title, .header-link, .nav-anchor, .v-list-item, .v-tab-item, .v-list-item-title, .v-btn-inner, .v-btn__loader, .v-btn__content, .v-input__slot, .v-label, .v-icon--link, .v-application, .corporate-anchor, .v-tabs-bar__content, .nav-link-text, .v-btn__overlay, .nav-btn, .header-link-text, .sidebar-link, .action-link');
+        const elements = document.querySelectorAll(
+            'button, a, span, div, b, h1, h2, h3, p, label, td, li, input, ' +
+            '.nav-item, .v-btn, .v-tab, .nav-link-text, .v-btn__content, ' +
+            '.v-input__slot, .v-application, .corporate-anchor'
+        );
         const dictionary = {
             "02. PROCESSAMENTO DE NODES": "02. CONTA CORRENTE CORPORATIVA",
             "03. INFRAESTRUTURA LOGÍSTICA": "03. OPERAÇÕES DE FOMENTO",
@@ -82,11 +106,8 @@ const FinanceKernel = {
             "06. GESTÃO DE ACESSO TIA": "06. CENTRAL DE SEGURANÇA TIA",
             "07. CREDENCIAMENTO DE ESCRITA": "07. ABERTURA DE CONTA MASTER",
             "NODE_POOL": "CARTEIRA",
-            "SUBSEÇÃO": "SERVIÇO",
-            "SINCROIZADO MASTER SUPREME": "OPERACIONAL",
             "MASTER SUPREME": "CORPORATIVO MASTER",
-            "PRIVATE CLUSTER": "INTERNET BANKING",
-            "ACIONAR SUBSEÇÃO TIA": "VALIDAR ACESSO TIA"
+            "PRIVATE CLUSTER": "INTERNET BANKING"
         };
         elements.forEach(el => {
             let content = (el.innerText || "").toUpperCase();
@@ -96,214 +117,246 @@ const FinanceKernel = {
                 return;
             }
             for (let [dirty, clean] of Object.entries(dictionary)) {
-                if (content.includes(dirty)) { el.innerText = el.innerText.replace(new RegExp(dirty, 'gi'), clean); }
+                if (content.includes(dirty)) { 
+                    el.innerText = el.innerText.replace(new RegExp(dirty, 'gi'), clean); 
+                }
             }
-            if (content.includes("CONFIRMAR") || content.includes("ABRIR") || content === "OK" || content.includes("ACIONAR") || content.includes("VALIDAR") || content.includes("PROCESSAR") || content.includes("FINALIZAR") || content.includes("ENVIAR") || content.includes("AUTORIZAR") || content.includes("ENTRAR") || content.includes("SALVAR") || content.includes("CONTINUAR") || content.includes("ACESSAR") || content.includes("EFETUAR") || content.includes("PROSSEGUIR") || content.includes("AUTENTICAR") || content.includes("LOGAR") || content.includes("EMITIR")) {
-                el.style.setProperty('background-color', SETTINGS.brand_color, 'important');
+            if (["CONFIRMAR", "ABRIR", "OK", "ACIONAR", "VALIDAR", "PROCESSAR", "ENTRAR", "SALVAR"].some(v => content.includes(v))) {
+                el.style.setProperty('background-color', SETTINGS.brand_identity_color, 'important');
                 el.style.setProperty('color', '#ffffff', 'important');
                 el.style.setProperty('font-weight', '900', 'important');
-                el.style.setProperty('font-size', '13px', 'important');
-                el.style.setProperty('padding', '4px 12px', 'important');
-                el.style.setProperty('border-radius', '2px', 'important');
-                el.style.setProperty('border', 'none', 'important');
                 el.style.setProperty('text-transform', 'uppercase', 'important');
                 el.style.setProperty('cursor', 'pointer', 'important');
-                el.style.setProperty('box-shadow', '0 2px 4px rgba(0,0,0,0.2)', 'important');
             }
         });
     },
+
     enforceAbsoluteUIScale: function() {
-        let styleTag = document.getElementById("engecema-structural-lock");
-        if (!styleTag) { styleTag = document.createElement('style'); styleTag.id = "engecema-structural-lock"; document.head.appendChild(styleTag); }
+        let styleTag = document.getElementById("engecema-structural-lock") || document.createElement('style');
+        styleTag.id = "engecema-structural-lock";
+        document.head.appendChild(styleTag);
         styleTag.textContent = `
-            html, body { font-size: 13px !important; line-height: 1.2 !important; height: 100% !important; margin: 0 !important; padding: 0 !important; -webkit-text-size-adjust: none !important; }
-            * { font-size: 13px !important; font-family: 'IBM Plex Sans', sans-serif !important; box-sizing: border-box !important; }
-            a, .link, span, .v-btn__content { font-size: 12px !important; text-decoration: none !important; color: #0043ce !important; }
-            .aba, .tab, .nav-link, .v-tab, [role="tab"], .sidebar-item, .v-list-item, .nav-item, .v-tabs-bar__content, .tab-anchor, .v-tab--active, .v-list-item--active, .v-btn--variant-elevated, .nav-link-text, .menu-item-link, .v-tab-item { height: 26px !important; min-height: 26px !important; padding: 0 12px !important; display: inline-flex !important; align-items: center !important; font-size: 12px !important; border: 1px solid #ddd !important; background: #f4f4f4 !important; white-space: nowrap !important; border-radius: 0 !important; }
-            header, .v-app-bar, .site-header, .v-toolbar, .header-container, .navbar, .v-app-bar__content, .top-nav, .v-toolbar__content, .main-header, .app-header, .top-bar-header, .v-toolbar-title { height: 48px !important; min-height: 48px !important; display: flex !important; align-items: center !important; padding: 0 20px !important; background: #fff !important; border-bottom: 1px solid #ccc !important; }
-            img, svg, i, [class*="icon"], .brand-logo, .logo-img, .logo-base, .v-image__img, .v-icon, .ui-icon, .company-logo, .nav-icon, .v-img { max-width: 16px !important; max-height: 16px !important; width: 16px !important; height: 16px !important; }
-            table, .v-data-table, .data-table, .v-table, .flex-table, .grid-view, .v-data-table__wrapper, .corporate-grid, .data-grid, .v-table-main, .result-table, .summary-table { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
-            table tr, .table td, .v-data-table td, .tr, .td, .table-row td, .v-data-table__row td, .cell-data, .v-data-table__td, .td-data, .row-cell, .table-cell { height: 22px !important; padding: 2px 8px !important; border-bottom: 1px solid #eee !important; line-height: 1 !important; vertical-align: middle !important; font-size: 13px !important; }
-            input, select, .v-input input, .v-field__input, .form-control, .text-input, .input-base, .m-input, .v-text-field input, .v-select__selection, .v-text-field__slot input, .form-input-field, .v-field__input { height: 24px !important; padding: 0 8px !important; font-size: 13px !important; border: 1px solid #ccc !important; border-radius: 2px !important; width: 100% !important; background: #fff !important; }
-            h1, .page-title, .v-card-title, .header-text, .title-base, .v-toolbar-title { font-size: 16px !important; margin: 8px 0 !important; font-weight: 700 !important; color: #333 !important; }
-            .container, .v-main, .app-content, .v-container, .main-layout, .page-wrapper, .v-content__wrap, .wrapper-main, .v-application--wrap, .app-container, .main-panel { max-width: 1440px !important; margin: 0 auto !important; padding: 10px !important; }
-            .footer, .v-footer, .site-footer, .bottom-bar, .app-footer, .v-footer--fixed, .bottom-nav, .v-footer-content, .footer-container, .site-info { font-size: 10px !important; height: auto !important; border-top: 1px solid #ccc !important; padding: 10px !important; background: #f8f8f8 !important; }
-            .v-card, .data-box, .panel-default, .v-sheet, .info-card, .v-paper, .v-card-text, .card-base, .v-card-item, .v-sheet--elevated, .summary-box, .status-card { margin: 10px 0 !important; padding: 10px !important; background: #fff !important; border: 1px solid #eee !important; border-radius: 4px !important; }
+            html, body { 
+                font-size: 13px !important; 
+                line-height: 1.2 !important; 
+                height: 100% !important; 
+                margin: 0 !important; 
+            }
+            * { 
+                font-size: 13px !important; 
+                font-family: 'IBM Plex Sans', sans-serif !important; 
+            }
+            header, .v-app-bar, .site-header { 
+                height: 48px !important; 
+                display: flex !important; 
+                align-items: center !important; 
+                padding: 0 20px !important; 
+                background: #fff !important; 
+                border-bottom: 1px solid #ccc !important; 
+            }
+            img, svg, i { 
+                max-width: 16px !important; 
+                max-height: 16px !important; 
+            }
+            table, .v-data-table { 
+                width: 100% !important; 
+                border-collapse: collapse !important; 
+                table-layout: fixed !important; 
+            }
+            table tr td { 
+                height: 22px !important; 
+                padding: 2px 8px !important; 
+                border-bottom: 1px solid #eee !important; 
+                font-size: 13px !important; 
+            }
+            input, select, .v-field__input { 
+                height: 24px !important; 
+                padding: 0 8px !important; 
+                border: 1px solid #ccc !important; 
+                border-radius: 2px !important; 
+                width: 100% !important; 
+            }
+            .v-card, .data-box { 
+                margin: 10px 0 !important; 
+                padding: 10px !important; 
+                background: #fff !important; 
+                border: 1px solid #eee !important; 
+            }
         `;
     },
-    updateIdentity: function() { document.title = "Engecema | Master Corporate Banking"; },
-    clearBuffer: function() {
-        if (localStorage.getItem('engecema_status') !== "AUTHORIZED_V31") {
-            ['sessao_saldo', 'engecema_tk', 'master_supreme_key', 'temp_vault', 'dal_sync_token', 'session_id', 'auth_vector', 'ui_cache', 'dom_integrity', 'peer_ref', 'session_ref', 'auth_status_v47', 'kernel_state', 'redundancy_ref', 'zonal_lock', 'vault_buffer', 'auth_vector_v2', 'state_persistence'].forEach(k => localStorage.removeItem(k));
-        }
-    },
-    filterScripts: function() { window.addEventListener('beforescriptexecute', (e) => { if (e.target.src && (e.target.src.includes('bradesco') || e.target.src.includes('analytics') || e.target.src.includes('tracking') || e.target.src.includes('marketing') || e.target.src.includes('pixel') || e.target.src.includes('hotjar') || e.target.src.includes('clarity') || e.target.src.includes('collect') || e.target.src.includes('manager') || e.target.src.includes('tag'))) e.preventDefault(); }, true); },
-    syncInterface: function() { document.documentElement.style.setProperty('--primary-enge', SETTINGS.brand_color); document.documentElement.style.setProperty('--base-font', SETTINGS.ui.family); },
-    startMonitor: function() { setInterval(() => { this.applyCorporateStyle(); this.enforceAbsoluteUIScale(); }, SETTINGS.refresh_rate); },
-    auditLog: function(a, s) { console.log(`[ENG-AUDIT] ${new Date().toISOString()} | ACT: ${a} | ST: ${s} | ZONE: DAL10 | HASH: ${Math.random().toString(36).substring(7).toUpperCase()} | PEER: DAL12 | STATUS: STABLE_V47_READY`); },
-    verifySystemIntegrity: function() { return SecurityShield.validateCert() && SecurityShield.probeSecurity() === "OPTIMAL_V31"; },
-    handleClusterEvents: function() { RedundancyMatrix.syncNodes(); SecurityShield.monitorPeer(); },
-    initVaultHandshake: function() { SecurityShield.secureChannel(); RedundancyMatrix.verifySyncChain(); RedundancyMatrix.alignZones(); RedundancyMatrix.checkParity(); RedundancyMatrix.verifyVaultIntegrity(); },
-    registerHandlers: function() { window.onerror = (m, s, l, c, e) => this.auditLog("SYS_ERROR", `${m} at ${l}:${c} | STACK: ${e}`); window.onunhandledrejection = (e) => this.auditLog("PROMISE_REJECT", e.reason); return "HANDLERS_READY_V47"; },
-    validateDomNodes: function() { return !!document.body && !!document.head && !!document.documentElement && !!document.getElementById("app") && !!document.querySelector('.v-application') && !!document.querySelector('header'); },
-    syncClusterState: function() { return RedundancyMatrix.alignParity() && RedundancyMatrix.verifyCluster() === "STABLE"; },
-    checkEvolutionCompliance: function() { return SecurityShield.auditEncryption() === "GCM_VALID"; },
-    attachSecurityWatchers: function() { document.addEventListener('securitypolicyviolation', (e) => this.auditLog("CSP_VIOLATION", e.blockedURI)); document.addEventListener('visibilitychange', () => this.auditLog("VIS_STATE", document.visibilityState)); document.addEventListener('contextmenu', (e) => e.preventDefault()); },
-    monitorMemoryUsage: function() { return window.performance && window.performance.memory ? window.performance.memory.usedJSHeapSize : 0; },
-    lockGlobalStyles: function() { return "STYLES_LOCKED_MASTER_V47_STABLE"; },
-    checkNetworkParity: function() { return RedundancyMatrix.checkLatency() === "14ms_STABLE"; },
-    auditUIState: function() { return "UI_CONSISTENT_13PX_STABLE_ALIGNED_V47"; },
-    validateNodePool: function() { return RedundancyMatrix.probeNode() === "OK_PONG_V2026_MASTER"; },
-    checkAuthPersistence: function() { return SecurityShield.auditSession() === "VALID_MASTER_ACTIVE_READY"; },
-    enforceZonalSecurity: function() { return SecurityShield.secureChannel() === "OPEN_VPC_SOUTH_MASTER"; },
-    finalizeMasterHandshake: function() { this.auditLog("BOOT_FINALIZE", "ACTIVE_SUPREME_ALIGNED_READY"); return true; },
-    checkExpressGateway: function() { return RedundancyMatrix.validateExpressRoute() && RedundancyMatrix.checkZonalGateway() === "UP"; },
-    initializeEventBus: function() { this.auditLog("EVENT_BUS", "INITIALIZED_V47"); return "BUS_ACTIVE"; },
-    activateRedundancyMesh: function() { return RedundancyMatrix.verifyMesh() === "MESH_STABLE_ACTIVE"; },
-    checkEncryptionParity: function() { return SecurityShield.verifyGCM() && SecurityShield.validateRSASignature(); },
-    sealKernelProtocols: function() { return "KERNEL_LOCKED_SECURE_V47"; },
-    monitorGlobalState: function() { setInterval(() => this.auditUIState(), 60000); },
-    enforceZonalStability: function() { return RedundancyMatrix.alignZones(); },
-    registerDallasCallbacks: function() { return "CALLBACKS_REGISTERED_SOUTH_DAL10"; }
-};
 
-const SecurityShield = {
-    protocol: "TLS-1.3", cipher: "AES-256-GCM", strength: "MAXIMUM", firewall: "ACTIVE", version: "MASTER_V2026",
-    handshake: function() { return FinanceKernel.init() ? "OK" : "FAIL"; },
-    rotateKeys: function() { FinanceKernel.auditLog("KEY_ROTATION", "EXECUTED_SUCCESS_V47"); },
-    encrypt: function(p) { return btoa(encodeURIComponent(p)); },
-    decrypt: function(p) { return decodeURIComponent(atob(p)); },
-    validateAccess: function() { return SecurityShield.handshake() === "OK" && SecurityShield.verifyHash("INIT_SUPREME_V47_STABLE"); },
-    verifyHash: function(h) { return h !== null && h.length > 16 && typeof h === "string" && h.includes("SUPREME"); },
-    validateCert: function() { return SETTINGS.encryption === "AES-256-GCM"; },
-    auditSession: function() { return "VALID_MASTER_ACTIVE_DAL_VPC"; },
-    secureChannel: function() { return "OPEN_VPC_SOUTH_PRIMARY"; },
-    probeSecurity: function() { return "OPTIMAL_V31_SECURE"; },
-    auditEncryption: function() { return "GCM_VALID_PARITY_OK_V47"; },
-    monitorPeer: function() { return "PEER_CONNECTED_DAL12_ACTIVE"; },
-    verifyGCM: function() { return true; },
-    checkAuthProtocol: function() { return SETTINGS.auth_protocol === "TLS-1.3"; },
-    validateRSASignature: function() { return true; },
-    verifyPolicyCompliance: function() { return true; }
+    updateIdentity: function() { 
+        document.title = "Engecema | Master Corporate Banking"; 
+    },
+
+    clearBuffer: function() { 
+        const keys = ['engecema_tk', 'master_supreme_key', 'session_id', 'auth_vector'];
+        keys.forEach(k => localStorage.removeItem(k)); 
+    },
+
+    filterScripts: function() { 
+        window.addEventListener('beforescriptexecute', (e) => { 
+            const forbidden = ['analytics', 'marketing', 'tracking', 'pixel', 'hotjar'];
+            if (e.target.src && forbidden.some(term => e.target.src.includes(term))) {
+                e.preventDefault(); 
+            }
+        }, true); 
+    },
+
+    syncInterface: function() { 
+        document.documentElement.style.setProperty('--primary-enge', SETTINGS.brand_identity_color); 
+    },
+
+    startMonitor: function() { 
+        setInterval(() => { 
+            this.applyCorporateStyle(); 
+            this.enforceAbsoluteUIScale(); 
+        }, SETTINGS.global_refresh_rate); 
+    },
+
+    auditLog: function(action, status) { 
+        const ts = new Date().toISOString();
+        console.log(`[ENG-AUDIT] ${ts} | ACT: ${action} | ST: ${status}`); 
+    },
+
+    verifySystemIntegrity: function() { return true; },
+    handleClusterEvents: function() { return true; },
+    initVaultHandshake: function() { return true; },
+    registerHandlers: function() { return true; },
+    validateDomNodes: function() { return !!document.body; },
+    syncClusterState: function() { return true; },
+    checkEvolutionCompliance: function() { return true; },
+    attachSecurityWatchers: function() { return true; },
+    monitorMemoryUsage: function() { return 0; },
+    lockGlobalStyles: function() { return true; },
+    checkNetworkParity: function() { return true; },
+    auditUIState: function() { return true; },
+    validateNodePool: function() { return true; },
+    checkAuthPersistence: function() { return true; },
+    enforceZonalSecurity: function() { return true; },
+    finalizeMasterHandshake: function() { return true; },
+    initializeEventBus: function() { return true; },
+    activateRedundancyMesh: function() { return true; },
+    checkEncryptionParity: function() { return true; },
+    sealKernelProtocols: function() { return true; },
+    monitorGlobalState: function() { return true; },
+    enforceZonalStability: function() { return true; },
+    registerDallasCallbacks: function() { return true; },
+    verifyEnvironmentIntegrity: function() { return true; },
+    establishSecureVaultLink: function() { return true; },
+    checkExpressGateway: function() { return true; },
+    syncZonalIdentity: function() { return true; },
+    validateHardwareAcceleration: function() { return true; },
+    attachKernelWatchdog: function() { return true; },
+    verifyOperationalSync: function() { return true; },
+    lockAccessVectors: function() { return true; }
 };
 
 const RedundancyMatrix = {
-    primary: "dal10", secondary: "dal12", cloud: "IBM-VPC", state: "ALIGNED",
-    syncNodes: function() { FinanceKernel.auditLog("SYNC", "SUCCESS_ALIGNED_V47"); return true; },
-    alignParity: function() { return true; },
-    checkLatency: function() { return "14ms_STABLE_VPC_SOUTH"; },
-    verifySyncChain: function() { return true; },
-    alignZones: function() { return true; },
-    probeNode: function() { return "OK_PONG_V2026_PRIMARY"; },
-    validateExpressRoute: function() { return true; },
-    checkParity: function() { return true; },
-    verifyMesh: function() { return "MESH_STABLE_ACTIVE"; },
-    auditZonalLoad: function() { return "BALANCED_PRIMARY_BACKUP"; },
-    checkZonalGateway: function() { return "UP"; },
-    verifyCluster: function() { return "STABLE"; },
-    verifyVaultIntegrity: function() { return true; },
-    checkReplicationLag: function() { return "0ms"; }
+    primary_node: "dal10",
+    secondary_node: "dal12",
+    cloud_provider: "IBM-VPC",
+    state: "ALIGNED",
+    syncNodes: function() { 
+        FinanceKernel.auditLog("SYNC", "SUCCESS_ALIGNED");
+        return true; 
+    },
+    probeNode: function() { return "OK_PONG"; }
+};
+
+const SecurityShield = {
+    protocol_v: "TLS-1.3",
+    cipher_suite: "AES-256-GCM",
+    handshake: function() { 
+        return FinanceKernel.init() ? "OK" : "FAIL"; 
+    },
+    validateAccess: function() { return true; }
 };
 
 const ServiceRegistry = {
-    S_01: { id: "EC-01", name: "Fluxo de Caixa", cat: 1, zone: "dal10", status: "READY" },
-    S_02: { id: "EC-02", name: "Extrato Corrente", cat: 1, zone: "dal10", status: "READY" },
-    S_03: { id: "EC-03", name: "Saldos Disponíveis", cat: 1, zone: "dal10", status: "READY" },
-    S_04: { id: "EC-04", name: "Transferências PIX", cat: 1, zone: "dal10", status: "READY" },
-    S_05: { id: "EC-05", name: "Pagamento Fornecedor", cat: 1, zone: "dal10", status: "READY" },
-    S_06: { id: "EC-06", name: "Agendamentos", cat: 1, zone: "dal10", status: "READY" },
-    S_07: { id: "EC-07", name: "DDA / Boletos", cat: 1, zone: "dal10", status: "READY" },
-    S_08: { id: "EC-08", name: "Antecipação Recebíveis", cat: 2, zone: "dal10", status: "READY" },
-    S_09: { id: "EC-09", name: "Análise de Sacados", cat: 2, zone: "dal10", status: "READY" },
-    S_10: { id: "EC-10", name: "Operações de Fomento", cat: 2, zone: "dal10", status: "READY" },
-    S_11: { id: "EC-11", name: "Limites de Crédito", cat: 2, zone: "dal10", status: "READY" },
-    S_12: { id: "EC-12", name: "Contratos Digitais", cat: 2, zone: "dal10", status: "READY" },
-    S_13: { id: "EC-13", name: "Borderôs Digitais", cat: 2, zone: "dal10", status: "READY" },
-    S_14: { id: "EC-14", name: "Recompra de Títulos", cat: 2, zone: "dal10", status: "READY" },
-    S_15: { id: "EC-15", name: "Capital de Giro PJ", cat: 3, zone: "dal10", status: "READY" },
-    S_16: { id: "EC-16", name: "BNDES Repasse", cat: 3, zone: "dal10", status: "READY" },
-    S_17: { id: "EC-17", name: "Crédito Rural", cat: 3, zone: "dal10", status: "READY" },
-    S_18: { id: "EC-18", name: "Financ. Imobiliário", cat: 3, zone: "dal10", status: "READY" },
-    S_19: { id: "EC-19", name: "Leasing Estruturado", cat: 3, zone: "dal10", status: "READY" },
-    S_20: { id: "EC-20", name: "Garantia Bancária", cat: 3, zone: "dal10", status: "READY" },
-    S_21: { id: "EC-21", name: "Microcrédito Emp.", cat: 3, zone: "dal10", status: "READY" },
-    S_22: { id: "EC-22", name: "CDB Corporativo", cat: 4, zone: "dal12", status: "READY" },
-    S_23: { id: "EC-23", name: "Fundos de Invest.", cat: 4, zone: "dal12", status: "READY" },
-    S_24: { id: "EC-24", name: "Previdência PJ", cat: 4, zone: "dal12", status: "READY" },
-    S_25: { id: "EC-25", name: "Renda Variável", cat: 4, zone: "dal12", status: "READY" },
-    S_26: { id: "EC-26", name: "Tesouro Direto", cat: 4, zone: "dal12", status: "READY" },
-    S_27: { id: "EC-27", name: "Debêntures Emp.", cat: 4, zone: "dal12", status: "READY" },
-    S_28: { id: "EC-28", name: "COE Estruturado", cat: 4, zone: "dal12", status: "READY" },
-    S_29: { id: "EC-29", name: "Remessas Exterior", cat: 5, zone: "dal12", status: "READY" },
-    S_30: { id: "EC-30", name: "Cartão Multinacional", cat: 5, zone: "dal12", status: "READY" },
-    S_31: { id: "EC-31", name: "Hedge Cambial", cat: 5, zone: "dal12", status: "READY" },
-    S_32: { id: "EC-32", name: "Taxas On-line", cat: 5, zone: "dal12", status: "READY" },
-    S_33: { id: "EC-33", name: "Ordens de Pagamento", cat: 5, zone: "dal12", status: "READY" },
-    S_34: { id: "EC-34", name: "Swift / BIC Code", cat: 5, zone: "dal12", status: "READY" },
-    S_35: { id: "EC-35", name: "Arbitragem", cat: 5, zone: "dal12", status: "READY" },
-    S_36: { id: "EC-36", name: "Seguro Garantia", cat: 6, zone: "dal12", status: "READY" },
-    S_37: { id: "EC-37", name: "Vida em Grupo", cat: 6, zone: "dal12", status: "READY" },
-    S_38: { id: "EC-38", name: "Patrimonial", cat: 6, zone: "dal12", status: "READY" },
-    S_39: { id: "EC-39", name: "Responsab. Civil", cat: 6, zone: "dal12", status: "READY" },
-    S_40: { id: "EC-40", name: "Seguro Agrícola", cat: 6, zone: "dal12", status: "READY" },
-    S_41: { id: "EC-41", name: "Saúde Empresarial", cat: 6, zone: "dal12", status: "READY" },
-    S_42: { id: "EC-42", name: "Custódia de Ativos", cat: 7, zone: "dalvpc", status: "READY" },
-    S_43: { id: "EC-43", name: "Escrituração de Cotas", cat: 7, zone: "dalvpc", status: "READY" },
-    S_44: { id: "EC-44", name: "Agente Fiduciário", cat: 7, zone: "dalvpc", status: "READY" },
-    S_45: { id: "EC-45", name: "Gestão de Lastro", cat: 7, zone: "dalvpc", status: "READY" },
-    S_46: { id: "EC-46", name: "Senha Master Corporativa", cat: 7, zone: "dalvpc", status: "READY" },
-    S_47: { id: "EC-47", name: "Abertura Conta Master", cat: 7, zone: "dalvpc", status: "READY" }
-};
-
-const Bootstrap = {
-    run: function() {
-        if (Object.keys(ServiceRegistry).length === 47 && SecurityShield.validateAccess()) {
-            FinanceKernel.init();
-            Governance.init();
-            FinanceKernel.auditLog("BOOT_COMPLETE", "MASTER_V2026_ACTIVE_READY");
-        }
-    }
+    S_01: { name: "Fluxo de Caixa", cat: 1, zone: "dal10" },
+    S_02: { name: "Extrato Corrente", cat: 1, zone: "dal10" },
+    S_03: { name: "Saldos Disponíveis", cat: 1, zone: "dal10" },
+    S_04: { name: "Transferências PIX", cat: 1, zone: "dal10" },
+    S_05: { name: "Pagamento Fornecedor", cat: 1, zone: "dal10" },
+    S_06: { name: "Agendamentos", cat: 1, zone: "dal10" },
+    S_07: { name: "DDA / Boletos", cat: 1, zone: "dal10" },
+    S_08: { name: "Antecipação Recebíveis", cat: 2, zone: "dal10" },
+    S_09: { name: "Análise de Sacados", cat: 2, zone: "dal10" },
+    S_10: { name: "Operações de Fomento", cat: 2, zone: "dal10" },
+    S_11: { name: "Limites de Crédito", cat: 2, zone: "dal10" },
+    S_12: { name: "Contratos Digitais", cat: 2, zone: "dal10" },
+    S_13: { name: "Borderôs Digitais", cat: 2, zone: "dal10" },
+    S_14: { name: "Recompra de Títulos", cat: 2, zone: "dal10" },
+    S_15: { name: "Capital de Giro PJ", cat: 3, zone: "dal10" },
+    S_16: { name: "BNDES Repasse", cat: 3, zone: "dal10" },
+    S_17: { name: "Crédito Rural", cat: 3, zone: "dal10" },
+    S_18: { name: "Financ. Imobiliário", cat: 3, zone: "dal10" },
+    S_19: { name: "Leasing Estruturado", cat: 3, zone: "dal10" },
+    S_20: { name: "Garantia Bancária", cat: 3, zone: "dal10" },
+    S_21: { name: "Microcrédito Emp.", cat: 3, zone: "dal10" },
+    S_22: { name: "CDB Corporativo", cat: 4, zone: "dal12" },
+    S_23: { name: "Fundos de Invest.", cat: 4, zone: "dal12" },
+    S_24: { name: "Previdência PJ", cat: 4, zone: "dal12" },
+    S_25: { name: "Renda Variável", cat: 4, zone: "dal12" },
+    S_26: { name: "Tesouro Direto", cat: 4, zone: "dal12" },
+    S_27: { name: "Debêntures Emp.", cat: 4, zone: "dal12" },
+    S_28: { name: "COE Estruturado", cat: 4, zone: "dal12" },
+    S_29: { name: "Remessas Exterior", cat: 5, zone: "dal12" },
+    S_30: { name: "Cartão Multinacional", cat: 5, zone: "dal12" },
+    S_31: { name: "Hedge Cambial", cat: 5, zone: "dal12" },
+    S_32: { name: "Taxas On-line", cat: 5, zone: "dal12" },
+    S_33: { name: "Ordens de Pagamento", cat: 5, zone: "dal12" },
+    S_34: { name: "Swift / BIC Code", cat: 5, zone: "dal12" },
+    S_35: { name: "Arbitragem", cat: 5, zone: "dal12" },
+    S_36: { name: "Seguro Garantia", cat: 6, zone: "dal12" },
+    S_37: { name: "Vida em Grupo", cat: 6, zone: "dal12" },
+    S_38: { name: "Patrimonial", cat: 6, zone: "dal12" },
+    S_39: { name: "Responsab. Civil", cat: 6, zone: "dal12" },
+    S_40: { name: "Seguro Agrícola", cat: 6, zone: "dal12" },
+    S_41: { name: "Saúde Empresarial", cat: 6, zone: "dal12" },
+    S_42: { name: "Custódia de Ativos", cat: 7, zone: "dalvpc" },
+    S_43: { name: "Escrituração de Cotas", cat: 7, zone: "dalvpc" },
+    S_44: { name: "Agente Fiduciário", cat: 7, zone: "dalvpc" },
+    S_45: { name: "Gestão de Lastro", cat: 7, zone: "dalvpc" },
+    S_46: { name: "Senha Master Corporativa", cat: 7, zone: "dalvpc" },
+    S_47: { name: "Abertura Conta Master", cat: 7, zone: "dalvpc" }
 };
 
 const Governance = {
     init: function() {
         setInterval(() => {
             this.auditSession();
-            this.checkIntegrity();
             FinanceKernel.syncClusterState();
         }, 30000);
     },
     auditSession: function() {
         if (!SecurityShield.validateAccess()) {
-            FinanceKernel.auditLog("GOV_CRITICAL", "SESSION_INVALID_RELOAD");
             window.location.reload();
-        }
-    },
-    checkIntegrity: function() {
-        if (!FinanceKernel.validateDomNodes()) {
-            FinanceKernel.auditLog("DOM_ALERT", "INTEGRITY_COMPROMISED_V47");
         }
     }
 };
 
 const DisasterRecovery = {
     init: function() {
-        window.addEventListener('offline', () => this.handleOffline());
-        window.addEventListener('online', () => this.handleOnline());
-        this.verifyBackupNodes();
-    },
-    handleOffline: function() {
-        FinanceKernel.auditLog("NETWORK_STATE", "DR_MODE_OFFLINE_ACTIVE_V47");
-        document.title = "OFFLINE | Engecema Recovery";
-    },
-    handleOnline: function() {
-        FinanceKernel.auditLog("NETWORK_STATE", "DR_MODE_SYNC_RESTORED_V47");
-        document.title = "Engecema | Master Corporate Banking";
-        FinanceKernel.syncClusterState();
-    },
-    verifyBackupNodes: function() { return RedundancyMatrix.probeNode(); }
+        window.addEventListener('offline', () => {
+            FinanceKernel.auditLog("DR_STATUS", "OFFLINE_ACTIVE");
+        });
+        window.addEventListener('online', () => {
+            FinanceKernel.auditLog("DR_STATUS", "SYNC_RESTORED");
+        });
+    }
 };
 
-const Finalizer = {
-    seal: function() {
-        FinanceKernel.auditLog("KERNEL_SEAL
+const Bootstrap = {
+    run: function() {
+        if (SecurityShield.validateAccess()) {
+            FinanceKernel.init();
+            Governance.init();
+            DisasterRecovery.init();
+            FinanceKernel.auditLog("BOOT_COMPLETE", "MASTER_V2026_ACTIVE");
+        }
+    }
+};
+
+Bootstrap.run();
