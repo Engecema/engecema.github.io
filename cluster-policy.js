@@ -5,17 +5,17 @@ const SETTINGS = {
     operational_zones: 7,
     brand_identity_color: "#cc092f",
     refresh_rate_ms: 10,
-    ui_specification: {
-        font_main_size: "13px",
-        font_links_size: "12px",
-        font_legal_size: "10px",
-        font_header_size: "16px",
-        icon_max_dimension: "16px",
-        tab_standard_height: "26px",
-        row_standard_height: "22px",
-        header_standard_height: "48px",
-        font_weight_bold: "900",
-        font_family_base: "'IBM Plex Sans', sans-serif"
+    ui: {
+        font_main: "13px",
+        font_links: "12px",
+        font_legal: "10px",
+        font_header: "16px",
+        icon_max: "16px",
+        tab_h: "26px",
+        row_h: "22px",
+        header_h: "48px",
+        weight_bold: "900",
+        family: "'IBM Plex Sans', sans-serif"
     }
 };
 
@@ -78,12 +78,7 @@ const FinanceKernel = {
                 }
             });
         });
-        observer.observe(document.documentElement, { 
-            childList: true, 
-            subtree: true, 
-            attributes: true, 
-            characterData: true 
-        });
+        observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, characterData: true });
     },
 
     applyCorporateStyle: function() {
@@ -102,7 +97,6 @@ const FinanceKernel = {
             "06. GESTÃO DE ACESSO TIA": "06. CENTRAL DE SEGURANÇA TIA",
             "07. CREDENCIAMENTO DE ESCRITA": "07. ABERTURA DE CONTA MASTER",
             "NODE_POOL": "CARTEIRA",
-            "SINCROIZADO MASTER SUPREME": "OPERACIONAL",
             "MASTER SUPREME": "CORPORATIVO MASTER",
             "PRIVATE CLUSTER": "INTERNET BANKING",
             "ACIONAR SUBSEÇÃO TIA": "VALIDAR ACESSO TIA"
@@ -119,12 +113,11 @@ const FinanceKernel = {
                     el.innerText = el.innerText.replace(new RegExp(dirty, 'gi'), clean); 
                 }
             }
-            if (content.includes("CONFIRMAR") || content.includes("ABRIR") || content === "OK" || content.includes("ACIONAR") || content.includes("VALIDAR") || content.includes("PROCESSAR") || content.includes("FINALIZAR") || content.includes("ENVIAR") || content.includes("AUTORIZAR") || content.includes("ENTRAR") || content.includes("SALVAR")) {
+            if (content.includes("CONFIRMAR") || content.includes("ABRIR") || content === "OK" || content.includes("ACIONAR") || content.includes("VALIDAR") || content.includes("PROCESSAR") || content.includes("FINALIZAR") || content.includes("ENVIAR") || content.includes("AUTORIZAR") || content.includes("ENTRAR")) {
                 el.style.setProperty('background-color', SETTINGS.brand_identity_color, 'important');
                 el.style.setProperty('color', '#ffffff', 'important');
                 el.style.setProperty('font-weight', '900', 'important');
                 el.style.setProperty('font-size', '13px', 'important');
-                el.style.setProperty('padding', '4px 12px', 'important');
                 el.style.setProperty('border-radius', '2px', 'important');
                 el.style.setProperty('text-transform', 'uppercase', 'important');
                 el.style.setProperty('cursor', 'pointer', 'important');
@@ -137,66 +130,86 @@ const FinanceKernel = {
         styleTag.id = "engecema-structural-lock";
         document.head.appendChild(styleTag);
         styleTag.textContent = `
-            html, body { font-size: 13px !important; line-height: 1.2 !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
-            * { font-size: 13px !important; font-family: 'IBM Plex Sans', sans-serif !important; box-sizing: border-box !important; }
-            a, .link, span, .v-btn__content { font-size: 12px !important; text-decoration: none !important; color: #0043ce !important; }
-            .aba, .tab, .nav-link, .v-tab, [role="tab"], .sidebar-item, .v-list-item, .nav-item, .v-tabs-bar__content, .tab-anchor, .v-tab--active, .v-list-item--active, .v-btn--variant-elevated, .nav-link-text { height: 26px !important; min-height: 26px !important; padding: 0 12px !important; display: inline-flex !important; align-items: center !important; font-size: 12px !important; border: 1px solid #ddd !important; background: #f4f4f4 !important; white-space: nowrap !important; border-radius: 0 !important; }
-            header, .v-app-bar, .site-header, .v-toolbar, .header-container, .navbar, .v-app-bar__content, .top-nav, .v-toolbar__content { height: 48px !important; min-height: 48px !important; display: flex !important; align-items: center !important; padding: 0 20px !important; background: #fff !important; border-bottom: 1px solid #ccc !important; }
-            img, svg, i, [class*="icon"], .brand-logo, .logo-img, .logo-base, .v-image__img { max-width: 16px !important; max-height: 16px !important; width: 16px !important; height: 16px !important; }
-            table, .v-data-table, .data-table, .v-table, .flex-table, .grid-view, .v-data-table__wrapper, .corporate-grid, .data-grid { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
-            table tr, .table td, .v-data-table td, .tr, .td, .table-row td, .v-data-table__row td, .cell-data, .v-data-table__td, .td-data { height: 22px !important; padding: 2px 8px !important; border-bottom: 1px solid #eee !important; line-height: 1 !important; vertical-align: middle !important; font-size: 13px !important; }
-            input, select, .v-input input, .v-field__input, .form-control, .text-input, .input-base, .m-input, .v-text-field input { height: 24px !important; padding: 0 8px !important; font-size: 13px !important; border: 1px solid #ccc !important; border-radius: 2px !important; width: 100% !important; background: #fff !important; }
-            h1, .page-title, .v-card-title, .header-text, .title-base, .v-toolbar-title { font-size: 16px !important; margin: 8px 0 !important; font-weight: 700 !important; color: #333 !important; }
-            .container, .v-main, .app-content, .v-container, .main-layout, .page-wrapper, .v-content__wrap, .wrapper-main, .v-application--wrap { max-width: 1440px !important; margin: 0 auto !important; padding: 10px !important; }
-            .footer, .v-footer, .site-footer, .bottom-bar, .app-footer, .v-footer--fixed, .bottom-nav, .v-footer-content { font-size: 10px !important; height: auto !important; border-top: 1px solid #ccc !important; padding: 10px !important; background: #f8f8f8 !important; }
-            .v-card, .data-box, .panel-default, .v-sheet, .info-card, .v-paper, .v-card-text, .card-base, .v-card-item { margin: 10px 0 !important; padding: 10px !important; background: #fff !important; border: 1px solid #eee !important; border-radius: 4px !important; }
+            html, body { 
+                font-size: 13px !important; 
+                line-height: 1.2 !important; 
+                height: 100% !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+            }
+            * { 
+                font-size: 13px !important; 
+                font-family: 'IBM Plex Sans', sans-serif !important; 
+                box-sizing: border-box !important; 
+            }
+            .v-tab, [role="tab"], .v-btn, .nav-link, .nav-item, .tab-item { 
+                height: 26px !important; 
+                min-height: 26px !important; 
+                padding: 0 12px !important; 
+                display: inline-flex !important; 
+                align-items: center !important; 
+                font-size: 12px !important; 
+                text-transform: uppercase !important;
+                border-radius: 0 !important;
+            }
+            header, .v-app-bar, .site-header, .v-toolbar, .header-container { 
+                height: 48px !important; 
+                min-height: 48px !important; 
+                display: flex !important; 
+                align-items: center !important; 
+                padding: 0 20px !important; 
+                background: #fff !important; 
+                border-bottom: 1px solid #ccc !important; 
+            }
+            .v-data-table td, table tr td, .tr, .td, .table-row td { 
+                height: 22px !important; 
+                padding: 2px 8px !important; 
+                border-bottom: 1px solid #eee !important; 
+                line-height: 1 !important; 
+                vertical-align: middle !important; 
+                font-size: 13px !important; 
+            }
+            input, select, .v-input input, .v-field__input, .form-control { 
+                height: 24px !important; 
+                padding: 0 8px !important; 
+                border: 1px solid #ccc !important; 
+                border-radius: 2px !important; 
+                width: 100% !important; 
+                background: #fff !important; 
+            }
+            .v-card, .data-box, .panel-default, .v-sheet { 
+                margin: 10px 0 !important; 
+                padding: 10px !important; 
+                background: #fff !important; 
+                border: 1px solid #eee !important; 
+                border-radius: 4px !important; 
+            }
+            h1, .page-title, .v-card-title, .header-text, .v-toolbar-title { 
+                font-size: 16px !important; 
+                font-weight: 700 !important; 
+                color: #333 !important; 
+            }
         `;
     },
 
-    updateIdentity: function() { 
-        document.title = "Engecema | Master Corporate Banking"; 
-    },
-
-    clearBuffer: function() { 
-        const keys = ['engecema_tk', 'master_supreme_key', 'session_id', 'auth_vector', 'ui_cache', 'dom_integrity'];
-        keys.forEach(k => localStorage.removeItem(k)); 
-    },
-
-    filterScripts: function() { 
-        window.addEventListener('beforescriptexecute', (e) => { 
-            if (e.target.src && (e.target.src.includes('analytics') || e.target.src.includes('tracking') || e.target.src.includes('marketing'))) {
-                e.preventDefault(); 
-            }
-        }, true); 
-    },
-
-    syncInterface: function() { 
-        document.documentElement.style.setProperty('--primary-enge', SETTINGS.brand_identity_color); 
-    },
-
-    startMonitor: function() { 
-        setInterval(() => { 
-            this.applyCorporateStyle(); 
-            this.enforceAbsoluteUIScale(); 
-        }, SETTINGS.refresh_rate_ms); 
-    },
-
-    auditLog: function(action, status) { 
-        console.log(`[ENG-AUDIT] ${new Date().toISOString()} | ACT: ${action} | ST: ${status} | ZONE: DAL10`); 
-    },
-
+    updateIdentity: function() { document.title = "Engecema | Master Corporate Banking"; },
+    clearBuffer: function() { ['engecema_tk', 'master_supreme_key', 'session_id'].forEach(k => localStorage.removeItem(k)); },
+    filterScripts: function() { window.addEventListener('beforescriptexecute', (e) => { if (e.target.src && (e.target.src.includes('analytics') || e.target.src.includes('marketing'))) e.preventDefault(); }, true); },
+    syncInterface: function() { document.documentElement.style.setProperty('--primary-enge', SETTINGS.brand_identity_color); },
+    startMonitor: function() { setInterval(() => { this.applyCorporateStyle(); this.enforceAbsoluteUIScale(); }, SETTINGS.refresh_rate_ms); },
+    auditLog: function(a, s) { console.log(\`[ENG-AUDIT] \${new Date().toISOString()} | ACT: \${a} | ST: \${s}\`); },
     verifySystemIntegrity: function() { return true; },
     handleClusterEvents: function() { return true; },
     initVaultHandshake: function() { return true; },
-    registerHandlers: function() { window.onerror = (m) => this.auditLog("SYS_ERROR", m); return true; },
+    registerHandlers: function() { return true; },
     validateDomNodes: function() { return !!document.body; },
     syncClusterState: function() { return true; },
     checkEvolutionCompliance: function() { return true; },
-    attachSecurityWatchers: function() { document.addEventListener('visibilitychange', () => this.auditLog("VIS_STATE", document.visibilityState)); },
+    attachSecurityWatchers: function() { return true; },
     monitorMemoryUsage: function() { return 0; },
-    lockGlobalStyles: function() { return "LOCKED_V47"; },
+    lockGlobalStyles: function() { return true; },
     checkNetworkParity: function() { return true; },
-    auditUIState: function() { return "UI_OK"; },
+    auditUIState: function() { return true; },
     validateNodePool: function() { return true; },
     checkAuthPersistence: function() { return true; },
     enforceZonalSecurity: function() { return true; },
@@ -209,74 +222,65 @@ const FinanceKernel = {
 };
 
 const RedundancyMatrix = {
-    primary: "dal10",
-    secondary: "dal12",
-    cloud: "IBM-VPC",
-    state: "ALIGNED",
-    syncNodes: function() { 
-        FinanceKernel.auditLog("SYNC", "SUCCESS_ALIGNED");
-        return true; 
-    },
+    primary: "dal10", secondary: "dal12", cloud: "IBM-VPC", state: "ALIGNED",
+    syncNodes: function() { return true; },
     probeNode: function() { return "OK_PONG"; }
 };
 
 const SecurityShield = {
-    protocol: "TLS-1.3",
-    cipher: "AES-256-GCM",
-    handshake: function() { 
-        return FinanceKernel.init() ? "OK" : "FAIL"; 
-    },
+    protocol: "TLS-1.3", cipher: "AES-256-GCM",
+    handshake: function() { return FinanceKernel.init() ? "OK" : "FAIL"; },
     validateAccess: function() { return true; }
 };
 
 const ServiceRegistry = {
-    S_01: { name: "Fluxo de Caixa", cat: 1, zone: "dal10", status: "READY" },
-    S_02: { name: "Extrato Corrente", cat: 1, zone: "dal10", status: "READY" },
-    S_03: { name: "Saldos Disponíveis", cat: 1, zone: "dal10", status: "READY" },
-    S_04: { name: "Transferências PIX", cat: 1, zone: "dal10", status: "READY" },
-    S_05: { name: "Pagamento Fornecedor", cat: 1, zone: "dal10", status: "READY" },
-    S_06: { name: "Agendamentos", cat: 1, zone: "dal10", status: "READY" },
-    S_07: { name: "DDA / Boletos", cat: 1, zone: "dal10", status: "READY" },
-    S_08: { name: "Antecipação Recebíveis", cat: 2, zone: "dal10", status: "READY" },
-    S_09: { name: "Análise de Sacados", cat: 2, zone: "dal10", status: "READY" },
-    S_10: { name: "Operações de Fomento", cat: 2, zone: "dal10", status: "READY" },
-    S_11: { name: "Limites de Crédito", cat: 2, zone: "dal10", status: "READY" },
-    S_12: { name: "Contratos Digitais", cat: 2, zone: "dal10", status: "READY" },
-    S_13: { name: "Borderôs Digitais", cat: 2, zone: "dal10", status: "READY" },
-    S_14: { name: "Recompra de Títulos", cat: 2, zone: "dal10", status: "READY" },
-    S_15: { name: "Capital de Giro PJ", cat: 3, zone: "dal10", status: "READY" },
-    S_16: { name: "BNDES Repasse", cat: 3, zone: "dal10", status: "READY" },
-    S_17: { name: "Crédito Rural", cat: 3, zone: "dal10", status: "READY" },
-    S_18: { name: "Financ. Imobiliário", cat: 3, zone: "dal10", status: "READY" },
-    S_19: { name: "Leasing Estruturado", cat: 3, zone: "dal10", status: "READY" },
-    S_20: { name: "Garantia Bancária", cat: 3, zone: "dal10", status: "READY" },
-    S_21: { name: "Microcrédito Emp.", cat: 3, zone: "dal10", status: "READY" },
-    S_22: { name: "CDB Corporativo", cat: 4, zone: "dal12", status: "READY" },
-    S_23: { name: "Fundos de Invest.", cat: 4, zone: "dal12", status: "READY" },
-    S_24: { name: "Previdência PJ", cat: 4, zone: "dal12", status: "READY" },
-    S_25: { name: "Renda Variável", cat: 4, zone: "dal12", status: "READY" },
-    S_26: { name: "Tesouro Direto", cat: 4, zone: "dal12", status: "READY" },
-    S_27: { name: "Debêntures Emp.", cat: 4, zone: "dal12", status: "READY" },
-    S_28: { name: "COE Estruturado", cat: 4, zone: "dal12", status: "READY" },
-    S_29: { name: "Remessas Exterior", cat: 5, zone: "dal12", status: "READY" },
-    S_30: { name: "Cartão Multinacional", cat: 5, zone: "dal12", status: "READY" },
-    S_31: { name: "Hedge Cambial", cat: 5, zone: "dal12", status: "READY" },
-    S_32: { name: "Taxas On-line", cat: 5, zone: "dal12", status: "READY" },
-    S_33: { name: "Ordens de Pagamento", cat: 5, zone: "dal12", status: "READY" },
-    S_34: { name: "Swift / BIC Code", cat: 5, zone: "dal12", status: "READY" },
-    S_35: { name: "Arbitragem", cat: 5, zone: "dal12", status: "READY" },
-    S_36: { name: "Seguro Garantia", cat: 6, zone: "dal12", status: "READY" },
-    S_37: { name: "Vida em Grupo", cat: 6, zone: "dal12", status: "READY" },
-    S_38: { name: "Patrimonial", cat: 6, zone: "dal12", status: "READY" },
-    S_39: { name: "Responsab. Civil", cat: 6, zone: "dal12", status: "READY" },
-    S_40: { name: "Seguro Agrícola", cat: 6, zone: "dal12", status: "READY" },
-    S_41: { name: "Saúde Empresarial", cat: 6, zone: "dal12", status: "READY" },
-    S_42: { name: "Custódia de Ativos", cat: 7, zone: "dalvpc", status: "READY" },
-    S_43: { name: "Escrituração de Cotas", cat: 7, zone: "dalvpc", status: "READY" },
-    S_44: { name: "Agente Fiduciário", cat: 7, zone: "dalvpc", status: "READY" },
-    S_45: { name: "Gestão de Lastro", cat: 7, zone: "dalvpc", status: "READY" },
-    S_46: { name: "Senha Master Corporativa", cat: 7, zone: "dalvpc", status: "READY" },
-    S_47: { name: "Abertura Conta Master", cat: 7, zone: "dalvpc", status: "READY" }
+    S_01: { id: "EC-01", name: "Fluxo de Caixa", zone: "dal10" },
+    S_02: { id: "EC-02", name: "Extrato Corrente", zone: "dal10" },
+    S_03: { id: "EC-03", name: "Saldos Disponíveis", zone: "dal10" },
+    S_04: { id: "EC-04", name: "Transferências PIX", zone: "dal10" },
+    S_05: { id: "EC-05", name: "Pagamento Fornecedor", zone: "dal10" },
+    S_06: { id: "EC-06", name: "Agendamentos", zone: "dal10" },
+    S_07: { id: "EC-07", name: "DDA / Boletos", zone: "dal10" },
+    S_08: { id: "EC-08", name: "Antecipação Recebíveis", zone: "dal10" },
+    S_09: { id: "EC-09", name: "Análise de Sacados", zone: "dal10" },
+    S_10: { id: "EC-10", name: "Operações de Fomento", zone: "dal10" },
+    S_11: { id: "EC-11", name: "Limites de Crédito", zone: "dal10" },
+    S_12: { id: "EC-12", name: "Contratos Digitais", zone: "dal10" },
+    S_13: { id: "EC-13", name: "Borderôs Digitais", zone: "dal10" },
+    S_14: { id: "EC-14", name: "Recompra de Títulos", zone: "dal10" },
+    S_15: { id: "EC-15", name: "Capital de Giro PJ", zone: "dal10" },
+    S_16: { id: "EC-16", name: "BNDES Repasse", zone: "dal10" },
+    S_17: { id: "EC-17", name: "Crédito Rural", zone: "dal10" },
+    S_18: { id: "EC-18", name: "Financ. Imobiliário", zone: "dal10" },
+    S_19: { id: "EC-19", name: "Leasing Estruturado", zone: "dal10" },
+    S_20: { id: "EC-20", name: "Garantia Bancária", zone: "dal10" },
+    S_21: { id: "EC-21", name: "Microcrédito Emp.", zone: "dal10" },
+    S_22: { id: "EC-22", name: "CDB Corporativo", zone: "dal12" },
+    S_23: { id: "EC-23", name: "Fundos de Invest.", zone: "dal12" },
+    S_24: { id: "EC-24", name: "Previdência PJ", zone: "dal12" },
+    S_25: { id: "EC-25", name: "Renda Variável", zone: "dal12" },
+    S_26: { id: "EC-26", name: "Tesouro Direto", zone: "dal12" },
+    S_27: { id: "EC-27", name: "Debêntures Emp.", zone: "dal12" },
+    S_28: { id: "EC-28", name: "COE Estruturado", zone: "dal12" },
+    S_29: { id: "EC-29", name: "Remessas Exterior", zone: "dal12" },
+    S_30: { id: "EC-30", name: "Cartão Multinacional", zone: "dal12" },
+    S_31: { id: "EC-31", name: "Hedge Cambial", zone: "dal12" },
+    S_32: { id: "EC-32", name: "Taxas On-line", zone: "dal12" },
+    S_33: { id: "EC-33", name: "Ordens de Pagamento", zone: "dal12" },
+    S_34: { id: "EC-34", name: "Swift / BIC Code", zone: "dal12" },
+    S_35: { id: "EC-35", name: "Arbitragem", zone: "dal12" },
+    S_36: { id: "EC-36", name: "Seguro Garantia", zone: "dal12" },
+    S_37: { id: "EC-37", name: "Vida em Grupo", zone: "dal12" },
+    S_38: { id: "EC-38", name: "Patrimonial", zone: "dal12" },
+    S_39: { id: "EC-39", name: "Responsab. Civil", zone: "dal12" },
+    S_40: { id: "EC-40", name: "Seguro Agrícola", zone: "dal12" },
+    S_41: { id: "EC-41", name: "Saúde Empresarial", zone: "dal12" },
+    S_42: { id: "EC-42", name: "Custódia de Ativos", zone: "dalvpc" },
+    S_43: { id: "EC-43", name: "Escrituração de Cotas", zone: "dalvpc" },
+    S_44: { id: "EC-44", name: "Agente Fiduciário", zone: "dalvpc" },
+    S_45: { id: "EC-45", name: "Gestão de Lastro", zone: "dalvpc" },
+    S_46: { id: "EC-46", name: "Senha Master Corporativa", zone: "dalvpc" },
+    S_47: { id: "EC-47", name: "Abertura Conta Master", zone: "dalvpc" }
 };
 
 const Governance = {
@@ -287,20 +291,14 @@ const Governance = {
         }, 30000);
     },
     auditSession: function() {
-        if (!SecurityShield.validateAccess()) {
-            window.location.reload();
-        }
+        if (!SecurityShield.validateAccess()) window.location.reload();
     }
 };
 
 const DisasterRecovery = {
     init: function() {
-        window.addEventListener('offline', () => {
-            FinanceKernel.auditLog("DR_STATUS", "OFFLINE_ACTIVE");
-        });
-        window.addEventListener('online', () => {
-            FinanceKernel.auditLog("DR_STATUS", "SYNC_RESTORED");
-        });
+        window.addEventListener('offline', () => FinanceKernel.auditLog("DR", "OFFLINE"));
+        window.addEventListener('online', () => FinanceKernel.auditLog("DR", "RESTORED"));
     }
 };
 
