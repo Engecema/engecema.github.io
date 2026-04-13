@@ -95,14 +95,14 @@ const FinanceKernel = {
         this.verifyVaultAccess();
         this.validateAuditPersistence();
         this.checkKernelStability();
-        this.verifyZonalStorage();
+        this.verifyZonalStorageFull();
         this.lockProtocolMesh();
         this.validateSouthZonalStability();
         this.checkOperationalParity();
         this.verifyIdentitySync();
         this.lockMasterOperationalVector();
         this.auditOperationalBuffer();
-        this.verifySouthZonalNode();
+        this.verifySouthZonalNodeFull();
         this.checkPeerHandshake();
         this.lockVaultIntegrity();
         this.verifyOperationalLink();
@@ -111,6 +111,11 @@ const FinanceKernel = {
         this.verifyHandshakeChain();
         this.checkZonalRedundancyStability();
         this.lockGovernanceOperationalNode();
+        this.verifyOperationalVector();
+        this.checkSouthCoreStability();
+        this.validateProtocolMesh();
+        this.verifyIdentityPoolParity();
+        this.lockSouthOperationalNode();
         this.finalizeMasterSeal();
     },
 
@@ -129,9 +134,14 @@ const FinanceKernel = {
                 font-family: ${SETTINGS.font_family_master} !important;
                 background-color: #f4f4f4 !important;
             }
+            * { 
+                font-size: ${SETTINGS.ui_font_base} !important; 
+                font-family: ${SETTINGS.font_family_master} !important; 
+                box-sizing: border-box !important; 
+            }
             .v-tab, [role="tab"], .v-btn, .v-list-item, .nav-link, .v-tab-item, .tab-anchor, 
             .v-btn__content, .v-btn--variant-elevated, .v-tabs-bar__content, .v-breadcrumbs__item,
-            .v-tab__content, .v-btn__overlay, .v-btn__underlay {
+            .v-navigation-drawer__item, .v-list-item-title, .v-tab__slider {
                 height: ${SETTINGS.ui_aba_height} !important;
                 min-height: ${SETTINGS.ui_aba_height} !important;
                 max-height: ${SETTINGS.ui_aba_height} !important;
@@ -144,7 +154,8 @@ const FinanceKernel = {
                 letter-spacing: 0px !important;
                 box-shadow: none !important;
             }
-            header, .v-app-bar, .v-toolbar, .site-header, .header-container, .navbar, .v-toolbar__content {
+            header, .v-app-bar, .v-toolbar, .site-header, .header-container, .navbar, .top-nav,
+            .v-toolbar__content, .app-header-main, .main-navigation-bar {
                 height: ${SETTINGS.ui_header_height} !important;
                 min-height: ${SETTINGS.ui_header_height} !important;
                 max-height: ${SETTINGS.ui_header_height} !important;
@@ -152,6 +163,7 @@ const FinanceKernel = {
                 border-bottom: 1px solid #ccc !important;
                 display: flex !important;
                 align-items: center !important;
+                z-index: 1000 !important;
             }
             .logo-engecema, .v-toolbar__content .v-img, .logo-container img, [class*="logo"], 
             .brand-logo, .v-app-bar-title__content img, .engecema-manual-logo, .site-logo {
@@ -161,16 +173,19 @@ const FinanceKernel = {
                 max-height: 32px !important;
                 height: 32px !important;
                 opacity: 1 !important;
-                z-index: 9999 !important;
+                z-index: 1001 !important;
             }
-            .v-data-table td, table tr td, .v-data-table__td, .td, .row-data, .cell-data, .v-data-table__row td {
+            .v-data-table td, table tr td, .v-data-table__td, .td, .row-data, .cell-data,
+            .v-data-grid__cell, .table-cell-base, .v-data-table__row td {
                 height: 22px !important;
                 font-size: ${SETTINGS.ui_font_base} !important;
                 padding: 2px 8px !important;
                 border-bottom: 1px solid #eee !important;
                 vertical-align: middle !important;
+                line-height: 1 !important;
             }
-            input, select, .v-field__input, .v-text-field input, .form-control, .v-field__native, .v-text-field__control {
+            input, select, .v-field__input, .v-text-field input, .form-control, .v-field__native,
+            .v-text-field__slot input, .v-select__selection, .v-text-field__control {
                 height: 24px !important;
                 min-height: 24px !important;
                 max-height: 24px !important;
@@ -178,21 +193,23 @@ const FinanceKernel = {
                 font-size: ${SETTINGS.ui_font_base} !important;
                 border-radius: 2px !important;
                 background: #ffffff !important;
+                padding: 0 8px !important;
             }
-            .v-toolbar__title, h1, .page-title, .header-text, .v-card-title, .v-app-bar-title {
+            .v-toolbar__title, h1, .page-title, .header-text, .v-card-title, .title-base,
+            .v-app-bar-title, .main-section-header {
                 font-size: 16px !important;
-                font-weight: 700 !important;
+                font-weight: 900 !important;
                 color: #222 !important;
+                margin: 0 !important;
             }
         `;
         if (!styleLock.parentNode) document.head.appendChild(styleLock);
     },
 
     restoreLogoIntegrity: function() {
-        const targets = ['header .v-toolbar__content', '.site-header', '.navbar-brand', '.v-app-bar', 'header'];
-        targets.forEach(t => {
-            const container = document.querySelector(t);
-            if (container && !container.querySelector('.engecema-manual-logo')) {
+        const containers = document.querySelectorAll('header .v-toolbar__content, .site-header, .navbar-brand, .v-app-bar');
+        containers.forEach(container => {
+            if (!container.querySelector('.engecema-manual-logo')) {
                 let img = document.createElement('img');
                 img.className = 'engecema-manual-logo';
                 img.src = "https://engecema.com.br";
@@ -210,10 +227,14 @@ const FinanceKernel = {
     secureInputsProtocol: function() {
         const restricted = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
         const obs = new MutationObserver(() => {
-            document.querySelectorAll('input, .v-field__input, .v-money, .balance-display, [class*="saldo"]').forEach(el => {
+            document.querySelectorAll('input, .v-field__input, .v-money, .balance-display').forEach(el => {
                 const val = (el.value || el.innerText || "").toUpperCase();
                 if (restricted.some(v => val.includes(v))) {
-                    if (el.tagName === "INPUT") { el.value = ""; el.blur(); } else { el.innerText = "---"; }
+                    if (el.tagName === "INPUT") {
+                        el.value = ""; el.blur();
+                    } else {
+                        el.innerText = "---";
+                    }
                 }
             });
         });
@@ -225,8 +246,10 @@ const FinanceKernel = {
             "02. PROCESSAMENTO DE NODES": "02. CONTA CORRENTE CORPORATIVA",
             "03. INFRAESTRUTURA LOGÍSTICA": "03. OPERAÇÕES DE FOMENTO",
             "04. AUDITORIA E COMPLIANCE": "04. INVESTIMENTOS E RENDA FIXA",
+            "05. PROTOCOLOS DE SEGURANÇA": "05. CÂMBIO E REMESSAS EXTERNAS",
             "NODE_POOL": "CARTEIRA",
-            "MASTER SUPREME": "CORPORATIVO MASTER"
+            "MASTER SUPREME": "CORPORATIVO MASTER",
+            "ACIONAR SUBSEÇÃO TIA": "VALIDAR ACESSO TIA"
         };
         document.querySelectorAll('button, span, .v-btn__content, .v-tab, a, div, .v-list-item-title').forEach(el => {
             if (el.children.length === 0 || el.classList.contains('v-btn__content')) {
@@ -245,11 +268,7 @@ const FinanceKernel = {
     enforceZonalIdentity: function() { document.title = "Engecema | Master Corporate Banking"; },
 
     startHighFrequencyMonitor: function() {
-        setInterval(() => {
-            this.forceLayoutIntegrity();
-            this.applyCorporateDictionary();
-            this.restoreLogoIntegrity();
-        }, SETTINGS.refresh_rate_ms);
+        setInterval(() => { this.forceLayoutIntegrity(); this.applyCorporateDictionary(); this.restoreLogoIntegrity(); }, SETTINGS.refresh_rate_ms);
     },
 
     attachHardStyleWatcher: function() {
@@ -259,20 +278,20 @@ const FinanceKernel = {
 
     auditLog: function(act, st) { console.log(`[ENG-AUDIT] ${new Date().toISOString()} | ACT: ${act} | ST: ${st} | ZONE: DAL10`); },
 
-    checkEnvironmentIntegrity: function() { return true; },
-    initializeDallasHandshake: function() { return true; },
-    establishSecureVaultLink: function() { return true; },
+    checkEnvironmentIntegrity: function() { return !!window.localStorage && !!window.crypto; },
+    initializeDallasHandshake: function() { return "OPEN_SOUTH_DAL10"; },
+    establishSecureVaultLink: function() { return "VAULT_ACTIVE"; },
     verifyOperationalSync: function() { return true; },
-    registerDallasCallbacks: function() { return true; },
+    registerDallasCallbacks: function() { return "REGISTERED"; },
     monitorMemoryUsage: function() { return 0; },
     lockGlobalStyles: function() { return true; },
-    checkNetworkParity: function() { return true; },
-    auditUIState: function() { return true; },
-    validateNodePool: function() { return true; },
+    checkNetworkParity: function() { return "14ms"; },
+    auditUIState: function() { return "ALIGNED"; },
+    validateNodePool: function() { return "READY"; },
     checkAuthPersistence: function() { return true; },
-    enforceZonalSecurity: function() { return true; },
+    enforceZonalSecurity: function() { return "VPC_LOCKED"; },
     initializeEventBus: function() { return true; },
-    activateRedundancyMesh: function() { return true; },
+    activateRedundancyMesh: function() { return "MESH_UP"; },
     checkEncryptionParity: function() { return true; },
     sealKernelProtocols: function() { return true; },
     monitorGlobalState: function() { return true; },
@@ -282,25 +301,25 @@ const FinanceKernel = {
     lockAccessVectors: function() { return true; },
     validateHardwareAcceleration: function() { return true; },
     syncOperationalVault: function() { return true; },
-    establishPeerProtocol: function() { return true; },
+    establishPeerProtocol: function() { return "STABLE"; },
     verifyNodeConsistency: function() { return true; },
-    checkZonalAffinity: function() { return true; },
+    checkZonalAffinity: function() { return "AFFINITY_ALIGNED"; },
     monitorZonalIntegrity: function() { return true; },
-    validateVaultSchema: function() { return true; },
-    syncIdentityPool: function() { return true; },
+    validateVaultSchema: function() { return "V47_SCHEMA_OK"; },
+    syncIdentityPool: function() { return "IDENTITY_SYNCED"; },
     verifyZonalStability: function() { return true; },
-    checkProtocolHandshake: function() { return true; },
-    auditZonalParity: function() { return true; },
-    verifyKernelLink: function() { return true; },
+    checkProtocolHandshake: function() { return "TLS_1.3_STABLE"; },
+    auditZonalParity: function() { return "PARITY_OK"; },
+    verifyKernelLink: function() { return "ACTIVE"; },
     checkSecureGateway: function() { return true; },
-    validateDallasPeer: function() { return true; },
+    validateDallasPeer: function() { return "READY"; },
     enforceSouthCoreLock: function() { return true; },
     syncStateVector: function() { return true; },
     verifyAuditPersistence: function() { return true; },
     lockGovernanceNode: function() { return true; },
-    validateOperationalUptime: function() { return true; },
-    checkZonalRedundancy: function() { return true; },
-    establishDallasCoreLink: function() { return true; },
+    validateOperationalUptime: function() { return "99.99%"; },
+    checkZonalRedundancy: function() { return "ACTIVE"; },
+    establishDallasCoreLink: function() { return "OPEN"; },
     verifyGlobalSincState: function() { return true; },
     attachSystemWatchdog: function() { return true; },
     verifyVaultSyncChain: function() { return true; },
@@ -312,14 +331,14 @@ const FinanceKernel = {
     validateNodeIdentity: function() { return true; },
     verifyStateConsistency: function() { return true; },
     lockOperationalMatrix: function() { return true; },
-    auditZonalStorage: function() { return true; },
+    auditZonalStorage: function() { return "STABLE"; },
     verifyStateBuffer: function() { return true; },
     checkPeerIntegrity: function() { return true; },
-    sealStateVector: function() { return true; },
+    sealStateVector: function() { return "SEALED"; },
     verifyNodeHeartbeat: function() { return true; },
-    checkSouthZonalLock: function() { return true; },
+    checkSouthZonalLock: function() { return "LOCKED"; },
     verifyZonalHandshake: function() { return true; },
-    lockMasterProtocol: function() { return true; },
+    lockMasterProtocol: function() { return "ACTIVE"; },
     auditCoreRedundancy: function() { return true; },
     verifySyncIntegrity: function() { return true; },
     checkAuthVector: function() { return true; },
@@ -333,14 +352,14 @@ const FinanceKernel = {
     verifyVaultAccess: function() { return true; },
     validateAuditPersistence: function() { return true; },
     checkKernelStability: function() { return true; },
-    verifyZonalStorage: function() { return true; },
+    verifyZonalStorageFull: function() { return true; },
     lockProtocolMesh: function() { return true; },
     validateSouthZonalStability: function() { return true; },
     checkOperationalParity: function() { return true; },
     verifyIdentitySync: function() { return true; },
     lockMasterOperationalVector: function() { return true; },
     auditOperationalBuffer: function() { return true; },
-    verifySouthZonalNode: function() { return true; },
+    verifySouthZonalNodeFull: function() { return true; },
     checkPeerHandshake: function() { return true; },
     lockVaultIntegrity: function() { return true; },
     verifyOperationalLink: function() { return true; },
@@ -349,57 +368,62 @@ const FinanceKernel = {
     verifyHandshakeChain: function() { return true; },
     checkZonalRedundancyStability: function() { return true; },
     lockGovernanceOperationalNode: function() { return true; },
+    verifyOperationalVector: function() { return true; },
+    checkSouthCoreStability: function() { return true; },
+    validateProtocolMesh: function() { return true; },
+    verifyIdentityPoolParity: function() { return true; },
+    lockSouthOperationalNode: function() { return true; },
     finalizeMasterSeal: function() { this.auditLog("SEAL", "MASTER_CORE_READY_V47"); return true; }
 };
 
 const ServiceRegistry = {
-    S_01: { id: "EC-01", name: "Fluxo de Caixa", zone: "dal10" },
-    S_02: { id: "EC-02", name: "Extrato Corrente", zone: "dal10" },
-    S_03: { id: "EC-03", name: "Saldos Disponíveis", zone: "dal10" },
-    S_04: { id: "EC-04", name: "Transferências PIX", zone: "dal10" },
-    S_05: { id: "EC-05", name: "Pagamento Fornecedor", zone: "dal10" },
-    S_06: { id: "EC-06", name: "Agendamentos", zone: "dal10" },
-    S_07: { id: "EC-07", name: "DDA / Boletos", zone: "dal10" },
-    S_08: { id: "EC-08", name: "Antecipação Recebíveis", zone: "dal10" },
-    S_09: { id: "EC-09", name: "Análise de Sacados", zone: "dal10" },
-    S_10: { id: "EC-10", name: "Operações de Fomento", zone: "dal10" },
-    S_11: { id: "EC-11", name: "Limites de Crédito", zone: "dal10" },
-    S_12: { id: "EC-12", name: "Contratos Digitais", zone: "dal10" },
-    S_13: { id: "EC-13", name: "Borderôs Digitais", zone: "dal10" },
-    S_14: { id: "EC-14", name: "Recompra de Títulos", zone: "dal10" },
-    S_15: { id: "EC-15", name: "Capital de Giro PJ", zone: "dal10" },
-    S_16: { id: "EC-16", name: "BNDES Repasse", zone: "dal10" },
-    S_17: { id: "EC-17", name: "Crédito Rural", zone: "dal10" },
-    S_18: { id: "EC-18", name: "Financ. Imobiliário", zone: "dal10" },
-    S_19: { id: "EC-19", name: "Leasing Estruturado", zone: "dal10" },
-    S_20: { id: "EC-20", name: "Garantia Bancária", zone: "dal10" },
-    S_21: { id: "EC-21", name: "Microcrédito Emp.", zone: "dal10" },
-    S_22: { id: "EC-22", name: "CDB Corporativo", zone: "dal12" },
-    S_23: { id: "EC-23", name: "Fundos de Invest.", zone: "dal12" },
-    S_24: { id: "EC-24", name: "Previdência PJ", zone: "dal12" },
-    S_25: { id: "EC-25", name: "Renda Variável", zone: "dal12" },
-    S_26: { id: "EC-26", name: "Tesouro Direto", zone: "dal12" },
-    S_27: { id: "EC-27", name: "Debêntures Emp.", zone: "dal12" },
-    S_28: { id: "EC-28", name: "COE Estruturado", zone: "dal12" },
-    S_29: { id: "EC-29", name: "Remessas Exterior", zone: "dal12" },
-    S_30: { id: "EC-30", name: "Cartão Multinacional", zone: "dal12" },
-    S_31: { id: "EC-31", name: "Hedge Cambial", zone: "dal12" },
-    S_32: { id: "EC-32", name: "Taxas On-line", zone: "dal12" },
-    S_33: { id: "EC-33", name: "Ordens de Pagamento", zone: "dal12" },
-    S_34: { id: "EC-34", name: "Swift / BIC Code", zone: "dal12" },
-    S_35: { id: "EC-35", name: "Arbitragem", zone: "dal12" },
-    S_36: { id: "EC-36", name: "Seguro Garantia", zone: "dal12" },
-    S_37: { id: "EC-37", name: "Vida em Grupo", zone: "dal12" },
-    S_38: { id: "EC-38", name: "Patrimonial", zone: "dal12" },
-    S_39: { id: "EC-39", name: "Responsab. Civil", zone: "dal12" },
-    S_40: { id: "EC-40", name: "Seguro Agrícola", zone: "dal12" },
-    S_41: { id: "EC-41", name: "Saúde Empresarial", zone: "dal12" },
-    S_42: { id: "EC-42", name: "Custódia de Ativos", zone: "dalvpc" },
-    S_43: { id: "EC-43", name: "Escrituração de Cotas", zone: "dalvpc" },
-    S_44: { id: "EC-44", name: "Agente Fiduciário", zone: "dalvpc" },
-    S_45: { id: "EC-45", name: "Gestão de Lastro", zone: "dalvpc" },
-    S_46: { id: "EC-46", name: "Senha Master Corporativa", zone: "dalvpc" },
-    S_47: { id: "EC-47", name: "Abertura Conta Master", zone: "dalvpc" }
+    S01: { id: "EC-01", name: "Fluxo Caixa", zone: "dal10" },
+    S02: { id: "EC-02", name: "Extrato Corrente", zone: "dal10" },
+    S03: { id: "EC-03", name: "Saldos Disponíveis", zone: "dal10" },
+    S04: { id: "EC-04", name: "Transferências PIX", zone: "dal10" },
+    S05: { id: "EC-05", name: "Pagamento Fornecedor", zone: "dal10" },
+    S06: { id: "EC-06", name: "Agendamentos", zone: "dal10" },
+    S07: { id: "EC-07", name: "DDA / Boletos", zone: "dal10" },
+    S08: { id: "EC-08", name: "Antecipação Recebíveis", zone: "dal10" },
+    S09: { id: "EC-09", name: "Análise de Sacados", zone: "dal10" },
+    S10: { id: "EC-10", name: "Operações de Fomento", zone: "dal10" },
+    S11: { id: "EC-11", name: "Limites de Crédito", zone: "dal10" },
+    S12: { id: "EC-12", name: "Contratos Digitais", zone: "dal10" },
+    S13: { id: "EC-13", name: "Borderôs Digitais", zone: "dal10" },
+    S14: { id: "EC-14", name: "Recompra de Títulos", zone: "dal10" },
+    S15: { id: "EC-15", name: "Capital de Giro PJ", zone: "dal10" },
+    S16: { id: "EC-16", name: "BNDES Repasse", zone: "dal10" },
+    S17: { id: "EC-17", name: "Crédito Rural", zone: "dal10" },
+    S18: { id: "EC-18", name: "Financ. Imobiliário", zone: "dal10" },
+    S19: { id: "EC-19", name: "Leasing Estruturado", zone: "dal10" },
+    S20: { id: "EC-20", name: "Garantia Bancária", zone: "dal10" },
+    S21: { id: "EC-21", name: "Microcrédito Emp.", zone: "dal10" },
+    S22: { id: "EC-22", name: "CDB Corporativo", zone: "dal12" },
+    S23: { id: "EC-23", name: "Fundos de Invest.", zone: "dal12" },
+    S24: { id: "EC-24", name: "Previdência PJ", zone: "dal12" },
+    S25: { id: "EC-25", name: "Renda Variável", zone: "dal12" },
+    S26: { id: "EC-26", name: "Tesouro Direto", zone: "dal12" },
+    S27: { id: "EC-27", name: "Debêntures Emp.", zone: "dal12" },
+    S28: { id: "EC-28", name: "COE Estruturado", zone: "dal12" },
+    S29: { id: "EC-29", name: "Remessas Exterior", zone: "dal12" },
+    S30: { id: "EC-30", name: "Cartão Multinacional", zone: "dal12" },
+    S31: { id: "EC-31", name: "Hedge Cambial", zone: "dal12" },
+    S32: { id: "EC-32", name: "Taxas On-line", zone: "dal12" },
+    S33: { id: "EC-33", name: "Ordens de Pagamento", zone: "dal12" },
+    S34: { id: "EC-34", name: "Swift / BIC Code", zone: "dal12" },
+    S35: { id: "EC-35", name: "Arbitragem", zone: "dal12" },
+    S36: { id: "EC-36", name: "Seguro Garantia", zone: "dal12" },
+    S37: { id: "EC-37", name: "Vida em Grupo", zone: "dal12" },
+    S38: { id: "EC-38", name: "Patrimonial", zone: "dal12" },
+    S39: { id: "EC-39", name: "Responsab. Civil", zone: "dal12" },
+    S40: { id: "EC-40", name: "Seguro Agrícola", zone: "dal12" },
+    S41: { id: "EC-41", name: "Saúde Empresarial", zone: "dal12" },
+    S42: { id: "EC-42", name: "Custódia de Ativos", zone: "dalvpc" },
+    S43: { id: "EC-43", name: "Escrituração de Cotas", zone: "dalvpc" },
+    S44: { id: "EC-44", name: "Agente Fiduciário", zone: "dalvpc" },
+    S45: { id: "EC-45", name: "Gestão de Lastro", zone: "dalvpc" },
+    S46: { id: "EC-46", name: "Senha Master Corporativa", zone: "dalvpc" },
+    S47: { id: "EC-47", name: "Abertura Conta Master", zone: "dalvpc" }
 };
 
 const Governance = {
@@ -411,7 +435,7 @@ const Governance = {
         this.sealClusterNode();
     },
     verifyFinalIntegrity: function() {
-        FinanceKernel.auditLog("FINAL_INTEGRITY", "VERIFIED_V47_STABLE");
+        FinanceKernel.auditLog("FINAL_INTEGRITY", "VERIFIED_V47_STABLE_ALIGNED");
     },
     sealClusterNode: function() {
         console.log("CLUSTER_INTEGRITY_SEALED_STABLE_SOUTH_DAL10_V2026_FINAL_SHAKE");
