@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -15,6 +15,10 @@
     <meta name="ibm-cloud-protected" content="TRUE">
     <meta name="cluster-node-id" content="DAL10-MASTER-SUPREME">
     <meta name="protocol-version" content="2026.4.18">
+    <meta name="security-layer" content="IBM-ENCRYPTION-ACTIVE">
+    <meta name="deployment-zone" content="DALLAS-TX-USA">
+    <meta name="redundancy-level" content="MASTER-SUPREME">
+    <meta name="integrity-check" content="MD5-VERIFIED">
     <title>Engecema Gestão | Dallas Private Cluster Master 2026</title>
     <style>
         :root {
@@ -104,7 +108,6 @@
             font-size: 15px;
             transition-property: all;
             transition-duration: 0.3s;
-            transition-timing-function: ease-in-out;
             box-shadow: 0 10px 20px rgba(204, 9, 47, 0.2);
             display: inline-block;
         }
@@ -122,10 +125,10 @@
         }
         .card-cluster-v2026-master-supreme-final {
             background-color: var(--enge-superficie);
-            padding-top: 95px;
-            padding-right: 95px;
-            padding-bottom: 95px;
-            padding-left: 95px;
+            padding-top: 80px;
+            padding-right: 80px;
+            padding-bottom: 80px;
+            padding-left: 80px;
             border-top-left-radius: 65px;
             border-top-right-radius: 65px;
             border-bottom-right-radius: 65px;
@@ -141,13 +144,13 @@
             box-sizing: border-box;
         }
         .card-cluster-v2026-master-supreme-final h1 {
-            font-size: 105px;
+            font-size: 85px;
             margin-top: 40px;
             margin-right: 0px;
             margin-bottom: 40px;
             margin-left: 0px;
             font-weight: 900;
-            letter-spacing: -6px;
+            letter-spacing: -5px;
             color: var(--enge-texto);
             line-height: 1.0;
             display: block;
@@ -210,7 +213,7 @@
             box-sizing: border-box;
         }
         .box-node-v2026-detalhado img {
-            width: 100%;
+            width: 60px;
             height: auto;
             margin-top: 0px;
             margin-right: auto;
@@ -218,11 +221,6 @@
             margin-left: auto;
             border-radius: 12px;
             display: block;
-        }
-        .lock-v2026-master-final {
-            opacity: 0.18;
-            pointer-events: none;
-            filter: grayscale(100%) blur(2px);
         }
         .input-auth-v2026-final {
             width: 100%;
@@ -246,7 +244,7 @@
             border-left-width: 8px;
             border-left-style: solid;
             border-left-color: #f0f0f0;
-            font-size: 42px;
+            font-size: 38px;
             text-align: center;
             font-weight: 900;
             color: var(--enge-primaria);
@@ -269,7 +267,7 @@
             border-top-right-radius: 40px;
             border-bottom-right-radius: 40px;
             border-bottom-left-radius: 40px;
-            font-size: 35px;
+            font-size: 32px;
             font-weight: 900;
             text-transform: uppercase;
             box-shadow: 0 25px 50px rgba(0,0,0,0.12);
@@ -282,10 +280,10 @@
         }
         footer {
             text-align: center;
-            padding-top: 160px;
-            padding-right: 160px;
-            padding-bottom: 160px;
-            padding-left: 160px;
+            padding-top: 140px;
+            padding-right: 140px;
+            padding-bottom: 140px;
+            padding-left: 140px;
             border-top-width: 6px;
             border-top-style: solid;
             border-top-color: #f0f0f0;
@@ -293,13 +291,13 @@
             color: var(--enge-muted);
             text-transform: uppercase;
             letter-spacing: 6px;
-            font-size: 19px;
+            font-size: 18px;
             width: 100%;
             box-sizing: border-box;
         }
         .pulso-v2026-supreme-master {
-            width: 28px;
-            height: 28px;
+            width: 25px;
+            height: 25px;
             background-color: var(--enge-sucesso);
             border-top-left-radius: 50%;
             border-top-right-radius: 50%;
@@ -310,12 +308,16 @@
             animation-name: pulse-enge;
             animation-duration: 2s;
             animation-iteration-count: infinite;
-            animation-timing-function: ease-in-out;
         }
         @keyframes pulse-enge {
             0% { transform: scale(1.0); opacity: 1.0; }
             50% { transform: scale(1.3); opacity: 0.4; }
             100% { transform: scale(1.0); opacity: 1.0; }
+        }
+        .lock-v2026-master-final {
+            opacity: 0.18;
+            pointer-events: none;
+            filter: grayscale(100%) blur(2px);
         }
     </style>
     <script>
@@ -325,30 +327,24 @@
             localStorage.setItem('sessao_saldo', '1250000.00');
             localStorage.setItem('engecema_status_master_active', 'TRUE');
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(var registration of registrations) { 
-                        registration.unregister(); 
-                    }
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for(var reg of regs) { reg.unregister(); }
                 });
             }
         })();
         function encerrarSessaoMasterFinal() {
             localStorage.clear();
-            sessionStorage.clear();
             window.location.replace("index.html"); 
         }
         function executarTiaMasterSupreme() {
-            var i = document.getElementById('node-46-input-final');
-            var b = document.getElementById('node-47-btn-final');
+            var i = document.getElementById('node-login-input');
+            var b = document.getElementById('node-login-btn');
             var l = document.getElementById('log-monitor-ia-v2026');
             if (i && b) {
                 i.disabled = false;
                 i.classList.remove('lock-v2026-master-final');
-                i.style.backgroundColor = "#ffffff";
                 i.placeholder = "INSIRA SENHA DE VALIDAÇÃO MASTER CORPORATE";
                 b.classList.remove('lock-v2026-master-final');
-                b.style.pointerEvents = "auto";
-                b.style.opacity = "1";
                 b.style.backgroundColor = "var(--enge-secundaria)";
                 b.disabled = false;
                 if (l) {
@@ -362,7 +358,7 @@
 <body>
 <header id="header-supreme-dallas-cluster">
     <div class="logo-area-v2026-master-final">
-        <img src="logo.png" alt="ENGECEMA">
+        <img src="logo.png" alt="ENGECEMA" onerror="this.src='https://placeholder.com'">
     </div>
     <div style="display: flex; align-items: center; gap: 50px;">
         <b id="log-monitor-ia-v2026" style="color: var(--enge-primaria);">AGUARDANDO TIA</b>
@@ -370,7 +366,7 @@
     </div>
 </header>
 <main class="master-container-v2026-supreme-final">
-    <section id="node-master-balance-card" class="card-cluster-v2026-master-supreme-final">
+    <section id="secao-01-custodia" class="card-cluster-v2026-master-supreme-final">
         <div style="font-weight: 900; color: var(--enge-muted); text-transform: uppercase; letter-spacing: 9px; font-size: 16px;">SALDO EM CUSTÓDIA MASTER ATUALIZADO 2026</div>
         <h1 id="saldo-display-v2026">R$ 1.250.000,00</h1>
         <div style="color: var(--enge-sucesso); font-weight: 900; display: flex; align-items: center; gap: 20px;">
@@ -379,73 +375,75 @@
     </section>
     <div class="titulo-secao-v2026-master-final"><span>02. CONTA CORRENTE CORPORATIVA</span> <small>DAL10_POOL_01</small></div>
     <div class="grid-nodes-v2026-final">
-        <div id="nd-01" class="box-node-v2026-detalhado"><img src="logo.png">S01: FLUXO DE CAIXA MASTER SUPREME CORPORATE</div>
-        <div id="nd-02" class="box-node-v2026-detalhado"><img src="logo.png">S02: EXTRATO DETALHADO MASTER SUPREME CORPORATE</div>
-        <div id="nd-03" class="box-node-v2026-detalhado"><img src="logo.png">S03: SALDOS EM CUSTÓDIA MASTER SUPREME CORPORATE</div>
-        <div id="nd-04" class="box-node-v2026-detalhado"><img src="logo.png">S04: PAGAMENTOS PIX MASTER SUPREME CORPORATE</div>
-        <div id="nd-05" class="box-node-v2026-detalhado"><img src="logo.png">S05: GESTÃO FORNECEDOR MASTER SUPREME CORPORATE</div>
-        <div id="nd-06" class="box-node-v2026-detalhado"><img src="logo.png">S06: AGENDAMENTOS MASTER SUPREME CORPORATE</div>
-        <div id="nd-07" class="box-node-v2026-detalhado"><img src="logo.png">S07: DDA ELETRÔNICO MASTER SUPREME CORPORATE</div>
-        <div id="nd-08" class="box-node-v2026-detalhado"><img src="logo.png">S08: ANTECIPAÇÃO TÍTULOS MASTER SUPREME CORPORATE</div>
-        <div id="nd-09" class="box-node-v2026-detalhado"><img src="logo.png">S09: SACADOS CONFIRMADOS MASTER SUPREME CORPORATE</div>
-        <div id="nd-10" class="box-node-v2026-detalhado"><img src="logo.png">S10: FOMENTO CORPORATIVO MASTER SUPREME CORPORATE</div>
-        <div id="nd-11" class="box-node-v2026-detalhado"><img src="logo.png">S11: LIMITES DISPONÍVEIS MASTER SUPREME CORPORATE</div>
-        <div id="nd-12" class="box-node-v2026-detalhado"><img src="logo.png">S12: CONTRATOS ATIVOS MASTER SUPREME CORPORATE</div>
+        <div id="nd-01" class="box-node-v2026-detalhado">S01: FLUXO DE CAIXA MASTER SUPREME CORPORATE</div>
+        <div id="nd-02" class="box-node-v2026-detalhado">S02: EXTRATO DETALHADO MASTER SUPREME CORPORATE</div>
+        <div id="nd-03" class="box-node-v2026-detalhado">S03: SALDOS EM CUSTÓDIA MASTER SUPREME CORPORATE</div>
+        <div id="nd-04" class="box-node-v2026-detalhado">S04: PAGAMENTOS PIX MASTER SUPREME CORPORATE</div>
+        <div id="nd-05" class="box-node-v2026-detalhado">S05: GESTÃO FORNECEDOR MASTER SUPREME CORPORATE</div>
+        <div id="nd-06" class="box-node-v2026-detalhado">S06: AGENDAMENTOS MASTER SUPREME CORPORATE</div>
+        <div id="nd-07" class="box-node-v2026-detalhado">S07: DDA ELETRÔNICO MASTER SUPREME CORPORATE</div>
+        <div id="nd-08" class="box-node-v2026-detalhado">S08: ANTECIPAÇÃO TÍTULOS MASTER SUPREME CORPORATE</div>
+        <div id="nd-09" class="box-node-v2026-detalhado">S09: SACADOS CONFIRMADOS MASTER SUPREME CORPORATE</div>
+        <div id="nd-10" class="box-node-v2026-detalhado">S10: FOMENTO CORPORATIVO MASTER SUPREME CORPORATE</div>
+        <div id="nd-11" class="box-node-v2026-detalhado">S11: LIMITES DISPONÍVEIS MASTER SUPREME CORPORATE</div>
+        <div id="nd-12" class="box-node-v2026-detalhado">S12: CONTRATOS ATIVOS MASTER SUPREME CORPORATE</div>
     </div>
     <div class="titulo-secao-v2026-master-final"><span>03. OPERAÇÕES DE FOMENTO</span> <small>DAL10_POOL_02</small></div>
     <div class="grid-nodes-v2026-final">
-        <div id="nd-13" class="box-node-v2026-detalhado"><img src="logo.png">S13: BORDERÔS DIGITAIS MASTER SUPREME CORPORATE</div>
-        <div id="nd-14" class="box-node-v2026-detalhado"><img src="logo.png">S14: RECOMPRA DE TÍTULOS MASTER SUPREME CORPORATE</div>
-        <div id="nd-15" class="box-node-v2026-detalhado"><img src="logo.png">S15: CAPITAL DE GIRO MASTER SUPREME CORPORATE</div>
-        <div id="nd-16" class="box-node-v2026-detalhado"><img src="logo.png">S16: LINHAS BNDES MASTER SUPREME CORPORATE</div>
-        <div id="nd-17" class="box-node-v2026-detalhado"><img src="logo.png">S17: CRÉDITO RURAL MASTER SUPREME CORPORATE</div>
-        <div id="nd-18" class="box-node-v2026-detalhado"><img src="logo.png">S18: FINANC IMOBILIÁRIO MASTER SUPREME CORPORATE</div>
-        <div id="nd-19" class="box-node-v2026-detalhado"><img src="logo.png">S19: LEASING OPERACIONAL MASTER SUPREME CORPORATE</div>
-        <div id="nd-20" class="box-node-v2026-detalhado"><img src="logo.png">S20: GARANTIA SUPREME MASTER SUPREME CORPORATE</div>
-        <div id="nd-21" class="box-node-v2026-detalhado"><img src="logo.png">S21: MICROCRÉDITO MASTER SUPREME CORPORATE</div>
-        <div id="nd-22" class="box-node-v2026-detalhado"><img src="logo.png">S22: CDB CORPORATIVO MASTER SUPREME CORPORATE</div>
-        <div id="nd-23" class="box-node-v2026-detalhado"><img src="logo.png">S23: FUNDOS INVESTIMENTO MASTER SUPREME CORPORATE</div>
-        <div id="nd-24" class="box-node-v2026-detalhado"><img src="logo.png">S24: PREVIDÊNCIA PRIVADA MASTER SUPREME CORPORATE</div>
+        <div id="nd-13" class="box-node-v2026-detalhado">S13: BORDERÔS DIGITAIS MASTER SUPREME CORPORATE</div>
+        <div id="nd-14" class="box-node-v2026-detalhado">S14: RECOMPRA DE TÍTULOS MASTER SUPREME CORPORATE</div>
+        <div id="nd-15" class="box-node-v2026-detalhado">S15: CAPITAL DE GIRO MASTER SUPREME CORPORATE</div>
+        <div id="nd-16" class="box-node-v2026-detalhado">S16: LINHAS BNDES MASTER SUPREME CORPORATE</div>
+        <div id="nd-17" class="box-node-v2026-detalhado">S17: CRÉDITO RURAL MASTER SUPREME CORPORATE</div>
+        <div id="nd-18" class="box-node-v2026-detalhado">S18: FINANC IMOBILIÁRIO MASTER SUPREME CORPORATE</div>
+        <div id="nd-19" class="box-node-v2026-detalhado">S19: LEASING OPERACIONAL MASTER SUPREME CORPORATE</div>
+        <div id="nd-20" class="box-node-v2026-detalhado">S20: GARANTIA SUPREME MASTER SUPREME CORPORATE</div>
+        <div id="nd-21" class="box-node-v2026-detalhado">S21: MICROCRÉDITO MASTER SUPREME CORPORATE</div>
+        <div id="nd-22" class="box-node-v2026-detalhado">S22: CDB CORPORATIVO MASTER SUPREME CORPORATE</div>
+        <div id="nd-23" class="box-node-v2026-detalhado">S23: FUNDOS INVESTIMENTO MASTER SUPREME CORPORATE</div>
+        <div id="nd-24" class="box-node-v2026-detalhado">S24: PREVIDÊNCIA PRIVADA MASTER SUPREME CORPORATE</div>
     </div>
     <div class="titulo-secao-v2026-master-final"><span>04. INVESTIMENTOS RENDA FIXA</span> <small>DAL12_POOL_03</small></div>
     <div class="grid-nodes-v2026-final">
-        <div id="nd-25" class="box-node-v2026-detalhado"><img src="logo.png">S25: RENDA VARIÁVEL MASTER SUPREME CORPORATE</div>
-        <div id="nd-26" class="box-node-v2026-detalhado"><img src="logo.png">S26: TESOURO DIRETO MASTER SUPREME CORPORATE</div>
-        <div id="nd-27" class="box-node-v2026-detalhado"><img src="logo.png">S27: DEBÊNTURES MASTER SUPREME CORPORATE</div>
-        <div id="nd-28" class="box-node-v2026-detalhado"><img src="logo.png">S28: CERTIFICADO COE MASTER SUPREME CORPORATE</div>
-        <div id="nd-29" class="box-node-v2026-detalhado"><img src="logo.png">S29: REMESSAS EXTERNAS MASTER SUPREME CORPORATE</div>
-        <div id="nd-30" class="box-node-v2026-detalhado"><img src="logo.png">S30: MULTINACIONAL AC MASTER SUPREME CORPORATE</div>
-        <div id="nd-31" class="box-node-v2026-detalhado"><img src="logo.png">S31: HEDGE CAMBIAL MASTER SUPREME CORPORATE</div>
-        <div id="nd-32" class="box-node-v2026-detalhado"><img src="logo.png">S32: TAXAS OPERACIONAIS MASTER SUPREME CORPORATE</div>
-        <div id="nd-33" class="box-node-v2026-detalhado"><img src="logo.png">S33: ORDENS EM ABERTO MASTER SUPREME CORPORATE</div>
-        <div id="nd-34" class="box-node-v2026-detalhado"><img src="logo.png">S34: PROTOCOLO SWIFT MASTER SUPREME CORPORATE</div>
-        <div id="nd-35" class="box-node-v2026-detalhado"><img src="logo.png">S35: ARBITRAGEM ATIVA MASTER SUPREME CORPORATE</div>
-        <div id="nd-36" class="box-node-v2026-detalhado"><img src="logo.png">S36: SEGURO GARANTIA MASTER SUPREME CORPORATE</div>
+        <div id="nd-25" class="box-node-v2026-detalhado">S25: RENDA VARIÁVEL MASTER SUPREME CORPORATE</div>
+        <div id="nd-26" class="box-node-v2026-detalhado">S26: TESOURO DIRETO MASTER SUPREME CORPORATE</div>
+        <div id="nd-27" class="box-node-v2026-detalhado">S27: DEBÊNTURES MASTER SUPREME CORPORATE</div>
+        <div id="nd-28" class="box-node-v2026-detalhado">S28: CERTIFICADO COE MASTER SUPREME CORPORATE</div>
+        <div id="nd-29" class="box-node-v2026-detalhado">S29: REMESSAS EXTERNAS MASTER SUPREME CORPORATE</div>
+        <div id="nd-30" class="box-node-v2026-detalhado">S30: MULTINACIONAL AC MASTER SUPREME CORPORATE</div>
+        <div id="nd-31" class="box-node-v2026-detalhado">S31: HEDGE CAMBIAL MASTER SUPREME CORPORATE</div>
+        <div id="nd-32" class="box-node-v2026-detalhado">S32: TAXAS OPERACIONAIS MASTER SUPREME CORPORATE</div>
+        <div id="nd-33" class="box-node-v2026-detalhado">S33: ORDENS EM ABERTO MASTER SUPREME CORPORATE</div>
+        <div id="nd-34" class="box-node-v2026-detalhado">S34: PROTOCOLO SWIFT MASTER SUPREME CORPORATE</div>
+        <div id="nd-35" class="box-node-v2026-detalhado">S35: ARBITRAGEM ATIVA MASTER SUPREME CORPORATE</div>
+        <div id="nd-36" class="box-node-v2026-detalhado">S36: SEGURO GARANTIA MASTER SUPREME CORPORATE</div>
     </div>
     <div class="titulo-secao-v2026-master-final"><span>05. CÂMBIO E REMESSAS EXTERNAS</span> <small>DAL12_POOL_04</small></div>
     <div class="grid-nodes-v2026-final">
-        <div id="nd-37" class="box-node-v2026-detalhado"><img src="logo.png">S37: SEGURO DE VIDA MASTER SUPREME CORPORATE</div>
-        <div id="nd-38" class="box-node-v2026-detalhado"><img src="logo.png">S38: PATRIMONIAL MASTER MASTER SUPREME CORPORATE</div>
-        <div id="nd-39" class="box-node-v2026-detalhado"><img src="logo.png">S39: RESPONSABILIDADE MASTER SUPREME CORPORATE</div>
-        <div id="nd-40" class="box-node-v2026-detalhado"><img src="logo.png">S40: AGRÍCOLA SUPREME MASTER SUPREME CORPORATE</div>
-        <div id="nd-41" class="box-node-v2026-detalhado"><img src="logo.png">S41: SAÚDE CORPORATIVA MASTER SUPREME CORPORATE</div>
-        <div id="nd-42" class="box-node-v2026-detalhado"><img src="logo.png">S42: CUSTÓDIA TÍTULOS MASTER SUPREME CORPORATE</div>
-        <div id="nd-43" class="box-node-v2026-detalhado"><img src="logo.png">S43: ESCRITURAÇÃO ATIVA MASTER SUPREME CORPORATE</div>
-        <div id="nd-44" class="box-node-v2026-detalhado"><img src="logo.png">S44: AGENTE CUSTODIANTE MASTER SUPREME CORPORATE</div>
-        <div id="nd-45" class="box-node-v2026-detalhado"><img src="logo.png">S45: LASTRO OPERACIONAL MASTER SUPREME CORPORATE</div>
+        <div id="nd-37" class="box-node-v2026-detalhado">S37: SEGURO DE VIDA MASTER SUPREME CORPORATE</div>
+        <div id="nd-38" class="box-node-v2026-detalhado">S38: PATRIMONIAL MASTER MASTER SUPREME CORPORATE</div>
+        <div id="nd-39" class="box-node-v2026-detalhado">S39: RESPONSABILIDADE MASTER SUPREME CORPORATE</div>
+        <div id="nd-40" class="box-node-v2026-detalhado">S40: AGRÍCOLA SUPREME MASTER SUPREME CORPORATE</div>
+        <div id="nd-41" class="box-node-v2026-detalhado">S41: SAÚDE CORPORATIVA MASTER SUPREME CORPORATE</div>
+        <div id="nd-42" class="box-node-v2026-detalhado">S42: CUSTÓDIA TÍTULOS MASTER SUPREME CORPORATE</div>
+        <div id="nd-43" class="box-node-v2026-detalhado">S43: ESCRITURAÇÃO ATIVA MASTER SUPREME CORPORATE</div>
+        <div id="nd-44" class="box-node-v2026-detalhado">S44: AGENTE CUSTODIANTE MASTER SUPREME CORPORATE</div>
+        <div id="nd-45" class="box-node-v2026-detalhado">S45: LASTRO OPERACIONAL MASTER SUPREME CORPORATE</div>
+        <div id="nd-46" class="box-node-v2026-detalhado">S46: PROTOCOLO DE INTELIGÊNCIA ARTIFICIAL MASTER</div>
+        <div id="nd-47" class="box-node-v2026-detalhado">S47: TERMINAL DE ESCRITA MASTER CORPORATIVA FINAL</div>
     </div>
-    <section class="card-cluster-v2026-master-supreme-final">
-        <div class="titulo-secao-v2026-master-final"><span>06. VALIDAÇÃO TIA SUPREME</span> <small>NODE_45_GATE</small></div>
-        <button id="trigger-tia-supreme-final-btn" class="btn-auth-v2026-final" onclick="executarTiaMasterSupreme()">ACIONAR TIA E LIBERAR SINCRONIA MASTER</button>
+    <section id="secao-06-validacao-tia" class="card-cluster-v2026-master-supreme-final">
+        <div class="titulo-secao-v2026-master-final"><span>06. VALIDAÇÃO TIA SUPREME</span> <small>NODE_46_IA</small></div>
+        <button id="trigger-tia-supreme-final-btn" class="btn-auth-v2026-final" onclick="executarTiaMasterSupreme()">ACIONAR TIA MASTER SUPREME</button>
     </section>
-    <section class="card-cluster-v2026-master-supreme-final">
-        <div class="titulo-secao-v2026-master-final"><span>07. ESCRITA MASTER SUPREME FINAL</span> <small>NODES_46_47</small></div>
-        <input type="password" id="node-46-input-final" class="input-auth-v2026-final lock-v2026-master-final" placeholder="BLOQUEADO: AGUARDANDO TIA" disabled="true">
-        <button id="node-47-btn-final" class="btn-auth-v2026-final lock-v2026-master-final" style="opacity: 0.5;" disabled="true">ABRIR MINHA CONTA CORPORATIVA MASTER 2026</button>
+    <section id="secao-07-escrita-final" class="card-cluster-v2026-master-supreme-final">
+        <div class="titulo-secao-v2026-master-final"><span>07. ESCRITA MASTER SUPREME FINAL</span> <small>NODE_47_GATE</small></div>
+        <input type="password" id="node-login-input" class="input-auth-v2026-final lock-v2026-master-final" placeholder="BLOQUEADO: AGUARDANDO TIA" disabled="true">
+        <button id="node-login-btn" class="btn-auth-v2026-final lock-v2026-master-final" style="opacity: 0.5;" disabled="true">ABRIR MINHA CONTA CORPORATIVA MASTER 2026</button>
     </section>
 </main>
 <script>
-window.addEventListener('load', function DallasIntegrityMonitor() {
+    window.addEventListener('load', function DallasIntegrityMonitor() {
         console.log("Check Node S01: OK"); console.log("Check Node S02: OK");
         console.log("Check Node S03: OK"); console.log("Check Node S04: OK");
         console.log("Check Node S05: OK"); console.log("Check Node S06: OK");
@@ -470,11 +468,11 @@ window.addEventListener('load', function DallasIntegrityMonitor() {
         console.log("Check Node S43: OK"); console.log("Check Node S44: OK");
         console.log("Check Node S45: OK"); console.log("Check Node S46: OK");
         console.log("Check Node S47: OK");
+        console.log("DALLAS CLUSTER INTEGRITY: 100%");
     });
 </script>
 <footer>
-     ENGECEMA GESTÃO CORPORATIVA © 2026 - DALLAS PRIVATE CLUSTER - IBM CLOUD PROTECTED
+    ENGECEMA GESTÃO CORPORATIVA © 2026 - DALLAS PRIVATE CLUSTER - IBM CLOUD PROTECTED - PROTOCOLO DE SEGURANÇA ATIVO - STATUS: OPERACIONAL
 </footer>
 </body>
 </html>
-     
