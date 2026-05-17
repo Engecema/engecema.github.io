@@ -176,7 +176,7 @@
             margin-bottom: 40px;
             margin-left: 0px;
             font-weight: 900;
-            letter-spacing: -5px;
+            letter-spacing: -2px;
             color: var(--enge-texto);
             line-height: 1.0;
             display: block;
@@ -222,20 +222,6 @@
             border-bottom-width: 2px;
             border-bottom-style: solid;
             border-bottom-color: #eeeeee;
-            border-left-width: 2px;
-            border-left-style: solid;
-            border-left-color: #eeeeee;
-            font-size: 14px;
-            font-weight: 900;
-            box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.04);
-            text-align: center;
-            display: block;
-            box-sizing: border-box;
-            min-height: 200px;
-        }
-
-        .box-node-v2026-detalhado span {
-            display: block;
         }
 
         .box-node-v2026-detalhado .node-id {
@@ -443,81 +429,83 @@
             <div class="titulo-secao-v2026-master-final">PAINEL DE COMANDOS CRÍTICOS</div>
             <div style="display: flex; gap: 30px;">
                 <button class="btn-encerrar-v2026-master-supreme" style="background-color: var(--enge-secundaria);" onclick="executarTiaMasterSupreme()">FORÇAR DESBLOQUEIO TIA</button>
-                <button class="btn-encerrar-v2026-master-supreme" style="background-color: #7b1fa2;" onclick="printIbmConsoleLog('INTEGRITY SYNC INITIALIZED')">RODAR MD5 INTEGRITY CHECK</button>
             </div>
         </section>
 
         <!-- SEÇÃO 05 -->
-        <section id="secao-05-nodes-alpha" class="card-cluster-v2026-master-supreme-final">
-            <div class="titulo-secao-v2026-master-final">CLUSTER NODES ALPHA (1 - 16)</div>
+        <section id="secao-05-clusters" class="card-cluster-v2026-master-supreme-final">
+            <div class="titulo-secao-v2026-master-final">TOPOLOGIA ACTIVE DIRECT DE CLUSTERS (47 NODES ACTIVE)</div>
             <div class="grid-nodes-v2026-final">
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-01</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-02</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-03</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-04</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-05</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-06</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-07</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-08</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-09</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-10</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-11</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-12</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-13</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-14</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-15</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-16</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
+                <!-- Bloco repetitivo de 47 nodes para atender a especificação exata do kernel IBM -->
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-01</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-02</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-03</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-04</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-05</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-06</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-07</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-08</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-09</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-10</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-11</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-12</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-13</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-14</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-15</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-16</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-17</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-18</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-19</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-20</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-21</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-22</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-23</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-24</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-25</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-26</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-27</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-28</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-29</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-30</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-31</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-32</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-33</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-34</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-35</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-36</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-37</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-38</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-39</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-40</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-41</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-42</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-43</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-44</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-45</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-46</div><div class="node-status">● ONLINE</div></div>
+                <div class="box-node-v2026-detalhado"><div class="node-id">NODE-DAL10-47</div><div class="node-status">● ONLINE</div></div>
             </div>
         </section>
 
         <!-- SEÇÃO 06 -->
-        <section id="secao-06-nodes-beta" class="card-cluster-v2026-master-supreme-final">
-            <div class="titulo-secao-v2026-master-final">CLUSTER NODES BETA (17 - 32)</div>
-            <div class="grid-nodes-v2026-final">
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-17</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-18</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-19</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-20</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-21</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-22</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-23</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-24</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-25</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-26</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-27</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-28</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-29</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-30</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-31</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-32</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+        <section id="secao-06-redundancia" class="card-cluster-v2026-master-supreme-final">
+            <div class="titulo-secao-v2026-master-final">SISTEMA DE REDUNDÂNCIA AUTOMÁTICA</div>
+            <div style="color: var(--enge-muted); font-size: 16px; line-height: 1.8;">
+                O ambiente de produção Dallas Cluster atua sob regime de contingência de dados distribuídos. O espelhamento linear síncrono garante integridade bancária em tempo de execução sem latência residual.
             </div>
         </section>
 
         <!-- SEÇÃO 07 -->
-        <section id="secao-07-nodes-omega" class="card-cluster-v2026-master-supreme-final">
-            <div class="titulo-secao-v2026-master-final">CLUSTER NODES OMEGA (33 - 47)</div>
-            <div class="grid-nodes-v2026-final">
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-33</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-34</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-35</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-36</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-37</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-38</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-39</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-40</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-41</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-42</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-43</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-44</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-45</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-46</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-47</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+        <section id="secao-07-auditoria" class="card-cluster-v2026-master-supreme-final">
+            <div class="titulo-secao-v2026-master-final">REGISTRO DE RASTREABILIDADE (AUDIT TRAIL)</div>
+            <div style="color: var(--enge-texto); font-weight: 600;">
+                Protocolo Ativo: SHA-256 / AES-256-GCM. Transações monitoradas via terminal integrado.
             </div>
         </section>
     </main>
 
     <footer>
-        ENGECEMA GESTÃO CORPORATIVA CLUSTER v2026
+        ENGECEMA CORPORATE SYSTEM © 2026 - DALLAS PRIVATE INFRASTRUCTURE
     </footer>
 </body>
 </html>
