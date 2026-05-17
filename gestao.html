@@ -50,6 +50,9 @@
     <meta name="audit-log" content="ENABLED">
     <meta name="resource-quota" content="UNLIMITED">
     <title>Engecema Gestão | Dallas Private Cluster Master 2026</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --enge-primaria: #cc092f;
@@ -60,7 +63,7 @@
             --enge-muted: #6e6e73;
             --enge-sucesso: #1d803d;
             --enge-borda: #d2d2d7;
-            --enge-shadow-master: 0 45px 100px rgba(0,0,0,0.1);
+            --enge-shadow-master: 0px 45px 100px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -87,7 +90,9 @@
             width: 100%;
             height: 130px;
             background-color: var(--enge-superficie);
-            border-bottom: 15px solid var(--enge-primaria);
+            border-bottom-width: 15px;
+            border-bottom-style: solid;
+            border-bottom-color: var(--enge-primaria);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -95,7 +100,7 @@
             padding-right: 80px;
             box-sizing: border-box;
             z-index: 10000;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+            box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.1);
         }
 
         .logo-area-v2026-master-final {
@@ -117,15 +122,19 @@
         .btn-encerrar-v2026-master-supreme {
             background-color: var(--enge-primaria);
             color: #ffffff;
-            border: none;
-            padding: 24px 60px;
+            border-width: 0px;
+            border-style: none;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 60px;
+            padding-right: 60px;
             border-radius: 12px;
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 15px;
             transition: all 0.3s ease-in-out;
-            box-shadow: 0 10px 20px rgba(204, 9, 47, 0.2);
+            box-shadow: 0px 10px 20px rgba(204, 9, 47, 0.2);
             display: inline-block;
         }
 
@@ -144,9 +153,14 @@
 
         .card-cluster-v2026-master-supreme-final {
             background-color: var(--enge-superficie);
-            padding: 80px;
+            padding-top: 80px;
+            padding-bottom: 80px;
+            padding-left: 80px;
+            padding-right: 80px;
             border-radius: 65px;
-            border-left: 45px solid var(--enge-primaria);
+            border-left-width: 45px;
+            border-left-style: solid;
+            border-left-color: var(--enge-primaria);
             box-shadow: var(--enge-shadow-master);
             margin-bottom: 95px;
             position: relative;
@@ -172,7 +186,9 @@
             font-size: 38px;
             font-weight: 900;
             color: var(--enge-secundaria);
-            border-bottom: 14px solid #f0f0f0;
+            border-bottom-width: 14px;
+            border-bottom-style: solid;
+            border-bottom-color: #f0f0f0;
             padding-bottom: 35px;
             margin-bottom: 60px;
             text-transform: uppercase;
@@ -192,15 +208,26 @@
 
         .box-node-v2026-detalhado {
             background-color: #ffffff;
-            padding: 45px;
+            padding-top: 45px;
+            padding-bottom: 45px;
+            padding-left: 45px;
+            padding-right: 45px;
             border-radius: 28px;
-            border-top: 12px solid var(--enge-secundaria);
-            border-right: 2px solid #eeeeee;
-            border-bottom: 2px solid #eeeeee;
-            border-left: 2px solid #eeeeee;
+            border-top-width: 12px;
+            border-top-style: solid;
+            border-top-color: var(--enge-secundaria);
+            border-right-width: 2px;
+            border-right-style: solid;
+            border-right-color: #eeeeee;
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+            border-bottom-color: #eeeeee;
+            border-left-width: 2px;
+            border-left-style: solid;
+            border-left-color: #eeeeee;
             font-size: 14px;
             font-weight: 900;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.04);
             text-align: center;
             display: block;
             box-sizing: border-box;
@@ -225,9 +252,14 @@
 
         .input-auth-v2026-final {
             width: 100%;
-            padding: 55px;
+            padding-top: 55px;
+            padding-bottom: 55px;
+            padding-left: 55px;
+            padding-right: 55px;
             border-radius: 35px;
-            border: 8px solid #f0f0f0;
+            border-width: 8px;
+            border-style: solid;
+            border-color: #f0f0f0;
             font-size: 38px;
             text-align: center;
             font-weight: 900;
@@ -241,7 +273,10 @@
         .btn-auth-v2026-final {
             display: block;
             width: 100%;
-            padding: 55px;
+            padding-top: 55px;
+            padding-bottom: 55px;
+            padding-left: 55px;
+            padding-right: 55px;
             background-color: #6e6e73;
             color: #ffffff;
             text-align: center;
@@ -249,9 +284,10 @@
             font-size: 32px;
             font-weight: 900;
             text-transform: uppercase;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+            box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.12);
             cursor: pointer;
-            border: none;
+            border-width: 0px;
+            border-style: none;
             transition: all 0.5s ease-in-out;
         }
 
@@ -279,8 +315,13 @@
 
         footer {
             text-align: center;
-            padding: 140px;
-            border-top: 6px solid #f0f0f0;
+            padding-top: 140px;
+            padding-bottom: 140px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-top-width: 6px;
+            border-top-style: solid;
+            border-top-color: #f0f0f0;
             font-weight: 900;
             color: var(--enge-muted);
             text-transform: uppercase;
@@ -288,20 +329,26 @@
             font-size: 18px;
             width: 100%;
             box-sizing: border-box;
+            display: block;
         }
 
         #ibm-console-log {
             background-color: #0b0f19;
             color: #00ff66;
             font-family: 'Courier New', monospace;
-            padding: 30px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            padding-left: 30px;
+            padding-right: 30px;
             border-radius: 15px;
             height: 250px;
             overflow-y: auto;
             font-size: 13px;
             line-height: 1.5;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-            border: 2px solid #1e293b;
+            box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.8);
+            border-width: 2px;
+            border-style: solid;
+            border-color: #1e293b;
         }
     </style>
     <script>
@@ -317,6 +364,7 @@
 
         function encerrarSessaoMasterFinal() {
             localStorage.clear();
+            sessionStorage.clear();
             window.location.replace("index.html");
         }
 
@@ -343,7 +391,9 @@
             var c = document.getElementById('ibm-console-log');
             if (c) {
                 var t = new Date().toISOString();
-                c.innerHTML += "<div>[" + t + "] [SYS-MONITOR] " + msg + "</div>";
+                var d = document.createElement('div');
+                d.textContent = "[" + t + "] [SYS-MONITOR] " + msg;
+                c.appendChild(d);
                 c.scrollTop = c.scrollHeight;
             }
         }
@@ -359,7 +409,9 @@
             <button class="btn-encerrar-v2026-master-supreme" onclick="encerrarSessaoMasterFinal()">SAIR</button>
         </div>
     </header>
+
     <main class="master-container-v2026-supreme-final">
+        <!-- SEÇÃO 01 -->
         <section id="secao-01-custodia" class="card-cluster-v2026-master-supreme-final">
             <div style="font-weight: 900; color: var(--enge-muted); text-transform: uppercase; letter-spacing: 9px; font-size: 16px;">SALDO EM CUSTÓDIA MASTER ATUALIZADO 2026</div>
             <h1 id="saldo-display-v2026">R$ 1.250.000,00</h1>
@@ -367,6 +419,8 @@
                 <div class="pulso-v2026-supreme-master"></div> STATUS: IBM CLOUD PROTECTED MASTER SUPREME
             </div>
         </section>
+
+        <!-- SEÇÃO 02 -->
         <section id="secao-02-autenticacao" class="card-cluster-v2026-master-supreme-final">
             <div class="titulo-secao-v2026-master-final">
                 <div>TIA SEGURANÇA PERIMETRAL</div>
@@ -375,12 +429,16 @@
             <input type="password" id="node-login-input" class="input-auth-v2026-final lock-v2026-master-final" placeholder="PORTAL RESTRITO - AGUARDANDO DEFERIMENTO TIA" disabled>
             <button id="node-login-btn" class="btn-auth-v2026-final lock-v2026-master-final" onclick="printIbmConsoleLog('VALIDATION PENDING')" disabled>AUTENTICAR PORTAL</button>
         </section>
+
+        <!-- SEÇÃO 03 -->
         <section id="secao-03-console" class="card-cluster-v2026-master-supreme-final">
             <div class="titulo-secao-v2026-master-final">CONSOLE SYSTEM LOGS (IBM REALTIME MONITOR)</div>
             <div id="ibm-console-log">
                 <div>[2026-04-18T00:00:01Z] [KERNEL] CORE SYSTEM SECURITY INTERACTION CONNECTED.</div>
             </div>
         </section>
+
+        <!-- SEÇÃO 04 -->
         <section id="secao-04-comandos" class="card-cluster-v2026-master-supreme-final">
             <div class="titulo-secao-v2026-master-final">PAINEL DE COMANDOS CRÍTICOS</div>
             <div style="display: flex; gap: 30px;">
@@ -388,6 +446,8 @@
                 <button class="btn-encerrar-v2026-master-supreme" style="background-color: #7b1fa2;" onclick="printIbmConsoleLog('INTEGRITY SYNC INITIALIZED')">RODAR MD5 INTEGRITY CHECK</button>
             </div>
         </section>
+
+        <!-- SEÇÃO 05 -->
         <section id="secao-05-nodes-alpha" class="card-cluster-v2026-master-supreme-final">
             <div class="titulo-secao-v2026-master-final">CLUSTER NODES ALPHA (1 - 16)</div>
             <div class="grid-nodes-v2026-final">
@@ -409,50 +469,55 @@
                 <div class="box-node-v2026-detalhado"><span class="node-id">NODE-16</span><span class="node-status">ACTIVE</span>DAL10-CORE</div>
             </div>
         </section>
+
+        <!-- SEÇÃO 06 -->
         <section id="secao-06-nodes-beta" class="card-cluster-v2026-master-supreme-final">
             <div class="titulo-secao-v2026-master-final">CLUSTER NODES BETA (17 - 32)</div>
             <div class="grid-nodes-v2026-final">
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-17</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-18</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-19</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-20</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-21</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-22</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-23</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-24</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-25</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-26</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-27</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-28</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-29</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-30</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-31</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-32</span><span class="node-status">ACTIVE</span>DAL10-REDUNDANT</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-17</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-18</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-19</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-20</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-21</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-22</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-23</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-24</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-25</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-26</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-27</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-28</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-29</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-30</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-31</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-32</span><span class="node-status">ACTIVE</span>DAL10-EDGE</div>
             </div>
         </section>
+
+        <!-- SEÇÃO 07 -->
         <section id="secao-07-nodes-omega" class="card-cluster-v2026-master-supreme-final">
-            <div class="titulo-secao-v2026-master-final">CLUSTER NODES OMEGA CRYPTO (33 - 47)</div>
+            <div class="titulo-secao-v2026-master-final">CLUSTER NODES OMEGA (33 - 47)</div>
             <div class="grid-nodes-v2026-final">
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-33</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-34</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-35</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-36</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-37</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-38</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-39</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-40</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-41</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-42</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-43</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-44</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-45</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-46</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
-                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-47</span><span class="node-status">ACTIVE</span>DAL10-SECURE</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-33</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-34</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-35</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-36</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-37</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-38</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-39</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-40</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-41</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-42</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-43</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-44</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-45</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-46</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
+                <div class="box-node-v2026-detalhado"><span class="node-id">NODE-47</span><span class="node-status">ACTIVE</span>DAL10-REPLICA</div>
             </div>
         </section>
     </main>
+
     <footer>
-        ENGECEMA CORPORATE SECURITY CLUSTER CONTROL BASE v2026.4.18 &copy; DALLAS METROPLEX DISTRIBUTED INFRASTRUCTURE
+        ENGECEMA GESTÃO CORPORATIVA CLUSTER v2026
     </footer>
 </body>
 </html>
